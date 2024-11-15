@@ -16,6 +16,7 @@ socketHandlers(io);
 // Import Routes
 const authRoutes = require("./routes/auth");
 const projectRoutes = require("./routes/project");
+const userRoutes = require("./routes/user");
 
 // Middleware
 app.use(cors(corsConfig));
@@ -27,6 +28,7 @@ app.get("/", (_, res) => res.send("Hello, World!"));
 
 app.use("/auth", authRoutes);
 app.use("/project", projectRoutes);
+app.use("/user", userRoutes);
 
 // Start Server
 server.listen(config.PORT, () => console.log(`App listening on port ${config.PORT}`));
