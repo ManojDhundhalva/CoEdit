@@ -1,4 +1,14 @@
-
+const getAllProjects = `
+SELECT *
+FROM
+    projects AS p
+JOIN
+    project_owners AS po
+ON
+    p.project_id = po.project_id
+WHERE
+    po.user_id = $1;
+`;
 
 const addProjects = `
 INSERT INTO projects (
@@ -82,9 +92,15 @@ SELECT * FROM file_data;
 `;
 // SELECT f.*, lu.*, f.file_id AS id FROM files AS f LEFT JOIN live_users AS lu ON f.file_id = lu.file_id WHERE f.project_id = $1;
 
+
+const getProjectName = `
+SELECT project_name FROM projects WHERE project_id = $1;
+`;
+
 const getContributorId = `
 SELECT id FROM users WHERE username = $1;
 `;
+
 
 const getAllActiveFiles = `
 SELECT f.*, af.is_active_in_tab
@@ -134,6 +150,14 @@ ON lu.file_id = f.file_id
 WHERE lu.username = $1 AND lu.project_id = $2;
 `;
 
+const getLiveUsers = `
+SELECT u.username, u.profile_image AS image
+FROM project_live_users AS plu
+JOIN users AS u
+ON plu.username = u.username
+WHERE project_id = $1;
+`;
+
 const insertExpandData = `
   INSERT INTO file_tree_expand_user (user_id, file_tree_id)
   VALUES ($1, $2)
@@ -145,11 +169,18 @@ const deleteExpandData = `
 `;
 
 
+const getLogs = `
+SELECT l.*, u.profile_image AS image FROM logs AS l JOIN users AS u ON l.username = u.username WHERE file_id = $1;
+`;
+
+
 module.exports = {
+    getAllProjects,
     addProjects,
     addProjectOwners,
     makeAllActiveFilesToLive,
     getAllFiles,
+    getProjectName,
     getContributorId,
     getAllActiveFiles,
     addFileTree,
@@ -157,6 +188,8 @@ module.exports = {
     getFileTree,
     getInitialTabs,
     setAllFilesLive,
+    getLiveUsers,
     insertExpandData,
     deleteExpandData,
+    getLogs,
 };

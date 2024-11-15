@@ -2,6 +2,21 @@ const pool = require("../db");
 const queries = require("../queries/project");
 const { v4: uuidv4 } = require("uuid");
 
+const getAllProjects = async (req, resp) => {
+  try {
+    if (!req.user || !req.user.id) {
+      return resp.status(401).json({ message: "Unauthorized access" });
+    }
+
+    const results = await pool.query(queries.getAllProjects, [req.user.id]);
+
+    return resp.status(200).json(results.rows);
+  } catch (error) {
+    console.error("Error retrieving projects:", error);
+    return resp.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
 const addProject = async (req, resp) => {
   const { projectName } = req.body;
 
@@ -60,6 +75,21 @@ const getAllFiles = async (req, resp) => {
   }
 };
 
+
+const getProjectName = async (req, resp) => {
+  try {
+    const results = await pool.query(queries.getProjectName, [
+      req.query.projectId,
+    ]);
+
+    resp.status(200).json({ project_name: results.rows[0].project_name });
+  } catch (err) {
+    console.error("Error ->", err);
+    resp.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+
 const getAllActiveFiles = async (req, resp) => {
   try {
     const results = await pool.query(queries.getAllActiveFiles, [
@@ -106,6 +136,19 @@ const getInitialTabs = async (req, resp) => {
   }
 };
 
+const getLiveUsers = async (req, resp) => {
+  try {
+    const results = await pool.query(queries.getLiveUsers, [
+      req.query.projectId,
+    ]);
+
+    resp.status(200).json(results.rows);
+  } catch (err) {
+    console.error("Error ->", err);
+    resp.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
 const setExpandData = async (req, resp) => {
   const { file_tree_id, expand } = req.body;
   if (expand) {
@@ -129,11 +172,26 @@ const setExpandData = async (req, resp) => {
   }
 };
 
+const getLogs = async (req, res) => {
+  const { file_id } = req.query;
+  try {
+    const result = await pool.query(queries.getLogs, [file_id]);
+    res.status(200).json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 module.exports = {
+  getAllProjects,
   addProject,
   getAllFiles,
+  getProjectName,
   getAllActiveFiles,
   getFileTree,
   getInitialTabs,
+  getLiveUsers,
   setExpandData,
+  getLogs,
 };
