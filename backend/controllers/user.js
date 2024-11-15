@@ -1,7 +1,8 @@
 const pool = require("../db");
 const queries = require("../queries/user");
 
-const getUser = async (req, res) => {
+// get functionality
+const getUser = async (req, res) => {      
     try {
         const { rows } = await pool.query(queries.getUser, [req.user.id]);
         res.status(200).json(rows[0]);
