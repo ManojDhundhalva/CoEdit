@@ -1,6 +1,16 @@
 const pool = require("../db");
 const queries = require("../queries/user");
 
+const getUser = async (req, res) => {
+    try {
+        const { rows } = await pool.query(queries.getUser, [req.user.id]);
+        res.status(200).json(rows[0]);
+    } catch (error) {
+        console.error("Error fetching user data: ", error);
+        res.status(500).json({ message: "Error fetching user data" });
+    }
+}
+
 const updateUser = async (req, res) => {
     try {
         const { name } = req.body;
@@ -13,5 +23,6 @@ const updateUser = async (req, res) => {
 }
 
 module.exports = {
+    getUser,
     updateUser,
 };
