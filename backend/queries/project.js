@@ -92,6 +92,17 @@ SELECT * FROM file_data;
 `;
 // SELECT f.*, lu.*, f.file_id AS id FROM files AS f LEFT JOIN live_users AS lu ON f.file_id = lu.file_id WHERE f.project_id = $1;
 
+const createANewFile = `
+INSERT INTO files (
+    file_id,
+    project_id,
+    file_created_by,
+    file_name,
+    file_extension
+)
+VALUES 
+    ($1, $2, $3, $4, $5);
+`;
 
 const getProjectName = `
 SELECT project_name FROM projects WHERE project_id = $1;
@@ -101,6 +112,14 @@ const getContributorId = `
 SELECT id FROM users WHERE username = $1;
 `;
 
+const addContributor = `
+INSERT INTO project_owners (
+    project_id,
+    user_id
+)
+VALUES 
+    ($1, $2);
+`;
 
 const getAllActiveFiles = `
 SELECT f.*, af.is_active_in_tab
@@ -168,11 +187,21 @@ const deleteExpandData = `
   DELETE FROM file_tree_expand_user WHERE user_id = $1 AND file_tree_id = $2;
 `;
 
+const userSearch = `
+SELECT * FROM users 
+WHERE (username ILIKE $1)
+AND id NOT IN (
+    SELECT user_id FROM project_owners WHERE project_id = $2
+)
+`;
 
 const getLogs = `
 SELECT l.*, u.profile_image AS image FROM logs AS l JOIN users AS u ON l.username = u.username WHERE file_id = $1;
 `;
 
+const getMessages = `   
+SELECT c.*, u.profile_image AS image FROM chat AS c JOIN users AS u ON c.username = u.username WHERE project_id = $1;
+`;
 
 module.exports = {
     getAllProjects,
@@ -180,8 +209,10 @@ module.exports = {
     addProjectOwners,
     makeAllActiveFilesToLive,
     getAllFiles,
+    createANewFile,
     getProjectName,
     getContributorId,
+    addContributor,
     getAllActiveFiles,
     addFileTree,
     addFileTreeUser,
@@ -191,5 +222,7 @@ module.exports = {
     getLiveUsers,
     insertExpandData,
     deleteExpandData,
+    userSearch,
     getLogs,
+    getMessages,
 };

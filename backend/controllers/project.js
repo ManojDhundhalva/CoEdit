@@ -75,6 +75,29 @@ const getAllFiles = async (req, resp) => {
   }
 };
 
+const createANewFile = async (req, resp) => {
+  const { newFile, extension, projectId } = req.body;
+
+  if (!newFile) {
+    return resp.status(400).json({ message: "newFile name is required" });
+  }
+
+  try {
+    const uniqueId = uuidv4();
+    const results = await pool.query(queries.createANewFile, [
+      uniqueId,
+      projectId,
+      req.user.username,
+      newFile,
+      extension,
+    ]);
+
+    resp.status(200).json({ message: "File Created Successfully" });
+  } catch (err) {
+    console.error("Error ->", err);
+    resp.status(500).json({ message: "Internal Server Error" });
+  }
+};
 
 const getProjectName = async (req, resp) => {
   try {
@@ -89,6 +112,19 @@ const getProjectName = async (req, resp) => {
   }
 };
 
+const addContributor = async (req, resp) => {
+  const { projectId, contributors } = req.body;
+  try {
+    for (const contributor of contributors) {
+      await pool.query(queries.addContributor, [projectId, contributor.id]);
+    }
+
+    resp.status(200).json({ message: "Added contributors" });
+  } catch (err) {
+    console.error("Error ->", err);
+    resp.status(500).json({ message: "Internal Server Error" });
+  }
+};
 
 const getAllActiveFiles = async (req, resp) => {
   try {
@@ -172,6 +208,20 @@ const setExpandData = async (req, resp) => {
   }
 };
 
+const userSearch = async (req, res) => {
+  const { q, projectId } = req.query; // Get the search term from query
+  try {
+    const result = await pool.query(
+      queries.userSearch,
+      [`%${q}%`, projectId] // Exclude the current user's username
+    );
+    res.status(200).json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 const getLogs = async (req, res) => {
   const { file_id } = req.query;
   try {
@@ -183,15 +233,30 @@ const getLogs = async (req, res) => {
   }
 };
 
+const getMessages = async (req, res) => {
+  const { project_id } = req.query;
+  try {
+    const result = await pool.query(queries.getMessages, [project_id]);
+    res.status(200).json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 module.exports = {
   getAllProjects,
   addProject,
   getAllFiles,
+  createANewFile,
   getProjectName,
+  addContributor,
   getAllActiveFiles,
   getFileTree,
   getInitialTabs,
   getLiveUsers,
   setExpandData,
+  userSearch,
   getLogs,
+  getMessages,
 };
