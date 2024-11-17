@@ -1,62 +1,82 @@
-import React from 'react'
+import React, { useEffect } from "react";
+import Typed from "typed.js";
 
-function HomePage() {
-  return (<>
-    <div class="box">
-      
+function App() {
+  useEffect(() => {
+    const typed = new Typed(".auto-type", {
+      strings: [
+        "Collaborate Instantly, Write Effortlessly!!!...",
+        "A platform built for a new way of working",
+        "Edit, share, and create in real-time with your team—anytime, anywhere.",
+      ],
+      typeSpeed: 50,
+      backSpeed: 25,
+      loop: true,
+    });
 
-      <div class="row">
-        <div class="col">
-          <h1 id="heading">
-            <span class="auto-type"></span>
-          </h1>
-        </div>
-        <div class="col">
-          {/* <img src="images/pic1.png" class="feature-image" alt="Feature" />  */}
-           <img src = "https://images.pexels.com/photos/1624496/pexels-photo-1624496.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" class = "feature-image" alt = "Feature" />
-        </div>
-      </div>
-    </div>
+    // Cleanup function to destroy the Typed instance
+    return () => {
+      typed.destroy();
+    };
+  }, []);
 
-    <div class="card_part">
-      <div class="part_2">
-        <div class="col">
-          <p>
-            Your ideas are ready to take shape—click 'Edit' and make them come
-            alive!
-          </p>
-        </div>
-        <div class="col">
-          <div class="video-container_1">
-            <video id="my-video_1" autoplay loop muted>
-              <source src="video.mp4" type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
+  return (
+    <div>
+      {/* Main Content */}
+      <div className="box">
+        <div className="row">
+          <div className="col">
+            <h1 id="heading">
+              <span className="auto-type"></span>
+            </h1>
+          </div>
+          <div className="col">
+            <img
+              src="https://images.pexels.com/photos/1624496/pexels-photo-1624496.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+              className="feature-image"
+              alt="Feature"
+            />
           </div>
         </div>
       </div>
-  
-      <div class="part_3">
-        <div class="col">
-          <div class="video-container_2">
-            <video id="my-video_2" autoplay loop muted>
-              <source src="video.mp4" type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
+
+      {/* Video and Content Section */}
+      <div className="card_part">
+        <div className="part_2">
+          <div className="col">
+            <p>
+              Your ideas are ready to take shape—click 'Edit' and make them come
+              alive!
+            </p>
+          </div>
+          <div className="col">
+            <div className="video-container_1">
+              <video id="my-video_1" autoPlay loop muted>
+                <source src="video.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
           </div>
         </div>
-        <div class="col">
-          <p>
-            A Space Where Creativity Meets Collaboration in Real Time.
-          </p>
+
+        <div className="part_3">
+          <div className="col">
+            <div className="video-container_2">
+              <video id="my-video_2" autoPlay loop muted>
+                <source src="video.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          </div>
+          <div className="col">
+            <p>A Space Where Creativity Meets Collaboration in Real Time.</p>
+          </div>
         </div>
       </div>
-  
+
+      <div className="space"></div>
     </div>
-    <div class="space"></div>
-    </>
-   
-  )
+  );
 }
 
-export default HomePage
+export default App;
