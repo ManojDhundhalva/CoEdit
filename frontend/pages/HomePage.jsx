@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import Typed from "typed.js";
-
+import "../CSS/HomePage.css"
 function App() {
   useEffect(() => {
     const typed = new Typed(".auto-type", {

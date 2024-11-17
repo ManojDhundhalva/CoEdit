@@ -1,0 +1,181 @@
+/* Global Reset */
+.box{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  /* Layout and Container Styling */
+  .box {
+    width: 100%;
+    height: 100vh;
+    padding: 20px 10%;
+  }
+  
+  .log {
+    width: 100px;
+    height: auto;
+    max-height: 100px;
+    background-color: transparent;
+  }
+  
+  
+  
+  /* Full-Page Background Image */
+  .full-page-image {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    z-index: -1;
+    opacity: 0.7;
+    background-color: white;
+  }
+  
+  .full-page-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    background-color: #00DBDE;
+    background-image: linear-gradient(90deg, #00DBDE 0%, #FC00FF 100%);
+  }
+  
+  
+  /* Row and Column Styling */
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .col {
+    flex-basis: 50%;
+    position: relative;
+    text-align: center;
+  }
+  
+  .col p{
+    font-family: "Figtree", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: bold;
+    font-style: normal;
+    color:#386641;
+    font-size:2rem;
+  
+  }
+  
+  .feature-img {
+    width: 100%;
+    margin-top: 10px;
+  }
+  
+  .col h1 {
+    margin-top: 180px;
+    font-size: 40px;
+    font-weight: 600;
+  }
+  
+  .col a {
+    text-decoration: none;
+    padding: 18px 50px;
+    border-radius: 30px;
+    display: inline-block;
+    color: black;
+    font-weight: 700;
+    margin-top: 70px;
+    box-shadow: 5px 8px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Part Sections */
+  .part_2, .part_3 {
+    padding: 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .card_part {
+    background-color: #f3f9f4;
+    margin-top: 50px;
+  }
+  
+  .space {
+    background-color: #b7e4c7;
+    padding-top: 3rem;
+  }
+  
+  
+  
+  .social-section {
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  
+  .social-text {
+    color: #666;
+  }
+  
+  .social-icons {
+    display: flex;
+    gap: 15px;
+  }
+  
+  .social-icon {
+    color: #666;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  
+  .social-icon:hover {
+    color: #333;
+  }
+  
+  .info-section {
+    display: flex;
+    justify-content: space-around;
+    padding: 40px 20px;
+    background-color: #e8f5ea;
+  }
+  
+  .info-column {
+    max-width: 300px;
+  }
+  
+  .column-title {
+    font-weight: 600;
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+    color: #444;
+  }
+  
+  .info-column p {
+    margin: 10px 0;
+    line-height: 1.6;
+  }
+  
+  .info-column i {
+    margin-right: 10px;
+    color: #666;
+  }
+  
+  
+  /* For the diamond icon next to TEAM-G35 */
+  .fa-gem {
+    margin-right: 8px;
+    color: #666;
+  }
+  
+  /* Additional Styling */
+  .auto-type {
+    color: #115D33;
+  }
+  
+  
+  
+  
+  
