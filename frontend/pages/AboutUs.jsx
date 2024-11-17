@@ -1,4 +1,5 @@
 import React from 'react'
+import "../CSS/AboutUs.css"
 
 function AboutUs() {
   return (
@@ -96,3 +97,4 @@ function AboutUs() {
 }
 
 export default AboutUs
+
