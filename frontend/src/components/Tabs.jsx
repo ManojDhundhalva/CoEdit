@@ -114,7 +114,7 @@ const Tabs = (props) => {
                           <Box id={`tabs-live-users-${tab.id}`} >
                             {tab.users.map((user, index) =>
                               user.is_live && (
-                                <>
+                                <div key={index}>
                                   <Box sx={{ p: 1, display: "flex", alignItems: "center", justifyContent: "flex-start" }}>
                                     {user.is_active_in_tab ? (
                                       <StyledBadge
@@ -190,7 +190,7 @@ const Tabs = (props) => {
                                       </Tooltip>)}
                                     <Typography fontWeight="bold" sx={{ px: 1 }}>{user.username}</Typography>
                                   </Box>
-                                </>
+                                </div>
                               )
                             )}
                           </Box>

@@ -107,7 +107,7 @@ function FileExplorer(props) {
   return (
     <>
       {loading ? (Array.from({ length: 5 }, (_, index) => (
-        <Box sx={{ px: "4px", py: "2px" }}>
+        <Box key={index} sx={{ px: "4px", py: "2px" }}>
           <Skeleton
             key={index}
             animation="wave"

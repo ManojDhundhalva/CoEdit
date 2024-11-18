@@ -254,7 +254,7 @@ function Editor() {
       case 0:
         return <DataObjectRoundedIcon sx={{ fontSize: "2em" }} />;
       case 1:
-        return <i class="fa-solid fa-code" style={{ fontSize: "1.5em" }}></i>;
+        return <i className="fa-solid fa-code" style={{ fontSize: "1.5em" }}></i>;
       case 2:
         return <DataArrayRoundedIcon sx={{ fontSize: "2em" }} />;
       case 3:

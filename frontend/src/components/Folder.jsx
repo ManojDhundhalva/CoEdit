@@ -183,7 +183,7 @@ const Folder = (props) => {
         <Box sx={{ width: "100%" }}>
           <Box sx={{ display: "flex", width: "100%" }}>
             {Array.from({ length: paddingLeft }, (_, index) => (
-              <Box sx={{ display: "flex", borderLeft: "2px solid black", marginLeft: "8px" }}>
+              <Box key={index} sx={{ display: "flex", borderLeft: "2px solid black", marginLeft: "8px" }}>
                 &nbsp;
               </Box>
             ))}
@@ -212,9 +212,9 @@ const Folder = (props) => {
                 </Box>
                 <Box>
                   {expand ? (
-                    <i class="fa-regular fa-folder-open"></i>
+                    <i className="fa-regular fa-folder-open"></i>
                   ) : (
-                    <i class="fa-solid fa-folder"></i>
+                    <i className="fa-solid fa-folder"></i>
                   )}
                   {/* <FolderRoundedIcon sx={{ color: "white" }} /> */}
                 </Box>
@@ -314,7 +314,7 @@ const Folder = (props) => {
             {showInput.isVisible && (
               <div style={{ display: "flex" }}>
                 {Array.from({ length: paddingLeft + 1 }, (_, index) => (
-                  <Box sx={{ display: "flex", borderLeft: "2px solid black", marginLeft: "8px" }}>
+                  <Box key={index} sx={{ display: "flex", borderLeft: "2px solid black", marginLeft: "8px" }}>
                     &nbsp;
                   </Box>
                 ))}
@@ -372,7 +372,7 @@ const Folder = (props) => {
         <Box sx={{ display: "flex" }}>
           <Box sx={{ display: "flex" }}>
             {Array.from({ length: paddingLeft }, (_, index) => (
-              <Box sx={{ display: "flex", borderLeft: "2px solid black", marginLeft: "8px" }}>
+              <Box key={index} sx={{ display: "flex", borderLeft: "2px solid black", marginLeft: "8px" }}>
                 &nbsp;
               </Box>
             ))}
