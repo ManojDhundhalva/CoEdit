@@ -65,6 +65,7 @@ function Editor() {
     const s = io(config.BACKEND_API, {
       withCredentials: true,
       transports: ['websocket', 'polling'], // Use WebSocket first, then fallback to polling
+      upgrade: false // Sometimes, disabling the HTTP long-polling upgrade helps
     });
 
     s.on("connect_error", (err) => console.log(err));

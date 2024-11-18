@@ -1,9 +1,16 @@
 // Initialize socket.io server
 const { Server } = require("socket.io");
-const corsConfig = require("./cors");
+const config = require("./index");
 
 const initIO = (server) => {
-    const io = new Server(server, { cors: corsConfig });
+    const io = new Server(server, {
+        cors: {
+            origin: config.FRONTEND_URL,
+            methods: ['GET', 'POST'],
+            credentials: true,
+            transports: ['websocket', 'polling']
+        }
+    });
     return io;
 }
 
