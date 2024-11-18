@@ -39,19 +39,16 @@ const googleCredentials = async (req, res) => {
             res.cookie("authToken", token, {
                 path: "/", // This allows the cookie to be accessible on all routes
                 maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
-                sameSite: "Strict", // Protect against CSRF
             });
 
             res.cookie("username", username, {
                 path: "/", // This allows the cookie to be accessible on all routes
                 maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
-                sameSite: "Strict", // Protect against CSRF
             });
 
             res.cookie("image", profile_image, {
                 path: "/", // This allows the cookie to be accessible on all routes
                 maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
-                sameSite: "Strict", // Protect against CSRF
             });
 
             return res.status(200).json({ accountExists, message: "Login is successfull" });
@@ -81,19 +78,16 @@ const googleLogin = async (req, res) => {
         res.cookie("authToken", token, {
             path: "/", // This allows the cookie to be accessible on all routes
             maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
-            sameSite: "Strict", // Protect against CSRF
         });
 
         res.cookie("username", username, {
             path: "/", // This allows the cookie to be accessible on all routes
             maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
-            sameSite: "Strict", // Protect against CSRF
         });
 
         res.cookie("image", image, {
             path: "/", // This allows the cookie to be accessible on all routes
             maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
-            sameSite: "Strict", // Protect against CSRF
         });
 
         return res.status(200).json({ message: "Login is successfull" });

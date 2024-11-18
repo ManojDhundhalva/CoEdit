@@ -57,21 +57,17 @@ const getAccount = async (req, resp) => {
             // Set the cookie with the token
             resp.cookie("authToken", token, {
                 path: "/", // This allows the cookie to be accessible on all routes
-                // httpOnly: true, // Protect cookie from XSS
                 maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
-                sameSite: "Strict", // Protect against CSRF
             });
 
             resp.cookie("username", username, {
                 path: "/", // This allows the cookie to be accessible on all routes
                 maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
-                sameSite: "Strict", // Protect against CSRF
             });
 
             resp.cookie("image", profile_image, {
                 path: "/", // This allows the cookie to be accessible on all routes
                 maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
-                sameSite: "Strict", // Protect against CSRF
             });
 
             // Respond with the token and username
