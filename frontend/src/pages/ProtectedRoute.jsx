@@ -11,19 +11,19 @@ function ProtectedRoute(props) {
 
     const [isOnline, setIsOnline] = useState(navigator.onLine);
 
-    useEffect(() => {
-        const authenticateUser = () => {
-            const authToken = Cookies.get("authToken");
-            const username = Cookies.get("username");
-            const image = Cookies.get("image");
+    // useEffect(() => {
+    //     const authenticateUser = () => {
+    //         const authToken = Cookies.get("authToken");
+    //         const username = Cookies.get("username");
+    //         const image = Cookies.get("image");
 
-            if (!authToken || !username || !image) navigate("/auth");
-            // window.location.href = "/auth";
-            else getUser();
-        };
+    //         if (!authToken || !username || !image) navigate("/auth");
+    //         // window.location.href = "/auth";
+    //         else getUser();
+    //     };
 
-        authenticateUser();
-    }, []);
+    //     authenticateUser();
+    // }, []);
 
     useEffect(() => {
         window.addEventListener("online", () => setIsOnline(true));

@@ -16,6 +16,8 @@ import FormatQuoteRoundedIcon from '@mui/icons-material/FormatQuoteRounded';
 import TextsmsRoundedIcon from '@mui/icons-material/TextsmsRounded';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import Chat from "../components/Chat";
+import { io } from "socket.io-client";
+import config from "../config";
 
 const styles = {
   container: {
@@ -57,7 +59,20 @@ function Editor() {
   const params = useParams();
   const projectId = params?.projectId || null;
 
-  const { socket } = useSocket();
+  const { socket, setSocket } = useSocket();
+
+  useEffect(() => {
+    const s = io(config.BACKEND_API);
+
+    s.on("connect_error", (err) => console.log(err));
+    s.on("connect_failed", (err) => console.log(err));
+
+    setSocket((prev) => s);
+
+    return () => {
+      s.disconnect();
+    };
+  }, []);
 
   const getLiveUsers = async () => {
     try {
