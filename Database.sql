@@ -1,15 +1,14 @@
 CREATE TABLE IF NOT EXISTS users (
     id UUID PRIMARY KEY,
-    name VARCHAR(255), -- optional for user -- fetch from google/custom
-    image TEXT, --fetch from google, one user created cannot be changed/verify email
+    "name" VARCHAR(255),
+    "image" TEXT, 
     profile_image TEXT,
     username VARCHAR(255) UNIQUE NOT NULL,
-    emailid VARCHAR(255) UNIQUE NOT NULL, -- fetch from google/custom
-    password VARCHAR(255),
+    emailid VARCHAR(255) UNIQUE NOT NULL,
+    "password" VARCHAR(255),
     mode VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    -- Adding CHECK constraint for mode
     CONSTRAINT mode_check CHECK (mode IN ('manual', 'google'))
 );
 
@@ -56,8 +55,7 @@ CREATE TABLE IF NOT EXISTS live_users(
 );
 
 CREATE TABLE IF NOT EXISTS file_tree(
-    file_tree_id UUID PRIMARY KEY, -- in root file it will be parent_id == file_tree_id == file_id
-    -- file_tree_id UUID REFERENCES files(file_id) PRIMARY KEY, -- in root file it will be parent_id == file_tree_id == file_id
+    file_tree_id UUID PRIMARY KEY,
     project_id UUID REFERENCES projects(project_id) NOT NULL,
     parent_id UUID REFERENCES file_tree(file_tree_id),  
     name VARCHAR(255) NOT NULL,
@@ -65,7 +63,7 @@ CREATE TABLE IF NOT EXISTS file_tree(
     file_tree_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS file_tree_expand_user( -- only for folders
+CREATE TABLE IF NOT EXISTS file_tree_expand_user(
     user_id UUID REFERENCES users(id) NOT NULL,
     file_tree_id UUID REFERENCES file_tree(file_tree_id) NOT NULL,
     PRIMARY KEY (user_id, file_tree_id),
@@ -92,5 +90,3 @@ CREATE TABLE IF NOT EXISTS chat(
     username VARCHAR(255) REFERENCES users(username) NOT NULL,
     message TEXT NOT NULL
 );
-
--- also add which project had which file for each database, like active_files, live_users
