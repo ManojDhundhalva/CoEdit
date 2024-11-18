@@ -205,7 +205,6 @@ const Tabs = (props) => {
                         onClick={(e) => {
                           e.stopPropagation();
                           handleCloseTab(tab.id);
-                          console.log(tab.id);
                         }}
                       />
                     </div>

@@ -25,9 +25,9 @@ const useAPI = () => {
 
     const handleError = (error) => {
         if (error.code === "ERR_CANCELED") {
-            console.error("[Request aborted] :", error.message);
+            // console.error("[Request aborted] :", error.message);
         } else if (error.response) {
-            // if (error.response.status === 403) LogOut(); //unauthorized
+            if (error.response.status === 403) LogOut(); //unauthorized
             console.error("[API request error] :", error.response.data?.message);
         } else {
             console.error("[Network or server error] :", error.message);

@@ -62,10 +62,8 @@ function Editor() {
   const getLiveUsers = async () => {
     try {
       const results = await GET("/project/get-live-users", { projectId });
-      console.log("getLiveUsers", results.data);
       setLiveUsers((prev) => results.data);
     } catch (error) {
-      console.log(error);
     }
   };
 
@@ -156,7 +154,6 @@ function Editor() {
   const getInitialTabs = async () => {
     try {
       const results = await GET("/project/get-initial-tabs", { projectId });
-      console.log(results.data);
 
       const data = results.data.map((file) => ({
         id: file.file_id,
@@ -181,7 +178,6 @@ function Editor() {
         return activeFile ? activeFile.file_id : null; // Return the file_id or null if not found
       });
     } catch (err) {
-      console.log("err ->", err);
     }
   };
 
@@ -189,9 +185,6 @@ function Editor() {
     getInitialTabs();
   }, []);
 
-  useEffect(() => {
-    console.log("tabs", tabs);
-  }, [tabs]);
 
   useEffect(() => {
     if (!socket) return;

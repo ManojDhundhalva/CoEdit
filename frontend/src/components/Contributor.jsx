@@ -46,10 +46,8 @@ function Contributor(props) {
       const fetchUsersData = { q: searchTerm, projectId };
       try {
         const response = await GET("/project/users/search", fetchUsersData);
-        console.log(response.data);
         setSuggestions(response.data); // Use the data directly
       } catch (err) {
-        console.error(err);
       } finally {
         setIsFetchingUsers(false);
       }
@@ -99,11 +97,9 @@ function Contributor(props) {
     setIsAddingContributor(true);
     try {
       const results = await POST("/project/add-contributor", { projectId, contributors });
-      console.log(results);
       toast.success(`Added, "${contributors.length}"`);
       setSelectedUsers([]);
     } catch (err) {
-      console.log("err ->", err);
       toast.success(`NOT Added, "${contributors.length}"`);
     } finally {
       setIsAddingContributor(false);

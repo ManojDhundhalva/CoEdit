@@ -55,7 +55,6 @@ function ResetPassword(props) {
             );
             navigate("/");
         } catch (error) {
-            console.log(error);
             toast(error.response?.data?.message || "Something went wrong!",
                 {
                     icon: <CancelRoundedIcon />,

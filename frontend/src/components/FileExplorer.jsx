@@ -74,7 +74,6 @@ function FileExplorer(props) {
 
     // Handler for deleting a node
     const deleteHandler = ({ node_id: nodeId }) => {
-      console.log("nodeId", nodeId);
       const finalTree = deleteNode(explorerData, nodeId);
       setExplorerData({ ...finalTree }); // Ensure immutability to trigger re-render
     };
@@ -93,11 +92,9 @@ function FileExplorer(props) {
     setLoading(true);
     try {
       const { data } = await GET("/project/get-file-tree", { projectId });
-      console.log("data", data);
       const tree = buildFileTree(data);
       setExplorerData({ ...tree }); // Ensure new object to trigger re-render
     } catch (err) {
-      console.log("err ->", err);
     } finally {
       setLoading(false);
     }

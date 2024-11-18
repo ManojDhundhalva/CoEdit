@@ -70,7 +70,6 @@ function User(props) {
             );
             getUser();
         } catch (error) {
-            console.error("Error updating user data: ", error);
             toast(error.response?.data?.message || "Error updating user data",
                 {
                     icon: <CancelRoundedIcon />,
@@ -99,7 +98,6 @@ function User(props) {
     const [hoveredAvatar, setHoveredAvatar] = useState(null);
 
     const handleMouseEnter = (avatar) => {
-        console.log(avatar);
         setHoveredAvatar(avatar);
     };
 
@@ -141,9 +139,6 @@ function User(props) {
         }
     };
 
-    useEffect(() => {
-        console.log("selectedProfileImage", selectedProfileImage);
-    }, [selectedProfileImage]);
     return (
         <>
             {isProfilePictureSelectOpen ?

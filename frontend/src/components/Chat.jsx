@@ -76,11 +76,9 @@ function Chat(props) {
             setIsChatLoading(true);
             try {
                 const response = await GET('/project/chat/messages', { project_id: projectId });
-                console.log("response", response);
                 setMessages(response.data);
                 scrollToBottom();
             } catch (error) {
-                console.error(error);
                 toast.error('Failed to load messages');
             } finally {
                 setIsChatLoading(false);

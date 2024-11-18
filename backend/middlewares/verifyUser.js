@@ -4,9 +4,10 @@ const config = require("../config");
 const verifyToken = (req, res, next) => {
   const token = req.cookies.authToken;
   const username = req.cookies.username;
+  const image = req.cookies.image;
 
-  if (!token || !username) {
-    return res.status(401).json({ message: "Authentication required." });
+  if (!token || !username || !image) {
+    return res.status(403).json({ message: "Authentication required." });
   }
 
   // Verify the token

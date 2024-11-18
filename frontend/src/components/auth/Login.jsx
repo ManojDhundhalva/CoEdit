@@ -153,7 +153,6 @@ export default function Login({ hasAccount, setHasAccount }) {
             const response = await GET("/auth/verify-username", { username: e.target.value }, signal);
             setNewUserNameError(response.data.exists);
         } catch (error) {
-            console.log(error);
         } finally {
             setIsValidNewUserNameLoading((prev) => false);
         }
@@ -218,13 +217,11 @@ export default function Login({ hasAccount, setHasAccount }) {
                     },
                 }
             );
-            console.log("results.data", results.data);
             setCode(results.data.code);
             setForgotUsername(results.data.username);
             setForgotImage(results.data.image);
             setIsForgotPassword((prev) => true);
         } catch (error) {
-            console.log(error);
             toast(error.response?.data?.message || "Something went wrong!",
                 {
                     icon: <CancelRoundedIcon />,
@@ -264,7 +261,6 @@ export default function Login({ hasAccount, setHasAccount }) {
                 );
             }
         } catch (error) {
-            console.log(error);
             toast(error.response?.data?.message || "Something went wrong!",
                 {
                     icon: <CancelRoundedIcon />,
@@ -279,10 +275,6 @@ export default function Login({ hasAccount, setHasAccount }) {
             setIsForgotPasswordLoading((prev) => false);
         }
     }
-
-    useEffect(() => {
-        console.log("image", image);
-    }, [image]);
 
     useEffect(() => {
         if (image && email && name) {

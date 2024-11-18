@@ -38,7 +38,6 @@ export const UserProvider = ({ children }) => {
                 image: data.image,
             });
         } catch (error) {
-            console.error("Error fetching user data: ", error);
             toast(error.response?.data?.message || "Error fetching user data",
                 {
                     icon: <CancelRoundedIcon />,

@@ -84,11 +84,9 @@ const Tools = ({ liveUsers }) => {
     const getProjectName = async () => {
       try {
         const { data } = await GET("/project/get-project-name", { projectId });
-        console.log("TOOLS", data);
         setProjectName((prev) => data.project_name);
         setIsAdmin((prev) => data.is_admin);
       } catch (err) {
-        console.log("err ->", err);
       }
     };
 

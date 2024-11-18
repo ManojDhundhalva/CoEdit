@@ -17,7 +17,6 @@ function VerifyCode(props) {
 
     const [otp, setOtp] = useState("");
 
-    useEffect(() => { console.log(otp) }, [otp]);
 
     // Countdown timer
     useEffect(() => {

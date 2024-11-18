@@ -23,7 +23,6 @@ function GoogleLogin(props) {
                 const { code } = authResult;
                 const { data } = await GET("/auth/google-credentials", { code });
                 const { accountExists } = data;
-                console.log("data", data);
 
                 if (accountExists) {
                     toast.success(data.message);
@@ -39,7 +38,6 @@ function GoogleLogin(props) {
                 toast.error("google auth error");
             }
         } catch (error) {
-            console.log("Google Error", error);
             toast.error(error.message);
         }
     }

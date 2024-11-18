@@ -88,10 +88,6 @@ const Navbar = () => {
     color: "#134611",
   };
 
-  useEffect(() => {
-    console.log(isProfileOpen);
-  }, [isProfileOpen]);
-
   return (
     <nav className="navbar navbar-expand-lg p-1" style={navbarStyle}>
       <div className="container-fluid">

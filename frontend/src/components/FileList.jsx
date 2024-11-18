@@ -64,7 +64,6 @@ const FileList = ({ allFiles, onFileClick, selectedFileId, getAllFiles }) => {
       getAllFiles();
       toast.success(`File Created`);
     } catch (err) {
-      console.log("err ->", err);
       toast.error("NOT ADDED");
     }
   };

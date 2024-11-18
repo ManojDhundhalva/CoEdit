@@ -166,7 +166,6 @@ export default function RegisterPage({ hasAccount, setHasAccount }) {
             const response = await GET("/auth/verify-username", { username: e.target.value }, signal);
             setUserNameError(response.data.exists);
         } catch (error) {
-            console.log(error);
         } finally {
             setIsValidUserNameLoading((prev) => false);
         }
@@ -195,7 +194,6 @@ export default function RegisterPage({ hasAccount, setHasAccount }) {
             const response = await GET("/auth/verify-email", { emailid: e.target.value }, signal);
             setEmailError(response.data.exists);
         } catch (error) {
-            console.log(error);
         } finally {
             setIsValidEmailLoading((prev) => false);
         }
@@ -222,7 +220,6 @@ export default function RegisterPage({ hasAccount, setHasAccount }) {
             const response = await GET("/auth/verify-username", { username: e.target.value }, signal);
             setNewUserNameError(response.data.exists);
         } catch (error) {
-            console.log(error);
         } finally {
             setIsValidNewUserNameLoading((prev) => false);
         }

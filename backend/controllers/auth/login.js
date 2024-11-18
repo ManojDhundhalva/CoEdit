@@ -80,7 +80,6 @@ const getAccount = async (req, resp) => {
             return resp.status(401).json({ message: "Incorrect Password" });
         }
     } catch (error) {
-        console.error("Error occurred during account retrieval:", error);
         return resp
             .status(500)
             .json({ message: "DATABASE - Internal Server Error" });

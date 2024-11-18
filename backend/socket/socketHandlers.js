@@ -23,8 +23,8 @@ const insertLiveUser = async (project_id, fileId, username) => {
                     [fileId, username, project_id]
                 );
             } catch (err) {
-                console.error("Error updating live user:", err);
-                throw err;
+                // console.error("Error updating live user:", err);
+                // throw err;
             }
         } else {
             try {
@@ -38,13 +38,13 @@ const insertLiveUser = async (project_id, fileId, username) => {
                     [fileId, project_id, username]
                 );
             } catch (err) {
-                console.error("Error inserting live user:", err);
-                throw err;
+                // console.error("Error inserting live user:", err);
+                // throw err;
             }
         }
     } catch (err) {
-        console.error("Error getting live user:", err);
-        throw err;
+        // console.error("Error getting live user:", err);
+        // throw err;
     }
 };
 
@@ -134,7 +134,6 @@ const deleteFileAndChildren = async (fileTreeId) => {
             fileTreeId,
         ]);
 
-        console.log(descendantsResult.rows);
 
         for (let i = descendantsResult.rows.length - 1; i >= 0; i--) {
             const { file_tree_id } = descendantsResult.rows[i];
@@ -167,7 +166,7 @@ const deleteFileAndChildren = async (fileTreeId) => {
             await pool.query("DELETE FROM files WHERE file_id = $1", [file_tree_id]);
         }
     } catch (err) {
-        console.error("Error deleting files:", err);
+        // console.error("Error deleting files:", err);
     }
 };
 
@@ -193,7 +192,7 @@ const insertNewLog = async (file_id, newLog) => {
     try {
         await pool.query(query, parameters);
     } catch (error) {
-        console.error("Error inserting new log:", error);
+        // console.error("Error inserting new log:", error);
     }
 };
 
@@ -204,14 +203,13 @@ const insertChatMessage = async (project_id, username, message, time) => {
     try {
         await pool.query(query, parameters);
     } catch (error) {
-        console.error("Error inserting chat message:", error);
+        // console.error("Error inserting chat message:", error);
     }
 };
 
 const socketHandlers = (io) => {
     io.on("connection", (socket) => {
         socket.setMaxListeners(20);
-        console.log("Connect-id :", socket.id);
 
         socket.on("editor:join-project", async ({ project_id, username, image }) => {
             socket.join(project_id);
@@ -236,7 +234,6 @@ const socketHandlers = (io) => {
 
             io.to(project_id).emit("editor:live-user-joined", { username, image });
 
-            console.log("project_id", project_id);
             socket.on(
                 "file-explorer:insert-node",
                 async ({ new_node_parent_id, name, is_folder }) => {
@@ -321,7 +318,6 @@ const socketHandlers = (io) => {
                     .to(project_id)
                     .emit("code-editor:remove-active-live-user", { username });
 
-                console.log("Disconnect :", socket.id);
             });
         });
     });

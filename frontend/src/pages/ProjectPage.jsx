@@ -270,7 +270,6 @@ function ProjectPage() {
       setIsFetchingProjectsLoading(true);
       try {
         const results = await GET("/project/get-all-projects");
-        console.log(results.data)
         setAllProjects(results.data);
       } catch (error) {
         toast(error.response?.data?.message || "Something went wrong!",

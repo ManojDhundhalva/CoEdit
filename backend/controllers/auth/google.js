@@ -21,9 +21,6 @@ const googleCredentials = async (req, res) => {
         }
 
         const { email, name, picture } = await userResponse.json();
-        console.log("email", email);
-        console.log("name", name);
-        console.log("picture", picture);
 
         const results = await pool.query(queries.getAccountByEmail, [email]);
 
@@ -63,7 +60,6 @@ const googleCredentials = async (req, res) => {
         return res.status(200).json({ email, name, image: picture });
 
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ message: "Google auth Error" });
     }
 };
@@ -103,7 +99,6 @@ const googleLogin = async (req, res) => {
         return res.status(200).json({ message: "Login is successfull" });
 
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ message: "Google auth Error" });
     }
 };

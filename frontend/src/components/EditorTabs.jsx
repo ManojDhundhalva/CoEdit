@@ -24,10 +24,6 @@ const EditorTabs = ({
   setAllFiles,
   openedTabs,
 }) => {
-  useEffect(() => {
-    console.log("allFiles", allFiles);
-    console.log("selectedFileId", selectedFileId);
-  }, [allFiles, selectedFileId]);
 
   return (
     <Box sx={{ flexGrow: 1 }}>

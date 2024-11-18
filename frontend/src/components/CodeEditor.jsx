@@ -134,10 +134,8 @@ const CodeEditor = ({ fileName, socket, fileId, username, setTabs, localImage })
     setIsLoadingLogs(true);
     try {
       const results = await GET("/project/code-editor/logs", { file_id: fileId });
-      console.log("logs ->", results.data);
       setLogs(results.data);
     } catch (error) {
-      console.error(error);
     } finally {
       setIsLoadingLogs(false);
     }
@@ -155,14 +153,13 @@ const CodeEditor = ({ fileName, socket, fileId, username, setTabs, localImage })
     setIsLoadingContent(true);
     try {
       const response = await GET("/project/code-editor/content", { file_id: fileId });
-      console.log("response", response.data.file_data.content);
       if (response?.data?.file_data?.content) {
         return (response.data.file_data.content); // Save content to state
       } else {
         return "";
       }
     } catch (error) {
-      console.error("Error fetching initial content:", error);
+      toast.error("Error fetching initial content:", error);
       return "";
     } finally {
       setIsLoadingContent(false);
@@ -203,7 +200,6 @@ const CodeEditor = ({ fileName, socket, fileId, username, setTabs, localImage })
   useEffect(() => {
     if (!socket) return;
     const handleGetAllCursors = ({ users: cursors }) => {
-      console.log("cursors", cursors);
       setUsers(cursors);
     }
     socket.on("code-editor:get-all-users-cursors", handleGetAllCursors);
@@ -360,7 +356,6 @@ const CodeEditor = ({ fileName, socket, fileId, username, setTabs, localImage })
     const userJoined = (data) => {
       if (!data && !data?.aUser) return;
       const { aUser, image: UserImage } = data;
-      console.log("userJoined", aUser);
 
       if (!aUser?.fileId || !aUser?.username || !aUser?.isActiveInTab || !aUser?.isLive || !aUser?.liveUsersTimestamp || !aUser?.projectId) return;
 
@@ -428,7 +423,6 @@ const CodeEditor = ({ fileName, socket, fileId, username, setTabs, localImage })
     };
 
     const userLeft = ({ file_id, username }) => {
-      console.log("userLeft", fileId, username);
       setTabs((prevTabs) =>
         prevTabs.map((tab) =>
           tab.id === file_id
@@ -442,7 +436,6 @@ const CodeEditor = ({ fileName, socket, fileId, username, setTabs, localImage })
     };
 
     const removeActiveLiveUser = ({ username }) => {
-      console.log("removeActiveLiveUser", username);
       setTabs((prevTabs) =>
         prevTabs.map((tab) => ({
           ...tab,
@@ -452,7 +445,6 @@ const CodeEditor = ({ fileName, socket, fileId, username, setTabs, localImage })
     };
 
     const loadLiveUsers = ({ allUsers }) => {
-      console.log("loadLiveUsers", allUsers);
       setTabs((prevTabs) => {
         // Update or add the users in the correct tab based on their file_id
         const updatedTabs = [...prevTabs];
@@ -656,16 +648,15 @@ const CodeEditor = ({ fileName, socket, fileId, username, setTabs, localImage })
 
   // Function to save content to the database
   const saveContentToDB = (content) => {
-    console.log("content", content);
     setIsLoadingSave(true);
 
     // Make the POST request using .then() and .catch()
     POST("/project/code-editor/save", { file_id: fileId, content })
       .then((response) => {
-        console.log("Content saved successfully:", response);
+        // console.log("Content saved successfully:", response);
       })
       .catch((error) => {
-        console.error("Failed to save content:", error);
+        // console.error("Failed to save content:", error);
       })
       .finally(() => {
         setIsLoadingSave(false);
@@ -695,16 +686,13 @@ const CodeEditor = ({ fileName, socket, fileId, username, setTabs, localImage })
       (item) => item.language === e.target.value
     );
     setSelectLanguage(selectedLanguage);
-    console.log('Selected Language:', selectedLanguage);
   };
 
   const handleRunCode = async () => {
     const { language, version } = selectLanguage;
-    console.log("selectLanguage", selectLanguage);
 
     const sourceCode = editorInstance.current.getValue();
 
-    console.log("language, version", language, version);
 
     if (!sourceCode || sourceCode.trim() === "") {
       toast("Code is empty",
@@ -726,7 +714,6 @@ const CodeEditor = ({ fileName, socket, fileId, username, setTabs, localImage })
 
     try {
       const results = await executeCode(language, version, sourceCode, codeInput);
-      console.log("results", results);
       setCodeOutput(results);
     } catch (error) {
       toast(error?.message || "Something went wrong!",

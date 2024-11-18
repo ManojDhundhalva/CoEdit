@@ -49,7 +49,6 @@ const sendMail = async (req, res) => {
         }
 
         const { emailid, username, profile_image } = userInfo.rows[0];
-        console.log(emailid, username, code, profile_image);
 
         const results = await main(config.USER_EMAIL, emailid, username, code);
         return res.status(200).json({ message: "Mail sent successfully", code, username, image: profile_image });

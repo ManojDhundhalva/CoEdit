@@ -156,9 +156,7 @@ const Folder = (props) => {
       const setExpandDataObj = { expand, file_tree_id: explorer.id };
       try {
         const results = await POST("/project/set-expand-data", setExpandDataObj);
-        console.log("setExpandData", results.data);
       } catch (error) {
-        console.log(error);
       }
     };
 
