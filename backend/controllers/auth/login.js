@@ -58,16 +58,19 @@ const getAccount = async (req, resp) => {
             resp.cookie("authToken", token, {
                 path: "/", // This allows the cookie to be accessible on all routes
                 maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
+                sameSite: 'None', // Allows cross-site cookie usage
             });
 
             resp.cookie("username", username, {
                 path: "/", // This allows the cookie to be accessible on all routes
                 maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
+                sameSite: 'None', // Allows cross-site cookie usage
             });
 
             resp.cookie("image", profile_image, {
                 path: "/", // This allows the cookie to be accessible on all routes
                 maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
+                sameSite: 'None', // Allows cross-site cookie usage
             });
 
             // Respond with the token and username
