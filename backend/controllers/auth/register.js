@@ -62,18 +62,21 @@ const createAccount = async (req, res) => {
             path: "/", // This allows the cookie to be accessible on all routes
             maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
             sameSite: 'None', // Allows cross-site cookie usage
+            secure: true, // Ensures the cookie is sent over HTTPS only
         });
 
         res.cookie("username", username, {
             path: "/", // This allows the cookie to be accessible on all routes
             maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
             sameSite: 'None', // Allows cross-site cookie usage
+            secure: true, // Ensures the cookie is sent over HTTPS only
         });
 
         res.cookie("image", profile_image, {
             path: "/", // This allows the cookie to be accessible on all routes
             maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
             sameSite: 'None', // Allows cross-site cookie usage
+            secure: true, // Ensures the cookie is sent over HTTPS only
         });
 
         return res.status(201).json({ message: "Account created successfully." });
