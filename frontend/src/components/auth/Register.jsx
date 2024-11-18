@@ -271,17 +271,17 @@ export default function RegisterPage({ hasAccount, setHasAccount }) {
     };
 
 
-    useEffect(() => {
-        const delayAndSetUser = async () => {
-            if (image && email && name) {
-                // Add 0.5-second delay before proceeding
-                await new Promise(resolve => setTimeout(resolve, 500));
-                setIsNewUser(true);
-            }
-        }
+    // useEffect(() => {
+    //     const delayAndSetUser = async () => {
+    //         if (image && email && name) {
+    //             // Add 0.5-second delay before proceeding
+    //             await new Promise(resolve => setTimeout(resolve, 500));
+    //             setIsNewUser(true);
+    //         }
+    //     }
 
-        delayAndSetUser();
-    }, [image, email, name]);
+    //     delayAndSetUser();
+    // }, [image, email, name]);
 
     return (
         <Grid
@@ -599,7 +599,7 @@ export default function RegisterPage({ hasAccount, setHasAccount }) {
                             </Grid>
 
                             <Grid item xs={12} container justifyContent="center">
-                                <GoogleLogin setEmail={setEmail} setName={setName} setImage={setImage} />
+                                <GoogleLogin setEmail={setEmail} setName={setName} setImage={setImage} setIsNewUser={setIsNewUser} />
                             </Grid>
 
                             <Grid container justifyContent="space-between" sx={{ px: 2 }}>
