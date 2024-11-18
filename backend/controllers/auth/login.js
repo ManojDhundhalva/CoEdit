@@ -39,6 +39,10 @@ const getAccount = async (req, resp) => {
 
         const { id, password: storedPassword, profile_image } = results.rows[0];
 
+        if (!storedPassword) {
+            return resp.status(404).json({ message: "You're Google Authenticated" });
+        }
+
         // Compare the provided password with the stored hashed password
         const isPasswordValid = await compareAsync(password, storedPassword);
 

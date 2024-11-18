@@ -1,13 +1,19 @@
 const getAllProjects = `
-SELECT *
+SELECT p.*, po.*, u.profile_image AS image
 FROM
     projects AS p
 JOIN
     project_owners AS po
 ON
     p.project_id = po.project_id
+JOIN
+    users AS u
+ON
+    p.project_created_by = u.username
 WHERE
-    po.user_id = $1;
+    po.username = $1
+ORDER BY
+    po.last_opened DESC;
 `;
 
 const addProjects = `
@@ -23,11 +29,11 @@ VALUES
 const addProjectOwners = `
 INSERT INTO project_owners (
     project_id,
-    user_id,
+    username,
     is_admin
 )
 VALUES 
-    ($1, $2, TRUE);
+    ($1, $2, $3);
 `;
 
 const addFileTree = `
@@ -105,7 +111,16 @@ VALUES
 `;
 
 const getProjectName = `
-SELECT project_name FROM projects WHERE project_id = $1;
+SELECT 
+  project_name, 
+  CASE 
+    WHEN project_created_by = $2 THEN TRUE 
+    ELSE FALSE 
+  END AS is_admin
+FROM 
+  projects 
+WHERE 
+  project_id = $1;
 `;
 
 const getContributorId = `
@@ -115,7 +130,7 @@ SELECT id FROM users WHERE username = $1;
 const addContributor = `
 INSERT INTO project_owners (
     project_id,
-    user_id
+    username
 )
 VALUES 
     ($1, $2);
@@ -190,17 +205,39 @@ const deleteExpandData = `
 const userSearch = `
 SELECT * FROM users 
 WHERE (username ILIKE $1)
-AND id NOT IN (
-    SELECT user_id FROM project_owners WHERE project_id = $2
+AND username NOT IN (
+    SELECT username FROM project_owners WHERE project_id = $2
 )
 `;
 
 const getLogs = `
-SELECT l.*, u.profile_image AS image FROM logs AS l JOIN users AS u ON l.username = u.username WHERE file_id = $1;
+SELECT l.*, u.profile_image AS image 
+FROM logs AS l 
+JOIN users AS u 
+ON l.username = u.username 
+WHERE file_id = $1 
+ORDER BY l.logs_timestamp DESC
+LIMIT 15;
 `;
 
 const getMessages = `   
 SELECT c.*, u.profile_image AS image FROM chat AS c JOIN users AS u ON c.username = u.username WHERE project_id = $1;
+`;
+
+const saveFile = `
+UPDATE files 
+SET file_data = $2
+WHERE file_id = $1;
+`;
+
+const getInitialContentOfFile = `
+SELECT file_data FROM files WHERE file_id = $1;
+`;
+
+const updateProjectName = `
+UPDATE projects 
+SET project_name = $3
+WHERE project_created_by = $1 AND project_id = $2;
 `;
 
 module.exports = {
@@ -225,4 +262,7 @@ module.exports = {
     userSearch,
     getLogs,
     getMessages,
+    saveFile,
+    getInitialContentOfFile,
+    updateProjectName,
 };

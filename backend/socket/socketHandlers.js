@@ -217,6 +217,16 @@ const socketHandlers = (io) => {
             socket.join(project_id);
             await pool.query(
                 `
+                UPDATE project_owners
+                SET last_opened = CURRENT_TIMESTAMP
+                WHERE project_id = $1
+                AND username = $2;
+                `,
+                [project_id, username]
+            );
+
+            await pool.query(
+                `
                 INSERT INTO project_live_users (project_id, username)
                 VALUES ($1, $2)
                 ON CONFLICT (project_id, username) DO NOTHING;
@@ -248,9 +258,15 @@ const socketHandlers = (io) => {
 
             socket.on("code-editor:send-change", async (data) => {
                 socket.broadcast.to(project_id).emit("code-editor:receive-change", data);
-
                 const { file_id, newLog } = data;
                 await insertNewLog(file_id, newLog);
+            });
+
+            socket.on("code-editor:send-all-cursors", ({ fileId }) => {
+                socket.broadcast.to(project_id).emit("code-editor:send-all-cursors", { fileId });
+                socket.on("code-editor:get-all-users-cursors", (data) => {
+                    socket.broadcast.to(project_id).emit("code-editor:get-all-users-cursors", data);
+                });
             });
 
             socket.on("code-editor:send-cursor", (data) => {

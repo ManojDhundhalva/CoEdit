@@ -6,5 +6,5 @@ const router = Router();
 
 router.get("/", verifyTokenAndAuthorization, controller.getUser);
 router.post("/", verifyTokenAndAuthorization, controller.updateUser);
-
+router.post("/update-profile-image", verifyTokenAndAuthorization, controller.updateProfileImage);
 module.exports = router;
