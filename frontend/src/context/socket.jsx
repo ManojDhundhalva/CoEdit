@@ -5,11 +5,26 @@ import React, {
   useEffect,
   useRef,
 } from "react";
+import { io } from "socket.io-client";
+import config from "../config";
 
 const socketContext = createContext();
 
 export const SocketProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
+
+  useEffect(() => {
+    const s = io(config.BACKEND_API);
+
+    s.on("connect_error", (err) => console.log(err));
+    s.on("connect_failed", (err) => console.log(err));
+
+    setSocket((prev) => s);
+
+    return () => {
+      s.disconnect();
+    };
+  }, []);
 
   return (
     <socketContext.Provider value={{ socket }}>

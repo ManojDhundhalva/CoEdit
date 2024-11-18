@@ -16,8 +16,6 @@ import FormatQuoteRoundedIcon from '@mui/icons-material/FormatQuoteRounded';
 import TextsmsRoundedIcon from '@mui/icons-material/TextsmsRounded';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import Chat from "../components/Chat";
-import { io } from "socket.io-client";
-import config from "../config";
 
 const styles = {
   container: {
@@ -59,30 +57,15 @@ function Editor() {
   const params = useParams();
   const projectId = params?.projectId || null;
 
-  const { socket, setSocket } = useSocket();
-
-  useEffect(() => {
-    const s = io(config.BACKEND_API, {
-      withCredentials: true,
-      transports: ['websocket', 'polling'], // Use WebSocket first, then fallback to polling
-      upgrade: false // Sometimes, disabling the HTTP long-polling upgrade helps
-    });
-
-    s.on("connect_error", (err) => console.log(err));
-    s.on("connect_failed", (err) => console.log(err));
-
-    setSocket((prev) => s);
-
-    return () => {
-      s.disconnect();
-    };
-  }, []);
+  const { socket } = useSocket();
 
   const getLiveUsers = async () => {
     try {
       const results = await GET("/project/get-live-users", { projectId });
+      console.log("getLiveUsers", results.data);
       setLiveUsers((prev) => results.data);
     } catch (error) {
+      console.log(error);
     }
   };
 
@@ -173,6 +156,7 @@ function Editor() {
   const getInitialTabs = async () => {
     try {
       const results = await GET("/project/get-initial-tabs", { projectId });
+      console.log(results.data);
 
       const data = results.data.map((file) => ({
         id: file.file_id,
@@ -197,6 +181,7 @@ function Editor() {
         return activeFile ? activeFile.file_id : null; // Return the file_id or null if not found
       });
     } catch (err) {
+      console.log("err ->", err);
     }
   };
 
@@ -204,6 +189,9 @@ function Editor() {
     getInitialTabs();
   }, []);
 
+  useEffect(() => {
+    console.log("tabs", tabs);
+  }, [tabs]);
 
   useEffect(() => {
     if (!socket) return;
@@ -273,7 +261,7 @@ function Editor() {
       case 0:
         return <DataObjectRoundedIcon sx={{ fontSize: "2em" }} />;
       case 1:
-        return <i className="fa-solid fa-code" style={{ fontSize: "1.5em" }}></i>;
+        return <i class="fa-solid fa-code" style={{ fontSize: "1.5em" }}></i>;
       case 2:
         return <DataArrayRoundedIcon sx={{ fontSize: "2em" }} />;
       case 3:
