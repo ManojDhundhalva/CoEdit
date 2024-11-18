@@ -11,6 +11,10 @@ function ProtectedRoute(props) {
 
     const [isOnline, setIsOnline] = useState(navigator.onLine);
 
+    useEffect(() => {
+        getUser();
+    }, [])
+
     // useEffect(() => {
     //     const authenticateUser = () => {
     //         const authToken = Cookies.get("authToken");

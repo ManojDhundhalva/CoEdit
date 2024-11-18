@@ -62,7 +62,10 @@ function Editor() {
   const { socket, setSocket } = useSocket();
 
   useEffect(() => {
-    const s = io(config.BACKEND_API);
+    const s = io(config.BACKEND_API, {
+      withCredentials: true,
+      transports: ['websocket', 'polling'], // Use WebSocket first, then fallback to polling
+    });
 
     s.on("connect_error", (err) => console.log(err));
     s.on("connect_failed", (err) => console.log(err));
