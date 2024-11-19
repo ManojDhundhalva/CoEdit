@@ -287,410 +287,8 @@ export default function Login({ hasAccount, setHasAccount }) {
                 paddingX: { xs: 2, sm: 4 },
                 paddingY: { xs: 4, sm: 6 },
             }}
-        >{!isNewUser ? (
-            <Grid
-                item
-                xs={12}
-                sm={8}
-                md={6}
-                lg={4}
-                sx={{
-                    padding: { xs: 2, sm: 4 },
-                    borderRadius: "16px",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    border: "1px solid black",
-                }}
-            >
-                <Avatar sx={{ backgroundColor: "#333333", mb: 2 }}>
-                    <LockOutlinedIcon />
-                </Avatar>
-                <Typography variant="h5" fontWeight="bold" mb={2}>
-                    Sign in
-                </Typography>
-                <form onSubmit={handleSubmit} style={{ width: "100%" }}>
-                    <Grid container spacing={2}>
-                        <Grid item xs={12}>
-                            <TextField
-                                value={userName}
-                                onChange={(e) => {
-                                    if (e.target.value.length >= 255) return;
-                                    setUserNameOrEmailJustVerify(true);
-                                    setUserName(e.target.value);
-                                }}
-                                id="username"
-                                label="Username / Email ID"
-                                placeholder="Username OR Email-ID"
-                                variant="outlined"
-                                fullWidth
-                                required
-                                size="small"
-                                error={
-                                    (justVerify || userNameOrEmailJustVerify) && (userName === "" || userName.length >= 255)
-                                }
-                                helperText={
-                                    (justVerify || userNameOrEmailJustVerify) &&
-                                    (userName === ""
-                                        ? "This field cannot be empty."
-                                        : "")
-                                }
-                                InputProps={{
-                                    startAdornment: (
-                                        <InputAdornment position="start">
-                                            <PersonIcon sx={{ color: "#333333" }} />
-                                        </InputAdornment>
-                                    ),
-                                }}
-                                inputProps={{
-                                    required: false, // disables the default pop-up message
-                                }}
-                                sx={{
-                                    color: "black",
-                                    "& .MuiOutlinedInput-root": {
-                                        borderRadius: 3,
-                                        fontWeight: "bold",
-                                        "&.Mui-focused fieldset": {
-                                            borderColor: "black", // Keep the border color when focused
-                                        },
-                                    },
-                                    "& .MuiInputLabel-root": {
-                                        color: "black", // Change the label color
-                                        "&.Mui-focused": {
-                                            color: "black", // Change the label color
-                                        },
-                                    },
-                                }}
-                            />
-                        </Grid>
-
-                        <Grid item xs={12}>
-                            <TextField
-                                value={password}
-                                onChange={(e) => {
-                                    if (e.target.value.length >= 255) return;
-                                    setPassword(e.target.value);
-                                }}
-                                id="password"
-                                label="Password"
-                                placeholder="Password"
-                                variant="outlined"
-                                type={showPassword ? "text" : "password"}
-                                fullWidth
-                                required
-                                size="small"
-                                error={
-                                    justVerify &&
-                                    (password === "" || password.length < 8)
-                                }
-                                helperText={
-                                    justVerify &&
-                                    (password === ""
-                                        ? "This field cannot be empty."
-                                        : password.length < 8
-                                            ? "Password must contain at least 8 characters."
-                                            : "")
-                                }
-                                InputProps={{
-                                    startAdornment: (
-                                        <InputAdornment position="start">
-                                            <VpnKeyRoundedIcon sx={{ color: "#333333" }} />
-                                        </InputAdornment>
-                                    ),
-                                    endAdornment: (
-                                        <InputAdornment position="end">
-                                            <IconButton
-                                                aria-label="toggle password visibility"
-                                                onClick={handleTogglePasswordVisibility}
-                                                onMouseDown={handlePasswordMouseDown}
-                                                edge="end"
-                                            >
-                                                {showPassword ? (
-                                                    <Visibility sx={{ color: "#333333" }} />
-                                                ) : (
-                                                    <VisibilityOff sx={{ color: "#333333" }} />
-                                                )}
-                                            </IconButton>
-                                        </InputAdornment>
-                                    ),
-                                }}
-                                inputProps={{
-                                    required: false, // disables the default pop-up message
-                                }}
-                                sx={{
-                                    color: "black",
-                                    "& .MuiOutlinedInput-root": {
-                                        borderRadius: 3,
-                                        fontWeight: "bold",
-                                        "&.Mui-focused fieldset": {
-                                            borderColor: "black", // Keep the border color when focused
-                                        },
-                                    },
-                                    "& .MuiInputLabel-root": {
-                                        color: "black", // Change the label color
-                                        "&.Mui-focused": {
-                                            color: "black", // Change the label color
-                                        },
-                                    },
-                                }}
-                            />
-                        </Grid>
-
-                        <Grid item xs={12}>
-                            <Button
-                                fullWidth
-                                type="submit"
-                                variant="contained"
-                                sx={{
-                                    fontWeight: "bold",
-                                    borderRadius: 3,
-                                    backgroundColor: "#333333",
-                                    color: "white",
-                                    "&:hover": {
-                                        backgroundColor: "#404040",
-                                    },
-                                }}
-                            >
-                                {loading ? (
-                                    <>
-                                        Signing In&nbsp;&nbsp;
-                                        <CircularProgress
-                                            size={20}
-                                            thickness={7}
-                                            sx={{
-                                                color: "white",
-                                                '& circle': { strokeLinecap: 'round' },
-                                            }}
-                                        />
-                                    </>
-                                ) : ("Sign In")}
-                            </Button>
-                        </Grid>
-
-                        <Grid container justifyContent="space-between" sx={{ px: 2 }}>
-                            <Box
-                                onClick={handleForgotPassword}
-                                sx={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    my: 2,
-                                    fontSize: "small",
-                                    fontWeight: "bold",
-                                    color: isSendingMail ? "black" : "#666666",
-                                    textDecoration: isSendingMail ? "none" : "underline",
-                                    cursor: isSendingMail ? "auto" : "pointer",
-                                    "&:hover": {
-                                        color: "black",
-                                    },
-                                }}
-                            >
-                                {isSendingMail ? ("Sending mail to the your registered email") : ("Forgot Password?")}
-                                {isForgotPasswordLoading ? (
-                                    <CircularProgress
-                                        size={14}
-                                        thickness={7}
-                                        sx={{
-                                            mx: 1,
-                                            color: "black",
-                                            '& circle': { strokeLinecap: 'round' },
-                                        }}
-                                    />
-                                ) : null}
-                            </Box>
-                        </Grid>
-
-                        <Grid container justifyContent="center" sx={{ pl: 2 }}>
-                            <Typography fontWeight="bold">
-                                OR
-                            </Typography>
-                        </Grid>
-
-                        <Grid item xs={12} container justifyContent="center">
-                            <GoogleLogin setEmail={setEmail} setName={setName} setImage={setImage} setIsNewUser={setIsNewUser} />
-                        </Grid>
-
-                        <Grid container justifyContent="space-between" sx={{ px: 2 }}>
-                            <Box
-                                onClick={() => setHasAccount(false)}
-                                sx={{
-                                    my: 2,
-                                    fontSize: "small",
-                                    fontWeight: "bold",
-                                    color: "#666666",
-                                    textDecoration: "underline",
-                                    cursor: "pointer",
-                                    "&:hover": {
-                                        color: "black",
-                                    },
-                                }}
-                            >
-                                Don't have an account? Sign Up
-                            </Box>
-                        </Grid>
-                    </Grid>
-                </form>
-            </Grid >
-
-        ) : (
-            <Grid
-                item
-                xs={12}
-                sm={8}
-                md={6}
-                lg={4}
-                sx={{
-                    padding: { xs: 2, sm: 4 },
-                    borderRadius: "16px",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    border: "1px solid black",
-                }}
-            >
-
-                <form onSubmit={handleSubmitNewUser} style={{ width: "100%" }}>
-                    <Grid container spacing={2}>
-                        <Grid item xs={12}>
-                            <Box sx={{ position: "relative", display: "flex", width: "100%", height: "100%", flexDirection: "column", alignItems: "center" }}>
-                                <Typography variant="h5" fontWeight="bold" sx={{ my: 2 }}>Hi, {name}</Typography>
-                                <IconButton onClick={() => { setIsNewUser((prev) => false); setImage(""); setEmail(""); setName(""); }}
-                                    sx={{ bgcolor: "#F2F2F2", color: "#333333", position: "absolute", top: 0, left: 0, borderRadius: "50%" }}
-                                >
-                                    <KeyboardBackspaceRoundedIcon sx={{ color: "#333333" }} />
-                                </IconButton>
-                                <img
-                                    src={image}
-                                    alt="profile-image"
-                                    style={{
-                                        width: "150px",
-                                        height: "150px",
-                                        objectFit: "cover",
-                                        borderRadius: "50%",
-                                        border: "1px solid #333333",
-                                    }}
-                                    crossOrigin="anonymous"
-                                    referrerPolicy="no-referrer"
-                                    decoding="async"
-                                />
-                                <Typography fontWeight="bold" sx={{ my: 2 }}>{email}</Typography>
-                                <Box sx={{ display: "flex", justifyContent: "flex-start", width: "100%", p: "12px", my: 2, borderRadius: 3, border: "1px solid #333333" }}>
-                                    <InfoRoundedIcon /> <Typography fontWeight="bold" sx={{ mx: 2 }}>Choose a username to get started</Typography>
-                                </Box>
-                            </Box>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                value={newUserName}
-                                onChange={handleChangeNewUserName}
-                                id="username"
-                                label="Username"
-                                placeholder="Username"
-                                variant="outlined"
-                                fullWidth
-                                required
-                                size="small"
-                                autoComplete="on"
-                                error={
-                                    newUserNameJustVerify && (newUserName === "" || !isValidUserName(newUserName))
-                                }
-                                InputProps={{
-                                    startAdornment: (
-                                        <InputAdornment position="start">
-                                            <PersonIcon sx={{ color: "#333333" }} />
-                                        </InputAdornment>
-                                    ),
-                                    endAdornment: (
-                                        <InputAdornment position="end">
-                                            {isValidNewUserNameLoading ?
-                                                <CircularProgress
-                                                    size={20}
-                                                    thickness={6}
-                                                    sx={{
-                                                        color: "black",
-                                                        '& circle': { strokeLinecap: 'round' },
-                                                    }}
-                                                />
-                                                : (newUserNameError || (newUserName !== "" && !isValidUserName(newUserName)) || (newUserNameJustVerify && newUserName === "")) ?
-                                                    <Tooltip
-                                                        TransitionComponent={Zoom}
-                                                        title={(newUserName === "") ? "Username is required" : "Username already exists"}
-                                                        placement="bottom"
-                                                        arrow
-                                                        componentsProps={{
-                                                            tooltip: {
-                                                                sx: {
-                                                                    bgcolor: "common.black",
-                                                                    "& .MuiTooltip-arrow": {
-                                                                        color: "common.black",
-                                                                    },
-                                                                },
-                                                            },
-                                                        }}
-                                                    >
-                                                        <WarningAmberRoundedIcon sx={{ color: "#333333", cursor: "pointer" }} />
-                                                    </Tooltip>
-                                                    : (newUserName !== "") ?
-                                                        <CheckRoundedIcon sx={{ color: "#333333" }} /> : null}
-                                        </InputAdornment>
-                                    ),
-                                }}
-                                inputProps={{
-                                    required: false, // disables the default pop-up message
-                                }}
-                                sx={{
-                                    color: "black",
-                                    "& .MuiOutlinedInput-root": {
-                                        borderRadius: 3,
-                                        fontWeight: "bold",
-                                        "&.Mui-focused fieldset": {
-                                            borderColor: "black", // Keep the border color when focused
-                                        },
-                                    },
-                                    "& .MuiInputLabel-root": {
-                                        color: "black", // Change the label color
-                                        "&.Mui-focused": {
-                                            color: "black", // Change the label color
-                                        },
-                                    },
-                                }}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Button
-                                fullWidth
-                                type="submit"
-                                variant="contained"
-                                sx={{
-                                    fontWeight: "bold",
-                                    borderRadius: "12px",
-                                    backgroundColor: "#333333",
-                                    color: "white",
-                                    "&:hover": {
-                                        backgroundColor: "#404040",
-                                    },
-                                }}
-                            >
-                                {isNewAccountIsCreating ? (
-                                    <>
-                                        Creating an Account&nbsp;&nbsp;
-                                        <CircularProgress
-                                            size={20}
-                                            thickness={6}
-                                            sx={{
-                                                color: "white",
-                                                '& circle': { strokeLinecap: 'round' },
-                                            }}
-                                        />
-                                    </>
-                                ) : ("Create Account")}
-                            </Button>
-                        </Grid>
-                    </Grid>
-                </form>
-            </Grid>
-        )}
-            {/* {!isForgotPassword ? (
+        >
+            {!isForgotPassword ? (
                 !isNewUser ? (
                     <Grid
                         item
@@ -958,7 +556,7 @@ export default function Login({ hasAccount, setHasAccount }) {
                                 <Grid item xs={12}>
                                     <Box sx={{ position: "relative", display: "flex", width: "100%", height: "100%", flexDirection: "column", alignItems: "center" }}>
                                         <Typography variant="h5" fontWeight="bold" sx={{ my: 2 }}>Hi, {name}</Typography>
-                                        <IconButton onClick={() => { setIsNewUser((prev)=>false); setImage(""); setEmail(""); setName(""); }}
+                                        <IconButton onClick={() => { setIsNewUser((prev) => false); setImage(""); setEmail(""); setName(""); }}
                                             sx={{ bgcolor: "#F2F2F2", color: "#333333", position: "absolute", top: 0, left: 0, borderRadius: "50%" }}
                                         >
                                             <KeyboardBackspaceRoundedIcon sx={{ color: "#333333" }} />
@@ -1095,63 +693,62 @@ export default function Login({ hasAccount, setHasAccount }) {
                     </Grid>
                 )
             ) :
-             (
-                <>
-                    {!forgetPasswordStep ? (
-                        <>
-                            <Grid
-                                item
-                                xs={12}
-                                sm={8}
-                                md={6}
-                                lg={4}
-                                sx={{
-                                    padding: { xs: 2, sm: 4 },
-                                    borderRadius: "16px",
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    alignItems: "center",
-                                    border: "1px solid black",
-                                }}
-                            >
-                                <VerifyCode
-                                    code={code}
-                                    setCode={setCode}
-                                    sendEmailToUser={sendEmailToUser}
-                                    setIsForgotPassword={setIsForgotPassword}
-                                    setForgetPasswordStep={setForgetPasswordStep}
-                                />
-                            </Grid>
-                        </>
-                    ) : (
-                        <>
-                            <Grid
-                                item
-                                xs={12}
-                                sm={8}
-                                md={6}
-                                lg={4}
-                                sx={{
-                                    padding: { xs: 2, sm: 4 },
-                                    borderRadius: "16px",
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    alignItems: "center",
-                                    border: "1px solid black",
-                                }}
-                            >
-                                <ResetPassword
-                                    username={forgotUsername}
-                                    image={forgotImage}
-                                    setForgetPasswordStep={setForgetPasswordStep}
-                                />
-                            </Grid>
-                        </>
-                    )}
-                </>
-            )
-            } */}
-
+                (
+                    <>
+                        {!forgetPasswordStep ? (
+                            <>
+                                <Grid
+                                    item
+                                    xs={12}
+                                    sm={8}
+                                    md={6}
+                                    lg={4}
+                                    sx={{
+                                        padding: { xs: 2, sm: 4 },
+                                        borderRadius: "16px",
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        alignItems: "center",
+                                        border: "1px solid black",
+                                    }}
+                                >
+                                    <VerifyCode
+                                        code={code}
+                                        setCode={setCode}
+                                        sendEmailToUser={sendEmailToUser}
+                                        setIsForgotPassword={setIsForgotPassword}
+                                        setForgetPasswordStep={setForgetPasswordStep}
+                                    />
+                                </Grid>
+                            </>
+                        ) : (
+                            <>
+                                <Grid
+                                    item
+                                    xs={12}
+                                    sm={8}
+                                    md={6}
+                                    lg={4}
+                                    sx={{
+                                        padding: { xs: 2, sm: 4 },
+                                        borderRadius: "16px",
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        alignItems: "center",
+                                        border: "1px solid black",
+                                    }}
+                                >
+                                    <ResetPassword
+                                        username={forgotUsername}
+                                        image={forgotImage}
+                                        setForgetPasswordStep={setForgetPasswordStep}
+                                    />
+                                </Grid>
+                            </>
+                        )}
+                    </>
+                )
+            }
         </Grid >
     );
 }
