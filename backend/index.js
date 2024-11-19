@@ -20,7 +20,7 @@ const projectRoutes = require("./routes/project");
 const userRoutes = require("./routes/user");
 
 // Middleware
-app.use(cors());
+app.use(cors(corsConfig));
 app.use(cookieParser());
 app.use(express.json());
 

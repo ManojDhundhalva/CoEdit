@@ -5,8 +5,9 @@ const config = require("./index");
 const initIO = (server) => {
     const io = new Server(server, {
         cors: {
-            origin: config.FRONTEND_URL,
+            origin: "*",
             methods: ['GET', 'POST'],
+            allowedHeaders: "*", //['Content-Type', 'Authorization'],
             credentials: true,
             transports: ['websocket', 'polling']
         }
