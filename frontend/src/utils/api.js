@@ -1,6 +1,8 @@
 import axios from "axios";
 import config from "../config";
 
+axios.defaults.withCredentials = true;
+
 // Create an instance of Axios for API requests
 const API = axios.create({
   baseURL: config.BACKEND_API,
@@ -9,7 +11,7 @@ const API = axios.create({
 });
 
 export async function executeCode(language = "javascript", version = "18.15.0", sourceCode = "", input = "") {
-  
+
   try {
     const response = await axios.post("https://emkc.org/api/v2/piston/execute", {
       language: language,
