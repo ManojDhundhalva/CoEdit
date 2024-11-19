@@ -207,30 +207,69 @@ const insertChatMessage = async (project_id, username, message, time) => {
     }
 };
 
+const updateLastOpened = async (project_id, username) => {
+    const query =
+        `
+        UPDATE project_owners
+        SET last_opened = CURRENT_TIMESTAMP
+        WHERE project_id = $1
+        AND username = $2;
+        `;
+    try {
+        await pool.query(query, [project_id, username]);
+    } catch (error) {
+        // console.log(error);
+    }
+};
+
+const insertLiveUserIfNotExist = async (project_id, username) => {
+
+    const query =
+        `
+        INSERT INTO project_live_users (project_id, username)
+        VALUES ($1, $2)
+        ON CONFLICT (project_id, username) DO NOTHING;
+        `;
+
+    try {
+        await pool.query(query, [project_id, username]);
+    } catch (error) {
+        // console.log(error);
+    }
+};
+
+
+
 const socketHandlers = (io) => {
     io.on("connection", (socket) => {
         socket.setMaxListeners(20);
 
         socket.on("editor:join-project", async ({ project_id, username, image }) => {
             socket.join(project_id);
-            await pool.query(
-                `
-                UPDATE project_owners
-                SET last_opened = CURRENT_TIMESTAMP
-                WHERE project_id = $1
-                AND username = $2;
-                `,
-                [project_id, username]
-            );
+            console.log("project_id", project_id);
+            console.log("username", username);
+            console.log("image", image);
 
-            await pool.query(
-                `
-                INSERT INTO project_live_users (project_id, username)
-                VALUES ($1, $2)
-                ON CONFLICT (project_id, username) DO NOTHING;
-                `,
-                [project_id, username]
-            );
+            await updateLastOpened(project_id, username);
+            // await pool.query(
+            //     `
+            //     UPDATE project_owners
+            //     SET last_opened = CURRENT_TIMESTAMP
+            //     WHERE project_id = $1
+            //     AND username = $2;
+            //     `,
+            //     [project_id, username]
+            // );
+
+            await insertLiveUserIfNotExist(project_id, username);
+            // await pool.query(
+            //     `
+            //     INSERT INTO project_live_users (project_id, username)
+            //     VALUES ($1, $2)
+            //     ON CONFLICT (project_id, username) DO NOTHING;
+            //     `,
+            //     [project_id, username]
+            // );
 
             io.to(project_id).emit("editor:live-user-joined", { username, image });
 
