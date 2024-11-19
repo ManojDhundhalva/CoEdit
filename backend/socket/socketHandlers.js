@@ -208,6 +208,9 @@ const insertChatMessage = async (project_id, username, message, time) => {
 };
 
 const updateLastOpened = async (project_id, username) => {
+
+    if (!project_id || !username) return;
+
     const query =
         `
         UPDATE project_owners
@@ -223,6 +226,8 @@ const updateLastOpened = async (project_id, username) => {
 };
 
 const insertLiveUserIfNotExist = async (project_id, username) => {
+
+    if (!project_id || !username) return;
 
     const query =
         `
