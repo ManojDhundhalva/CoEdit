@@ -276,12 +276,6 @@ export default function Login({ hasAccount, setHasAccount }) {
         }
     }
 
-    useEffect(() => {
-        if (image && email && name) {
-            setIsNewUser(true);
-        }
-    }, [image, email, name]);
-
     return (
         <Grid
             container
