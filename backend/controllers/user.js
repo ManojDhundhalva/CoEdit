@@ -35,28 +35,28 @@ const updateProfileImage = async (req, res) => {
             { expiresIn: config.JWT_TIMEOUT }
         );
 
-        res.cookie("authToken", token, {
-            path: "/", // This allows the cookie to be accessible on all routes
-            maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
-            sameSite: 'None', // Allows cross-site cookie usage
-            secure: true, // Ensures the cookie is sent over HTTPS only
-        });
+        // res.cookie("authToken", token, {
+        //     path: "/", // This allows the cookie to be accessible on all routes
+        //     maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
+        //     sameSite: 'None', // Allows cross-site cookie usage
+        //     secure: true, // Ensures the cookie is sent over HTTPS only
+        // });
 
-        res.cookie("username", username, {
-            path: "/", // This allows the cookie to be accessible on all routes
-            maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
-            sameSite: 'None', // Allows cross-site cookie usage
-            secure: true, // Ensures the cookie is sent over HTTPS only
-        });
+        // res.cookie("username", username, {
+        //     path: "/", // This allows the cookie to be accessible on all routes
+        //     maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
+        //     sameSite: 'None', // Allows cross-site cookie usage
+        //     secure: true, // Ensures the cookie is sent over HTTPS only
+        // });
 
-        res.cookie("image", profile_image, {
-            path: "/", // This allows the cookie to be accessible on all routes
-            maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
-            sameSite: 'None', // Allows cross-site cookie usage
-            secure: true, // Ensures the cookie is sent over HTTPS only
-        });
+        // res.cookie("image", profile_image, {
+        //     path: "/", // This allows the cookie to be accessible on all routes
+        //     maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
+        //     sameSite: 'None', // Allows cross-site cookie usage
+        //     secure: true, // Ensures the cookie is sent over HTTPS only
+        // });
 
-        return res.status(200).json({ message: "Profile image updated successfully" });
+        return res.status(200).json({ message: "Profile image updated successfully", authToken: token, username, image: profile_image });
     } catch (error) {
         return res.status(500).json({ message: "Error updating profile image" });
     }

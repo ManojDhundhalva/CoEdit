@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../context/user';
 import WifiOffRoundedIcon from '@mui/icons-material/WifiOffRounded';
@@ -17,9 +16,9 @@ function ProtectedRoute(props) {
 
     // useEffect(() => {
     //     const authenticateUser = () => {
-    //         const authToken = Cookies.get("authToken");
-    //         const username = Cookies.get("username");
-    //         const image = Cookies.get("image");
+    //         const authToken = localStorage.getItem("authToken");
+    //         const username = localStorage.getItem("username");
+    //         const image = localStorage.getItem("image");
 
     //         if (!authToken || !username || !image) navigate("/auth");
     //         // window.location.href = "/auth";

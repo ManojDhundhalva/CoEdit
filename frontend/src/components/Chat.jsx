@@ -12,7 +12,6 @@ import Typography from '@mui/material/Typography';
 import useAPI from '../hooks/api';
 import { toast } from 'react-hot-toast';
 import { getAvatar } from '../utils/avatar';
-import Cookies from 'js-cookie';
 
 function Chat(props) {
 

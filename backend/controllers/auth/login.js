@@ -55,29 +55,29 @@ const getAccount = async (req, resp) => {
             );
 
             // Set the cookie with the token
-            resp.cookie("authToken", token, {
-                path: "/", // This allows the cookie to be accessible on all routes
-                maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
-                sameSite: 'None', // Allows cross-site cookie usage
-                secure: true,
-            });
+            // resp.cookie("authToken", token, {
+            //     path: "/", // This allows the cookie to be accessible on all routes
+            //     maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
+            //     sameSite: 'None', // Allows cross-site cookie usage
+            //     secure: true,
+            // });
 
-            resp.cookie("username", username, {
-                path: "/", // This allows the cookie to be accessible on all routes
-                maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
-                sameSite: 'None', // Allows cross-site cookie usage
-                secure: true, // Ensures the cookie is sent over HTTPS only
-            });
+            // resp.cookie("username", username, {
+            //     path: "/", // This allows the cookie to be accessible on all routes
+            //     maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
+            //     sameSite: 'None', // Allows cross-site cookie usage
+            //     secure: true, // Ensures the cookie is sent over HTTPS only
+            // });
 
-            resp.cookie("image", profile_image, {
-                path: "/", // This allows the cookie to be accessible on all routes
-                maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
-                sameSite: 'None', // Allows cross-site cookie usage
-                secure: true, // Ensures the cookie is sent over HTTPS only
-            });
+            // resp.cookie("image", profile_image, {
+            //     path: "/", // This allows the cookie to be accessible on all routes
+            //     maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
+            //     sameSite: 'None', // Allows cross-site cookie usage
+            //     secure: true, // Ensures the cookie is sent over HTTPS only
+            // });
 
             // Respond with the token and username
-            return resp.status(200).json({ message: "Login is successfull" });
+            return resp.status(200).json({ message: "Login is successfull", authToken: token, username, image: profile_image });
         } else {
             return resp.status(401).json({ message: "Incorrect Password" });
         }

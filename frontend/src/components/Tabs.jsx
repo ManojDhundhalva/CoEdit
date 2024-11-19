@@ -2,7 +2,6 @@ import React from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { Grid, Avatar, Tooltip, Zoom, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import Cookies from "js-cookie";
 import { styled } from '@mui/material/styles';
 import { Badge, Typography, Box } from '@mui/material';
 import MoreHorizRoundedIcon from '@mui/icons-material/MoreHorizRounded';
@@ -126,7 +125,7 @@ const Tabs = (props) => {
                                           key={index}
                                           TransitionComponent={Zoom}
                                           title={
-                                            Cookies.get("username") === user.username
+                                            localStorage.getItem("username") === user.username
                                               ? "You"
                                               : user.username
                                           }
@@ -160,7 +159,7 @@ const Tabs = (props) => {
                                         key={index}
                                         TransitionComponent={Zoom}
                                         title={
-                                          Cookies.get("username") === user.username
+                                          localStorage.getItem("username") === user.username
                                             ? "You"
                                             : user.username
                                         }

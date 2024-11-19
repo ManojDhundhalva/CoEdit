@@ -41,6 +41,7 @@ import GoogleLogin from "./GoogleLogin.jsx";
 //files
 import ResetPassword from "./ResetPassword.jsx";
 import VerifyCode from "./VerifyCode.jsx";
+import { setDataToLocalStorage } from "../../utils/auth.js";
 
 export default function Login({ hasAccount, setHasAccount }) {
 
@@ -103,7 +104,8 @@ export default function Login({ hasAccount, setHasAccount }) {
         const credentials = { username: userName, password };
 
         try {
-            await POST("/auth/login", credentials);
+            const results = await POST("/auth/login", credentials);
+            setDataToLocalStorage(results.data);
             toast("Login successful!",
                 {
                     icon: <CheckCircleRoundedIcon />,
@@ -175,7 +177,8 @@ export default function Login({ hasAccount, setHasAccount }) {
         };
 
         try {
-            await POST("/auth/google-login", registerCredentials);
+            const results = await POST("/auth/google-login", registerCredentials);
+            setDataToLocalStorage(results.data);
             toast("Account Created successfully!",
                 {
                     icon: <CheckCircleRoundedIcon />,

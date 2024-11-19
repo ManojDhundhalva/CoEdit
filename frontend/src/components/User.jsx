@@ -13,6 +13,7 @@ import useAPI from '../hooks/api';
 import { isValidFullName } from '../utils/validation';
 import { avatars, getAvatar } from "../utils/avatar";
 import { DateFormatter } from "../utils/formatters"
+import { setDataToLocalStorage } from "../utils/auth"
 
 // Material-UI Components
 import {
@@ -112,6 +113,7 @@ function User(props) {
         setIsLoadingProfileImageSave(true);
         try {
             const results = await POST("/user/update-profile-image", { profile_image: selectedProfileImage });
+            setDataToLocalStorage(results.data);
             toast(results?.data?.message || "Profile image updated successfully",
                 {
                     icon: <CheckCircleRoundedIcon />,

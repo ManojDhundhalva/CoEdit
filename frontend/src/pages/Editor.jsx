@@ -9,7 +9,6 @@ import CodeEditor from "../components/CodeEditor";
 import Tools from "../components/Tools";
 import { useSocket } from "../context/socket";
 import useAPI from "../hooks/api";
-import Cookies from "js-cookie";
 import DataObjectRoundedIcon from '@mui/icons-material/DataObjectRounded';
 import DataArrayRoundedIcon from '@mui/icons-material/DataArrayRounded';
 import FormatQuoteRoundedIcon from '@mui/icons-material/FormatQuoteRounded';
@@ -109,8 +108,8 @@ function Editor() {
     if (!socket) return;
     socket.emit("editor:join-project", {
       project_id: projectId,
-      username: Cookies.get("username"),
-      image: Cookies.get("image"),
+      username: localStorage.getItem("username"),
+      image: localStorage.getItem("image"),
     });
   }, [socket]);
 
@@ -426,8 +425,8 @@ function Editor() {
                               fileName={tab.name}
                               socket={socket}
                               fileId={tab.id}
-                              username={Cookies.get("username")}
-                              localImage={Cookies.get("image")}
+                              username={localStorage.getItem("username")}
+                              localImage={localStorage.getItem("image")}
                               setTabs={setTabs}
                             />
                           </Box>

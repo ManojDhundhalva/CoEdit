@@ -1,7 +1,6 @@
 // module-imports
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Cookies from "js-cookie";
 import WifiOffRoundedIcon from '@mui/icons-material/WifiOffRounded';
 
 // components
@@ -12,18 +11,6 @@ function Auth() {
   const [hasAccount, setHasAccount] = useState(true);
   const navigate = useNavigate();
   const [isOnline, setIsOnline] = useState(navigator.onLine);
-
-  useEffect(() => {
-    const validateUser = () => {
-      const authToken = Cookies.get("authToken");
-      const username = Cookies.get("username");
-      const image = Cookies.get("image");
-
-      if (authToken && username && image) navigate("/");
-    };
-
-    validateUser();
-  }, []);
 
   useEffect(() => {
     window.addEventListener("online", () => setIsOnline(true));

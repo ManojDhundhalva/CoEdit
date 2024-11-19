@@ -2,9 +2,9 @@ const jwt = require("jsonwebtoken");
 const config = require("../config");
 
 const verifyToken = (req, res, next) => {
-  const token = req.cookies.authToken;
-  const username = req.cookies.username;
-  const image = req.cookies.image;
+  const token = req.headers['auth-token'];
+  const username = req.headers['x-username'];
+  const image = req.headers['x-image'];
 
   if (!token || !username || !image) {
     return res.status(403).json({ message: "Authentication required." });
@@ -22,8 +22,8 @@ const verifyToken = (req, res, next) => {
 
 const verifyTokenAndAuthorization = (req, res, next) => {
   verifyToken(req, res, () => {
-    const isUsernameValid = String(req.user.username) === String(req.cookies.username);
-    const isImageValid = String(req.user.image) === String(req.cookies.image);
+    const isUsernameValid = String(req.user.username) == req.headers['x-username'];
+    const isImageValid = String(req.user.image) == req.headers['x-image'];
 
     if (isUsernameValid && isImageValid) {
       next();

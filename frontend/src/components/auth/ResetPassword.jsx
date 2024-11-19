@@ -19,6 +19,7 @@ import { toast } from 'react-hot-toast'
 import CancelRoundedIcon from '@mui/icons-material/CancelRounded'
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded'
 import { getAvatar } from '../../utils/avatar'
+import { setDataToLocalStorage } from '../../utils/auth'
 
 function ResetPassword(props) {
 
@@ -43,6 +44,7 @@ function ResetPassword(props) {
         setIsLoading(true);
         try {
             const results = await POST("/auth/forget-password", { username, password });
+            setDataToLocalStorage(results.data);
             toast(results.data?.message || "Password updated successfully",
                 {
                     icon: <CheckCircleRoundedIcon />,

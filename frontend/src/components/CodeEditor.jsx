@@ -80,7 +80,6 @@ import useAPI from "../hooks/api";
 import { formatLogTimestamp } from "../utils/formatters";
 import { Avatar, Box, selectClasses, Tooltip, Typography, Zoom } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
-import Cookies from "js-cookie";
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import MinimizeRoundedIcon from '@mui/icons-material/MinimizeRounded';
 import FilterNoneRoundedIcon from '@mui/icons-material/FilterNoneRounded';
@@ -1120,7 +1119,7 @@ const CodeEditor = ({ fileName, socket, fileId, username, setTabs, localImage })
                   <Tooltip
                     TransitionComponent={Zoom}
                     title={
-                      Cookies.get("username") === log.username
+                      localStorage.getItem("username") === log.username
                         ? "You"
                         : log.username
                     }

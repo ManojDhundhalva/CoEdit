@@ -12,7 +12,6 @@ import CloseIcon from "@mui/icons-material/Close";
 import ArticleRoundedIcon from "@mui/icons-material/ArticleRounded";
 import TextEditor from "./TextEditor";
 import { green, grey } from "@mui/material/colors";
-import Cookies from "js-cookie";
 
 const EditorTabs = ({
   socket,
@@ -87,7 +86,7 @@ const EditorTabs = ({
                                     ? "2px double #0077b6"
                                     : "2px double grey",
                                   bgcolor: is_active_in_tab
-                                    ? username === Cookies.get("username")
+                                    ? username === localStorage.getItem("username")
                                       ? green[500]
                                       : green[200]
                                     : grey,

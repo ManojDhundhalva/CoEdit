@@ -1,34 +1,27 @@
 import React, { createContext, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import Cookies from "js-cookie";
+import { clearLocalStorage } from "../utils/auth"
 
 const authContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
 
-  const clearAllCookies = () => {
-    const allCookies = Cookies.get();
-    Object.keys(allCookies).forEach((cookie) => {
-      Cookies.remove(cookie);
-    });
-  };
-
   const LogOut = () => {
-    clearAllCookies();
+    clearLocalStorage();
     navigate("/auth");
   };
 
   const authenticate = () => {
-    const authToken = Cookies.get("authToken");
-    const username = Cookies.get("username");
+    const authToken = localStorage.getItem("authToken");
+    const username = localStorage.getItem("username");
 
     if (!(authToken && username)) LogOut();
   };
 
   const isAuthenticated = () => {
-    const authToken = Cookies.get("authToken");
-    const username = Cookies.get("username");
+    const authToken = localStorage.getItem("authToken");
+    const username = localStorage.getItem("username");
 
     return (authToken && username);
   };

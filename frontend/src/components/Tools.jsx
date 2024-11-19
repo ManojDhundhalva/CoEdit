@@ -13,7 +13,6 @@ import Contributor from "./Contributor";
 import useAPI from "../hooks/api";
 import { useRef } from "react";
 import DescriptionRoundedIcon from '@mui/icons-material/DescriptionRounded';
-import Cookies from "js-cookie"
 import User from "./User";
 import { useUser } from "../context/user";
 import { getAvatar } from "../utils/avatar";
@@ -163,7 +162,7 @@ const Tools = ({ liveUsers }) => {
                 key={index}
                 TransitionComponent={Zoom}
                 title={
-                  Cookies.get("username") === liveUser.username
+                  localStorage.getItem("username") === liveUser.username
                     ? "You"
                     : liveUser.username
                 }

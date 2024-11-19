@@ -9,6 +9,7 @@ import { useGoogleLogin } from "@react-oauth/google"
 
 //images
 import googleImg from "../../images/google.png";
+import { setDataToLocalStorage } from '../../utils/auth';
 
 function GoogleLogin(props) {
 
@@ -26,6 +27,7 @@ function GoogleLogin(props) {
 
                     if (accountExists) {
                         toast.success(data.message);
+                        setDataToLocalStorage(data);
                         navigate("/");
                     } else {
                         const { email, name, image } = data;

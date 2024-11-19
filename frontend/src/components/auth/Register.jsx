@@ -41,6 +41,7 @@ import GoogleLogin from "./GoogleLogin.jsx";
 
 //avatars
 import { avatars } from "../../utils/avatar.js";
+import { setDataToLocalStorage } from "../../utils/auth.js";
 
 export default function RegisterPage({ hasAccount, setHasAccount }) {
 
@@ -117,7 +118,8 @@ export default function RegisterPage({ hasAccount, setHasAccount }) {
         };
 
         try {
-            await POST("/auth/register", registerCredentials);
+            const results = await POST("/auth/register", registerCredentials);
+            setDataToLocalStorage(results.data);
             toast("Account Created successfully!",
                 {
                     icon: <InfoRoundedIcon />,
@@ -242,7 +244,8 @@ export default function RegisterPage({ hasAccount, setHasAccount }) {
         };
 
         try {
-            await POST("/auth/google-login", registerCredentials);
+            const results = await POST("/auth/google-login", registerCredentials);
+            setDataToLocalStorage(results.data);
             toast("Account Created successfully!",
                 {
                     icon: <InfoRoundedIcon />,
