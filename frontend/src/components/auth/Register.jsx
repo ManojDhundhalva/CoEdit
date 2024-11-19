@@ -633,7 +633,7 @@ export default function RegisterPage({ hasAccount, setHasAccount }) {
                             <Grid item xs={12}>
                                 <Box sx={{ position: "relative", display: "flex", width: "100%", height: "100%", flexDirection: "column", alignItems: "center" }}>
                                     <Typography variant="h5" fontWeight="bold" sx={{ my: 2 }}>Hi, {name}</Typography>
-                                    <IconButton onClick={() => { setIsNewUser(false); setImage(""); setEmail(""); setName(""); }}
+                                    <IconButton onClick={() => { setIsNewUser((prev) => false); setImage(""); setEmail(""); setName(""); }}
                                         sx={{ bgcolor: "#F2F2F2", color: "#333333", position: "absolute", top: 0, left: 0, borderRadius: "50%" }}
                                     >
                                         <KeyboardBackspaceRoundedIcon sx={{ color: "#333333" }} />

@@ -7,6 +7,7 @@ const initIO = require("./config/socket");
 const corsConfig = require("./config/cors");
 const socketHandlers = require("./socket/socketHandlers");
 
+const PORT = config.PORT || 9000;
 const app = express();
 const server = http.createServer(app);
 
@@ -31,4 +32,4 @@ app.use("/project", projectRoutes);
 app.use("/user", userRoutes);
 
 // Start Server
-server.listen(config.PORT, () => console.log(`App listening on port ${config.PORT}`));
+server.listen(PORT, () => console.log(`App listening on port ${PORT}`));
