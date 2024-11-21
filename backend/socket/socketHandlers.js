@@ -325,7 +325,8 @@ const socketHandlers = (io) => {
             });
 
             socket.on("code-editor:join-file", async ({ file_id }) => {
-                await insertLiveUser(project_id, file_id, username);
+                socket.broadcast.to(project_id).emit("code-editor:i-am-joined-a-file", { file_id, username });
+                // await insertLiveUser(project_id, file_id, username);
 
                 //send to all other users
                 const aUser = await getALiveUserInFile(file_id, username);
