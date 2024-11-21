@@ -44,7 +44,7 @@ function ResetPassword(props) {
         setIsLoading(true);
         try {
             const results = await POST("/auth/forget-password", { username, password });
-            setDataToLocalStorage(results.data);
+            await setDataToLocalStorage(results.data);
             toast(results.data?.message || "Password updated successfully",
                 {
                     icon: <CheckCircleRoundedIcon />,

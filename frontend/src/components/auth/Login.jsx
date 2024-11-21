@@ -105,7 +105,7 @@ export default function Login({ hasAccount, setHasAccount }) {
 
         try {
             const results = await POST("/auth/login", credentials);
-            setDataToLocalStorage(results.data);
+            await setDataToLocalStorage(results.data);
             toast("Login successful!",
                 {
                     icon: <CheckCircleRoundedIcon />,
@@ -178,7 +178,7 @@ export default function Login({ hasAccount, setHasAccount }) {
 
         try {
             const results = await POST("/auth/google-login", registerCredentials);
-            setDataToLocalStorage(results.data);
+            await setDataToLocalStorage(results.data);
             toast("Account Created successfully!",
                 {
                     icon: <CheckCircleRoundedIcon />,

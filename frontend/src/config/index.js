@@ -8,4 +8,9 @@ const config = {
     GOOGLE_CLIENT_ID: "64493502854-9ejfpv00ciclpifns0mor80fk7gmlngt.apps.googleusercontent.com",
 };
 
+// const config = {
+//     BACKEND_API: "https://localhost:8000",
+//     GOOGLE_CLIENT_ID: "64493502854-9ejfpv00ciclpifns0mor80fk7gmlngt.apps.googleusercontent.com",
+// };
+
 export default config;

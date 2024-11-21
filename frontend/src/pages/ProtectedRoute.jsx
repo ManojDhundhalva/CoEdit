@@ -10,23 +10,23 @@ function ProtectedRoute(props) {
 
     const [isOnline, setIsOnline] = useState(navigator.onLine);
 
-    useEffect(() => {
-        getUser();
-    }, [])
-
     // useEffect(() => {
-    //     const authenticateUser = () => {
-    //         const authToken = localStorage.getItem("authToken");
-    //         const username = localStorage.getItem("username");
-    //         const image = localStorage.getItem("image");
+    //     getUser();
+    // }, [])
 
-    //         if (!authToken || !username || !image) navigate("/auth");
-    //         // window.location.href = "/auth";
-    //         else getUser();
-    //     };
+    useEffect(() => {
+        const authenticateUser = () => {
+            const authToken = localStorage.getItem("authToken");
+            const username = localStorage.getItem("username");
+            const image = localStorage.getItem("image");
 
-    //     authenticateUser();
-    // }, []);
+            if (!authToken || !username || !image) navigate("/auth");
+            // window.location.href = "/auth";
+            else getUser();
+        };
+
+        authenticateUser();
+    }, []);
 
     useEffect(() => {
         window.addEventListener("online", () => setIsOnline(true));

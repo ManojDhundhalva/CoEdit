@@ -113,7 +113,7 @@ function User(props) {
         setIsLoadingProfileImageSave(true);
         try {
             const results = await POST("/user/update-profile-image", { profile_image: selectedProfileImage });
-            setDataToLocalStorage(results.data);
+            await setDataToLocalStorage(results.data);
             toast(results?.data?.message || "Profile image updated successfully",
                 {
                     icon: <CheckCircleRoundedIcon />,

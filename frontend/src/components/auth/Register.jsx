@@ -119,7 +119,7 @@ export default function RegisterPage({ hasAccount, setHasAccount }) {
 
         try {
             const results = await POST("/auth/register", registerCredentials);
-            setDataToLocalStorage(results.data);
+            await setDataToLocalStorage(results.data);
             toast("Account Created successfully!",
                 {
                     icon: <InfoRoundedIcon />,
@@ -245,7 +245,7 @@ export default function RegisterPage({ hasAccount, setHasAccount }) {
 
         try {
             const results = await POST("/auth/google-login", registerCredentials);
-            setDataToLocalStorage(results.data);
+            await setDataToLocalStorage(results.data);
             toast("Account Created successfully!",
                 {
                     icon: <InfoRoundedIcon />,

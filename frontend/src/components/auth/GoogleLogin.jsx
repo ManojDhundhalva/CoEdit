@@ -18,32 +18,69 @@ function GoogleLogin(props) {
     const { GET } = useAPI();
     const navigate = useNavigate();
 
-    const responseGoogle = (authResult) => {
-        if (authResult["code"]) {
-            const { code } = authResult;
-            GET("/auth/google-credentials", { code })
-                .then(({ data }) => {
-                    const { accountExists } = data;
+    // const responseGoogle = (authResult) => {
+    //     if (authResult["code"]) {
+    //         const { code } = authResult;
+    //         GET("/auth/google-credentials", { code })
+    //             .then(({ data }) => {
+    //                 const { accountExists } = data;
 
-                    if (accountExists) {
-                        toast.success(data.message);
-                        setDataToLocalStorage(data);
-                        navigate("/");
-                    } else {
-                        const { email, name, image } = data;
-                        setEmail(email);
-                        setName(name);
-                        setImage(image);
-                        setIsNewUser((prev) => true);
-                    }
-                })
-                .catch((error) => {
-                    toast.error(error.message);
-                });
+    //                 if (accountExists) {
+    //                     toast.success(data.message);
+    //                     await setDataToLocalStorage(data);
+    //                     navigate("/");
+    //                 } else {
+    //                     const { email, name, image } = data;
+    //                     setEmail(email);
+    //                     setName(name);
+    //                     setImage(image);
+    //                     setIsNewUser((prev) => true);
+    //                 }
+    //             })
+    //             .catch((error) => {
+    //                 toast.error(error.message);
+    //             });
+    //     } else {
+    //         toast.error("google auth error");
+    //     }
+    // };
+
+    const responseGoogle = async (authResult) => {
+        if (authResult["code"]) {
+            try {
+                const { code } = authResult;
+
+                // Await the GET request
+                const { data } = await GET("/auth/google-credentials", { code });
+                const { accountExists } = data;
+
+                if (accountExists) {
+                    toast.success(data.message);
+
+                    // Await setting data to localStorage
+                    await setDataToLocalStorage(data);
+
+                    // Navigate to the home page
+                    navigate("/");
+                } else {
+                    const { email, name, image } = data;
+
+                    // Update state for new users
+                    setEmail(email);
+                    setName(name);
+                    setImage(image);
+                    setIsNewUser(true); // `prev` is unnecessary for setting to true
+                }
+            } catch (error) {
+                // Handle errors from GET request
+                toast.error(error.message);
+            }
         } else {
-            toast.error("google auth error");
+            // Handle error when authResult does not contain a code
+            toast.error("Google auth error");
         }
     };
+
 
     const googleLogin = useGoogleLogin({
         onSuccess: responseGoogle,
