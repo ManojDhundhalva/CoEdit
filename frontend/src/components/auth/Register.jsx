@@ -322,9 +322,7 @@ export default function RegisterPage({ hasAccount, setHasAccount }) {
                                     required
                                     size="small"
                                     autoComplete="on"
-                                    error={
-                                        userJustVerify && (userName === "" || !isValidUserName(userName))
-                                    }
+                                    error={userNameError || (userName !== "" && !isValidUserName(userName)) || (userJustVerify && userName === "")}
                                     InputProps={{
                                         startAdornment: (
                                             <InputAdornment position="start">
@@ -399,7 +397,7 @@ export default function RegisterPage({ hasAccount, setHasAccount }) {
                                     required
                                     size="small"
                                     autoComplete="on"
-                                    error={emailJustVerify && (emailId === "" || !isValidEmail(emailId))}
+                                    error={emailError || (emailId !== "" && !isValidEmail(emailId)) || (emailJustVerify && emailId === "")}
                                     InputProps={{
                                         startAdornment: (
                                             <InputAdornment position="start">
