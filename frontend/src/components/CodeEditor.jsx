@@ -112,7 +112,7 @@ import { getAvatar } from "../utils/avatar";
 import { themes } from "../utils/code-editor-themes";
 import { executeCode } from "../utils/api";
 
-const CodeEditor = ({ fileName, socket, fileId, username, setTabs, localImage }) => {
+const CodeEditor = ({ fileName, socket, fileId, username, setTabs, localImage, selectedFileId }) => {
   const { GET, POST } = useAPI();
   const editorRef = useRef(null);
   const editorInstance = useRef(null);
@@ -353,10 +353,11 @@ const CodeEditor = ({ fileName, socket, fileId, username, setTabs, localImage })
 
   useEffect(() => {
     const userJoined = (data) => {
+      // console.log("data", data);
       if (!data && !data?.aUser) return;
       const { aUser, image: UserImage } = data;
 
-      if (!aUser?.fileId || !aUser?.username || !aUser?.isActiveInTab || !aUser?.isLive || !aUser?.liveUsersTimestamp || !aUser?.projectId) return;
+      if (!aUser?.file_id || !aUser?.username || !aUser?.is_active_in_tab || !aUser?.is_live || !aUser?.live_users_timestamp || !aUser?.project_id) return;
 
       const {
         file_id,
@@ -368,6 +369,23 @@ const CodeEditor = ({ fileName, socket, fileId, username, setTabs, localImage })
       } = aUser;
 
       setTabs((prevTabs) => {
+
+        if (prevTabs.length === 0) {
+          prevTabs.push({
+            id: file_id,
+            users: [
+              {
+                image: UserImage,
+                username,
+                is_active_in_tab,
+                is_live,
+                live_users_timestamp,
+              },
+            ],
+          });
+          return prevTabs;
+        }
+
         // First, set is_active_in_tab = false for all tabs for the specified username
         const updatedTabs = prevTabs.map((tab) => {
           return {
@@ -444,6 +462,8 @@ const CodeEditor = ({ fileName, socket, fileId, username, setTabs, localImage })
     };
 
     const loadLiveUsers = ({ allUsers }) => {
+      // console.log("allUsers", allUsers);
+      if (!allUsers) return;
       setTabs((prevTabs) => {
         // Update or add the users in the correct tab based on their file_id
         const updatedTabs = [...prevTabs];
@@ -493,18 +513,74 @@ const CodeEditor = ({ fileName, socket, fileId, username, setTabs, localImage })
       });
     };
 
+    // const loadLiveUsers = ({ file_id }) => {
+    //   if (file_id !== fileId) return;
+
+    //   socket.emit("code-editor:load-live-users-send-back", {
+    //     file_id,
+    //     image: localImage,
+    //     username,
+    //     is_active_in_tab: selectedFileId === file_id ? true : false,
+    //   });
+    // }
+
+    // const joinUser = (data) => {
+    //   console.log("data", data);
+    //   const { file_id, username: userName, image: userImage, is_active_in_tab } = data;
+    //   setTabs((prevTabs) => {
+    //     // Update or add the users in the correct tab based on their file_id
+    //     const updatedTabs = [...prevTabs];
+
+    //     updatedTabs.forEach((tab) => {
+    //       if (tab.id === file_id) {
+    //         // Check if the user already exists in the tab
+    //         const userExists = tab.users.some((u) => u.username === username);
+
+    //         if (userExists) {
+    //           // Update the existing user
+    //           tab.users = tab.users.map((u) =>
+    //             u.username === username
+    //               ? {
+    //                 ...u,
+    //                 is_active_in_tab,
+    //               }
+    //               : u
+    //           );
+    //         } else {
+    //           // Add new user
+    //           tab.users.push({
+    //             image: userImage,
+    //             username: userName,
+    //             is_active_in_tab,
+    //           });
+    //         }
+    //       }
+    //     });
+    //     return updatedTabs;
+    //   });
+    // };
+
     socket.on("code-editor:user-joined", userJoined);
     socket.on("code-editor:user-left", userLeft);
     socket.on("code-editor:remove-active-live-user", removeActiveLiveUser);
     socket.on("code-editor:load-live-users", loadLiveUsers);
+    // socket.on("code-editor:load-live-users-send-back", joinUser);
 
     return () => {
       socket.off("code-editor:user-joined", userJoined);
       socket.off("code-editor:user-left", userLeft);
       socket.off("code-editor:remove-active-live-user", removeActiveLiveUser);
       socket.off("code-editor:load-live-users", loadLiveUsers);
+      // socket.off("code-editor:load-live-users-send-back", joinUser);
     };
-  }, [socket, username]);
+  }, [selectedFileId]);
+
+  // useEffect(() => {
+  //   if (!socket) return;
+
+  //   socket.emit("code-editor:tab-change", { file_id: fileId });
+
+  // }, [selectedFileId]);
 
   useEffect(() => {
     const editor = editorInstance.current;

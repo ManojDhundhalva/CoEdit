@@ -1,11 +1,41 @@
-import React from 'react'
+import React from "react";
+import { Box, Typography, Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import KeyboardBackspaceRoundedIcon from '@mui/icons-material/KeyboardBackspaceRounded';
 
-function PageNotFound() {
+const PageNotFound = () => {
+    const navigate = useNavigate();
+
     return (
-        <>
-            <h1>PageNotFound</h1>
-        </>
-    )
-}
+        <Box
+            sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                minHeight: "100vh",
+                bgcolor: "#f7f7f7",
+                textAlign: "center",
+                p: 2,
+            }}
+        >
+            <Typography variant="h1" fontWeight="bold" sx={{ color: "#3f3f3f" }}>
+                404
+            </Typography>
+            <Typography variant="h5" sx={{ mb: 2, color: "#6f6f6f" }}>
+                Oops! The page you're looking for doesn't exist.
+            </Typography>
+            <button
+                onClick={() => navigate("/")}
+                style={{ mt: 2 }}
+            >
+                <KeyboardBackspaceRoundedIcon />
+                <Typography fontWeight="bold" sx={{ mx: 2 }}>
+                    Go Back Home
+                </Typography>
+            </button>
+        </Box>
+    );
+};
 
-export default PageNotFound
+export default PageNotFound;

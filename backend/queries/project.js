@@ -184,13 +184,13 @@ ON lu.file_id = f.file_id
 WHERE lu.username = $1 AND lu.project_id = $2;
 `;
 
-const getLiveUsers = `
-SELECT u.username, u.profile_image AS image
-FROM project_live_users AS plu
-JOIN users AS u
-ON plu.username = u.username
-WHERE project_id = $1;
-`;
+// const getLiveUsers = `
+// SELECT u.username, u.profile_image AS image
+// FROM project_live_users AS plu
+// JOIN users AS u
+// ON plu.username = u.username
+// WHERE project_id = $1;
+// `;
 
 const insertExpandData = `
   INSERT INTO file_tree_expand_user (user_id, file_tree_id)
@@ -260,7 +260,7 @@ module.exports = {
     getFileTree,
     getInitialTabs,
     setAllFilesLive,
-    getLiveUsers,
+    // getLiveUsers,
     insertExpandData,
     deleteExpandData,
     userSearch,

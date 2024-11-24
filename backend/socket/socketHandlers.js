@@ -225,23 +225,23 @@ const updateLastOpened = async (project_id, username) => {
     }
 };
 
-const insertLiveUserIfNotExist = async (project_id, username) => {
+// const insertLiveUserIfNotExist = async (project_id, username) => {
 
-    if (!project_id || !username) return;
+//     if (!project_id || !username) return;
 
-    const query =
-        `
-        INSERT INTO project_live_users (project_id, username)
-        VALUES ($1, $2)
-        ON CONFLICT (project_id, username) DO NOTHING;
-        `;
+//     const query =
+//         `
+//         INSERT INTO project_live_users (project_id, username)
+//         VALUES ($1, $2)
+//         ON CONFLICT (project_id, username) DO NOTHING;
+//         `;
 
-    try {
-        await pool.query(query, [project_id, username]);
-    } catch (error) {
-        // console.log(error);
-    }
-};
+//     try {
+//         await pool.query(query, [project_id, username]);
+//     } catch (error) {
+//         // console.log(error);
+//     }
+// };
 
 
 
@@ -251,9 +251,9 @@ const socketHandlers = (io) => {
 
         socket.on("editor:join-project", async ({ project_id, username, image }) => {
             socket.join(project_id);
-            console.log("project_id", project_id);
-            console.log("username", username);
-            console.log("image", image);
+            // console.log("project_id", project_id);
+            // console.log("username", username);
+            // console.log("image", image);
 
             await updateLastOpened(project_id, username);
             // await pool.query(
@@ -266,7 +266,12 @@ const socketHandlers = (io) => {
             //     [project_id, username]
             // );
 
-            await insertLiveUserIfNotExist(project_id, username);
+            socket.broadcast.to(project_id).emit("editor:live-user-joined", { username, image });
+            socket.on("editor:live-user-joined-send-back", (data) => {
+                io.to(project_id).emit("editor:live-user-joined-send-back", data);
+            });
+
+            // await insertLiveUserIfNotExist(project_id, username);
             // await pool.query(
             //     `
             //     INSERT INTO project_live_users (project_id, username)
@@ -276,7 +281,7 @@ const socketHandlers = (io) => {
             //     [project_id, username]
             // );
 
-            io.to(project_id).emit("editor:live-user-joined", { username, image });
+            // io.to(project_id).emit("editor:live-user-joined", { username, image });
 
             socket.on(
                 "file-explorer:insert-node",
@@ -319,14 +324,26 @@ const socketHandlers = (io) => {
             });
 
             socket.on("code-editor:load-live-users", async ({ file_id }) => {
-                //send to personal
-                const allUsers = await getAllLiveUserInFile(file_id);
-                socket.emit("code-editor:load-live-users", { allUsers });
+                io.to(project_id).emit("code-editor:load-live-users", { file_id });
             });
 
+            socket.on("code-editor:load-live-users-send-back", async (data) => {
+                io.to(project_id).emit("code-editor:load-live-users-send-back", data);
+            });
+
+            // socket.on("code-editor:load-live-users", async ({ file_id }) => {
+            //     //send to personal
+            //     const allUsers = await getAllLiveUserInFile(file_id);
+            //     console.log("allUsers", allUsers);
+            //     socket.emit("code-editor:load-live-users", { allUsers });
+            // });
+
             socket.on("code-editor:join-file", async ({ file_id }) => {
-                socket.broadcast.to(project_id).emit("code-editor:i-am-joined-a-file", { file_id, username });
-                // await insertLiveUser(project_id, file_id, username);
+                await insertLiveUser(project_id, file_id, username);
+
+                const allUsers = await getAllLiveUserInFile(file_id);
+                // console.log("allUsers", allUsers);
+                socket.emit("code-editor:load-live-users", { allUsers });
 
                 //send to all other users
                 const aUser = await getALiveUserInFile(file_id, username);
@@ -346,10 +363,6 @@ const socketHandlers = (io) => {
             });
 
             socket.on("disconnect", async () => {
-                await pool.query(
-                    "DELETE FROM project_live_users WHERE project_id = $1 AND username = $2",
-                    [project_id, username]
-                );
                 socket.broadcast
                     .to(project_id)
                     .emit("editor:live-user-left", { username });

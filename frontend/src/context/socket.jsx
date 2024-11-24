@@ -16,8 +16,14 @@ export const SocketProvider = ({ children }) => {
   useEffect(() => {
     const s = io(config.BACKEND_API);
 
-    s.on("connect_error", (err) => console.log(err));
-    s.on("connect_failed", (err) => console.log(err));
+    s.on("connect_error", (err) => {
+      console.log(err);
+      window.location.reload();
+    });
+    s.on("connect_failed", (err) => {
+      console.log(err);
+      window.location.reload();
+    });
 
     setSocket((prev) => s);
 

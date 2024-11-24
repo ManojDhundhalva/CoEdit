@@ -7,7 +7,7 @@ const initIO = require("./config/socket");
 const corsConfig = require("./config/cors");
 const socketHandlers = require("./socket/socketHandlers");
 
-const PORT = config.PORT || 9000;
+const PORT = config.PORT || 8000;
 const app = express();
 const server = http.createServer(app);
 

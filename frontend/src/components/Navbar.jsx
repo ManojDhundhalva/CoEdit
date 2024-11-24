@@ -1,29 +1,14 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
-import { Link } from "react-router-dom";
-import { Button, Box, Avatar, Tooltip } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
+import React, { useState, useEffect, useRef } from "react";
+import { Box, Avatar, Tooltip, Typography } from "@mui/material";
 import User from "../components/User";
 import { useUser } from "../context/user";
 import { getAvatar } from "../utils/avatar";
+import { useNavigate } from "react-router-dom";
+import logo from "../images/logo.jpg";
 
 const Navbar = () => {
   const { userInfo } = useUser();
-
-  const [prevScrollPos, setPrevScrollPos] = useState(window.pageYOffset);
-  const [showNavbar, setShowNavbar] = useState(true);
-
-  const handleScroll = useCallback(() => {
-    const currentScrollPos = window.pageYOffset;
-    setShowNavbar(prevScrollPos > currentScrollPos || currentScrollPos < 10);
-    setPrevScrollPos(currentScrollPos);
-  }, [prevScrollPos]);
-
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [handleScroll]);
+  const navigate = useNavigate();
 
   const profileRef = useRef(null);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -63,83 +48,70 @@ const Navbar = () => {
     };
   }, [handleCloseProfile]);
 
-  const navbarStyle = {
-    position: "fixed",
-    width: "100%",
-    top: showNavbar ? "0" : "-80px",
-    zIndex: 100,
-    transition: "top 0.3s",
-    backdropFilter: "blur(10px)",
-  };
-
-  const buttonStyles = {
-    fontWeight: "bold",
-    transition: "all 0.3s ease",
-    border: "2px solid transparent",
-    "&:hover": {
-      borderBottom: "2px solid #134611",
-      borderTopRightRadius: "5px",
-      borderTopLeftRadius: "5px",
-    },
-  };
-
-  const linkStyles = {
-    fontFamily: "Quicksand",
-    color: "#134611",
-  };
-
   return (
-    <nav className="navbar navbar-expand-lg p-1" style={navbarStyle}>
-      <div className="container-fluid">
-        <Link
-          className="navbar-brand"
-          to="/"
-          style={{
-            fontWeight: "bold",
-            fontSize: "xx-large",
-            fontFamily: "Quicksand",
+    <>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          px: { xs: 1, sm: 2 },
+          py: 1,
+        }}
+      >
+        {/* Left Section */}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: { xs: "center", sm: "flex-start" },
+            alignItems: "center",
           }}
         >
-          <i className="fa-regular fa-newspaper"></i>
-          Editor
-        </Link>
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
+          <img
+            src={logo}
+            alt="logo"
+            style={{ width: 50 }}
+          />
+          <Typography
+            fontWeight="bold"
+            fontSize={{ xs: "x-large", sm: "x-large" }}
+            sx={{ mx: { xs: 0, sm: 1 } }}
+          >
+            CoEdit
+          </Typography>
+        </Box>
+
+        {/* Right Section */}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: { xs: "center", sm: "flex-end" },
+            alignItems: "center",
+            gap: 1,
+          }}
         >
-          <MenuIcon />
-        </button>
-        <div className="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
-            <Button disableRipple variant="text" sx={buttonStyles}>
-              <Link className="nav-link active" to="/" style={linkStyles}>
-                Home
-              </Link>
-            </Button>
-            <Button disableRipple variant="text" sx={buttonStyles}>
-              <Link
-                className="nav-link active"
-                to="/project"
-                style={linkStyles}
-              >
-                project
-              </Link>
-            </Button>
-            <Button disableRipple variant="text" sx={buttonStyles}>
-              <Link
-                className="nav-link active"
-                to="/aboutus"
-                style={linkStyles}
-              >
-                About Us
-              </Link>
-            </Button>
-            <Tooltip title="profile"
+          <Box
+            onClick={() => navigate("/project")}
+            sx={{
+              cursor: "pointer",
+              fontWeight: "bold",
+              mx: { xs: 0, sm: 2 },
+              my: { xs: 1, sm: 0 },
+              bgcolor: "#F2F2F2",
+              borderRadius: "6px",
+              py: 1,
+              px: { xs: 1, sm: 3 },
+              "&:hover": {
+                bgcolor: "#E6E6E6",
+              },
+            }}
+          >
+            Projects
+          </Box>
+
+          <Box>
+            <Tooltip
+              title="profile"
               enterDelay={200}
               leaveDelay={0}
               componentsProps={{
@@ -151,10 +123,16 @@ const Navbar = () => {
                     },
                   },
                 },
-              }}>
+              }}
+            >
               <Avatar
                 onClick={toggleProfile}
-                sx={{ cursor: "pointer", width: 46, height: 46, border: "1px solid black", }}
+                sx={{
+                  cursor: "pointer",
+                  width: 46,
+                  height: 46,
+                  border: "1px solid black",
+                }}
                 alt={userInfo.userName}
                 src={getAvatar(userInfo.profileImage)}
                 imgProps={{
@@ -164,14 +142,27 @@ const Navbar = () => {
                 }}
               />
             </Tooltip>
-            {isProfileOpen ?
-              <Box ref={profileRef} sx={{ zIndex: 9999999, position: "fixed", right: 10, top: 80, bgcolor: "#FAFAFA", border: "1px solid black", borderRadius: "10px" }}>
+            {isProfileOpen ? (
+              <Box
+                ref={profileRef}
+                sx={{
+                  zIndex: 9999,
+                  position: "fixed",
+                  right: 10,
+                  top: 80,
+                  bgcolor: "#FAFAFA",
+                  border: "1px solid black",
+                  borderRadius: "10px",
+                }}
+              >
                 <User handleClose={handleCloseProfile} />
-              </Box> : null}
-          </ul>
-        </div>
-      </div>
-    </nav>
+              </Box>
+            ) : null}
+          </Box>
+        </Box>
+      </Box>
+
+    </>
   );
 };
 

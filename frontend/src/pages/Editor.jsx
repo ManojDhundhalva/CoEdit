@@ -50,7 +50,10 @@ function Editor() {
   const [selectedFileId, setSelectedFileId] = useState(null);
   const [explorerData, setExplorerData] = useState({});
   const [initialTabs, setInitialTabs] = useState([]);
-  const [liveUsers, setLiveUsers] = useState([]);
+  const [liveUsers, setLiveUsers] = useState([{
+    username: localStorage.getItem("username"),
+    image: localStorage.getItem("image"),
+  }]);
 
   const { GET } = useAPI();
   const params = useParams();
@@ -58,24 +61,28 @@ function Editor() {
 
   const { socket } = useSocket();
 
-  const getLiveUsers = async () => {
-    try {
-      const results = await GET("/project/get-live-users", { projectId });
-      console.log("getLiveUsers", results.data);
-      setLiveUsers((prev) => results.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const getLiveUsers = async () => {
+  //   try {
+  //     const results = await GET("/project/get-live-users", { projectId });
+  //     console.log("getLiveUsers", results.data);
+  //     setLiveUsers((prev) => results.data);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
-  useEffect(() => {
-    getLiveUsers();
-  }, []);
+  // useEffect(() => {
+  //   getLiveUsers();
+  // }, []);
 
   useEffect(() => {
     if (!socket) return;
 
     const liveUserJoined = ({ username, image }) => {
+
+      const liveUser = { username: localStorage.getItem("username"), image: localStorage.getItem("image") };
+
+      socket.emit("editor:live-user-joined-send-back", liveUser);
       setLiveUsers((prev) => {
         // Check if the username already exists
         const usernameExists = prev.some((user) => user.username === username);
@@ -95,10 +102,26 @@ function Editor() {
       });
     };
 
+    const addLiveUser = (liveUser) => {
+      setLiveUsers((prev) => {
+        // Check if the username already exists
+        const usernameExists = prev.some((user) => user.username === liveUser.username);
+
+        // If username already exists, return the previous state
+        if (usernameExists) return prev;
+
+        // Return a new array with the new user added
+        return [...prev, liveUser];
+      });
+    };
+
+
+    socket.on("editor:live-user-joined-send-back", addLiveUser);
     socket.on("editor:live-user-joined", liveUserJoined);
     socket.on("editor:live-user-left", liveUserLeft);
 
     return () => {
+      socket.off("editor:live-user-joined-send-back", addLiveUser);
       socket.off("editor:live-user-joined", liveUserJoined);
       socket.off("editor:live-user-left", liveUserLeft);
     };
@@ -155,19 +178,17 @@ function Editor() {
   const getInitialTabs = async () => {
     try {
       const results = await GET("/project/get-initial-tabs", { projectId });
-      console.log(results.data);
-
+      // console.log(results.data);
       const data = results.data.map((file) => ({
         id: file.file_id,
         name: file.file_name,
         users: [
           {
             is_active_in_tab: file.is_active_in_tab,
-            is_live: file.is_live,
-            live_users_timestamp: file.live_users_timestamp,
+            tabs_timestamp: file.tabs_timestamp,
             project_id: file.project_id,
             username: file.username,
-            image: file.image,
+            image: localStorage.getItem("image"),
           },
         ],
       }));
@@ -180,7 +201,7 @@ function Editor() {
         return activeFile ? activeFile.file_id : null; // Return the file_id or null if not found
       });
     } catch (err) {
-      console.log("err ->", err);
+      // console.log("err ->", err);
     }
   };
 
@@ -188,9 +209,9 @@ function Editor() {
     getInitialTabs();
   }, []);
 
-  useEffect(() => {
-    console.log("tabs", tabs);
-  }, [tabs]);
+  // useEffect(() => {
+  //   console.log("tabs", tabs);
+  // }, [tabs]);
 
   useEffect(() => {
     if (!socket) return;
@@ -260,7 +281,7 @@ function Editor() {
       case 0:
         return <DataObjectRoundedIcon sx={{ fontSize: "2em" }} />;
       case 1:
-        return <i class="fa-solid fa-code" style={{ fontSize: "1.5em" }}></i>;
+        return <i className="fa-solid fa-code" style={{ fontSize: "1.5em" }}></i>;
       case 2:
         return <DataArrayRoundedIcon sx={{ fontSize: "2em" }} />;
       case 3:
@@ -428,6 +449,7 @@ function Editor() {
                               username={localStorage.getItem("username")}
                               localImage={localStorage.getItem("image")}
                               setTabs={setTabs}
+                              selectedFileId={selectedFileId}
                             />
                           </Box>
                         </Box>

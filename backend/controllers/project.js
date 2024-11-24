@@ -166,17 +166,17 @@ const getInitialTabs = async (req, resp) => {
   }
 };
 
-const getLiveUsers = async (req, resp) => {
-  try {
-    const results = await pool.query(queries.getLiveUsers, [
-      req.query.projectId,
-    ]);
+// const getLiveUsers = async (req, resp) => {
+//   try {
+//     const results = await pool.query(queries.getLiveUsers, [
+//       req.query.projectId,
+//     ]);
 
-    return resp.status(200).json(results.rows);
-  } catch (err) {
-    return resp.status(500).json({ message: "Internal Server Error" });
-  }
-};
+//     return resp.status(200).json(results.rows);
+//   } catch (err) {
+//     return resp.status(500).json({ message: "Internal Server Error" });
+//   }
+// };
 
 const setExpandData = async (req, resp) => {
   const { file_tree_id, expand } = req.body;
@@ -284,7 +284,7 @@ module.exports = {
   getAllActiveFiles,
   getFileTree,
   getInitialTabs,
-  getLiveUsers,
+  // getLiveUsers,
   setExpandData,
   userSearch,
   getLogs,
