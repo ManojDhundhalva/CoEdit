@@ -15,6 +15,7 @@ import MaunilImg from "../images/members/maunil.png";
 import ManojImg from "../images/members/manoj.jpg";
 import DivyImg from "../images/members/divy.jpg";
 import KishanImg from "../images/members/kishan.jpeg";
+import ShravanImg from "../images/members/shravan.jpeg";
 
 const teamMembers = [
   {
@@ -67,9 +68,9 @@ const teamMembers = [
   },
   {
     name: "Shravankumar Makwana",
-    photo: "",
-    github: "https://github.com",
-    linkedin: "https://linkedin.com/",
+    photo: ShravanImg,
+    github: "https://github.com/Hepatitous",
+    linkedin: "https://www.linkedin.com/in/shravan-makwana-7b078633a/",
   },
 ];
 
@@ -106,7 +107,7 @@ function AboutUS() {
               <div className="section-title">
                 <h2 style={{ fontFamily: "Quicksand" }}>About US</h2>
                 <p style={{ fontFamily: "Quicksand" }}>
-                  We create and build real-time collaborative editing tools, making it easy for people to work together online.
+                  We developed powerful real-time collaborative editing tools designed to make online teamwork seamless and efficient.
                 </p>
               </div>
             </div>
@@ -119,8 +120,8 @@ function AboutUS() {
                     <img src={member.photo} alt="logo"
                       style={{
                         border: "1px solid #333333",
-                        objectFit: "contain", height: 200, width: 200,
-                        backgroundColor: "#FAFAFA", borderRadius: "50%"
+                        objectFit: "cover", height: 200, width: 200,
+                        backgroundColor: "#FAFAFA", borderRadius: "20%"
                       }}
                       onError={(e) => (e.target.src = avatars[0])}
                     />
