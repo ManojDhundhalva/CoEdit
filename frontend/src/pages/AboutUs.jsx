@@ -1,16 +1,100 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../CSS/AboutUs.css";
+import { avatars } from "../utils/avatar";
+import GitHubIcon from '@mui/icons-material/GitHub';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import { IconButton } from "@mui/material";
+import HardiImg from "../images/members/hardi.jpg";
+import PrathamImg from "../images/members/pratham.jpg";
+import DishankImg from "../images/members/dishank.jpeg";
+import MeshvImg from "../images/members/meshv.jpg";
+import MaunilImg from "../images/members/maunil.png";
+import ManojImg from "../images/members/manoj.jpg";
+import DivyImg from "../images/members/divy.jpg";
+import KishanImg from "../images/members/kishan.jpeg";
+
+const teamMembers = [
+  {
+    name: "Dishank Thakkar",
+    photo: DishankImg,
+    github: "https://github.com/Dishank0745",
+    linkedin: "https://www.linkedin.com/in/dishank-thakkar-835650279/",
+  },
+  {
+    name: "Divykumar Tandel",
+    photo: DivyImg,
+    github: "https://github.com/Tandeldivya",
+    linkedin: "https://www.linkedin.com/in/divyakumar-tandel/",
+  },
+  {
+    name: "Hardi Naik",
+    photo: HardiImg,
+    github: "https://github.com/Hardinaik",
+    linkedin: "https://www.linkedin.com/in/hardi-naik-76558b277/",
+  },
+  {
+    name: "Kishan Pansuriya",
+    photo: KishanImg,
+    github: "https://github.com/202201504",
+    linkedin: "https://www.linkedin.com/in/kishan-pansuriya-9b0352253/",
+  },
+  {
+    name: "Manoj Dhundhalva",
+    photo: ManojImg,
+    github: "https://github.com/ManojDhundhalva",
+    linkedin: "https://www.linkedin.com/in/manoj-dhundhalva-62ba0b24b/",
+  },
+  {
+    name: "Maunil Modi",
+    photo: MaunilImg,
+    github: "https://github.com/MaunilModi98",
+    linkedin: "https://www.linkedin.com/in/maunilmodi/",
+  },
+  {
+    name: "Meshv Patel",
+    photo: MeshvImg,
+    github: "https://github.com/Meshv12",
+    linkedin: "https://www.linkedin.com/in/meshv-patel-717056253/",
+  },
+  {
+    name: "Pratham Patel",
+    photo: PrathamImg,
+    github: "https://github.com/PrathamPatel25",
+    linkedin: "https://www.linkedin.com/in/pratham-patel-0920-/",
+  },
+  {
+    name: "Shravankumar Makwana",
+    photo: "",
+    github: "https://github.com",
+    linkedin: "https://linkedin.com/",
+  },
+];
+
 
 function AboutUS() {
+  const [shuffledMembers, setShuffledMembers] = useState([]);
+
   useEffect(() => {
     AOS.init({
       duration: 800,
       easing: "ease-in-out",
       once: true,
     });
+
+    // Shuffle the team members
+    const shuffleArray = (array) => {
+      const shuffled = [...array];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      return shuffled;
+    };
+
+    setShuffledMembers(shuffleArray(teamMembers));
   }, []);
 
   return (
@@ -22,13 +106,37 @@ function AboutUS() {
               <div className="section-title">
                 <h2 style={{ fontFamily: "Quicksand" }}>About US</h2>
                 <p style={{ fontFamily: "Quicksand" }}>
-                  We design and develop services for customers of all sizes,
-                  specializing in creating stylish, modern websites
+                  We create and build real-time collaborative editing tools, making it easy for people to work together online.
                 </p>
               </div>
             </div>
           </div>
           <div className="row">
+            {shuffledMembers.map((member, index) => (
+              <div key={index} className="col-sm-6 col-lg-6">
+                <div className="feature-box-1" style={{ boxShadow: "rgba(0, 0, 0, 0.1) 0px 0px 5px 0px, rgba(0, 0, 0, 0.1) 0px 0px 1px 0px" }}>
+                  <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+                    <img src={member.photo} alt="logo"
+                      style={{
+                        border: "1px solid #333333",
+                        objectFit: "contain", height: 200, width: 200,
+                        backgroundColor: "#FAFAFA", borderRadius: "50%"
+                      }}
+                      onError={(e) => (e.target.src = avatars[0])}
+                    />
+                    <h5 style={{ fontFamily: "Quicksand", marginTop: 20 }}>{member.name}</h5>
+                    <div>
+                      <IconButton sx={{ mx: "2px" }} onClick={() => window.open(member.github, "_blank")}>
+                        <GitHubIcon sx={{ color: "#333333" }} />
+                      </IconButton>
+                      <IconButton sx={{ mx: "2px" }} onClick={() => window.open(member.linkedin, "_blank")}>
+                        <LinkedInIcon sx={{ color: "#333333" }} />
+                      </IconButton>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
             <div className="col-sm-6 col-lg-12">
               <div className="feature-box-1">
                 <div className="icon">
@@ -41,15 +149,11 @@ function AboutUS() {
                   >
                     Members
                   </div>
-                  <h5 style={{ fontFamily: "Quicksand" }}>
-                    <a
-                      href="/"
-                      style={{ textDecoration: "none" }}
-                      target="_blank"
-                    >
-                      ABC
-                    </a>
-                  </h5>
+                  {shuffledMembers.map((member, index) => (
+                    <h5 key={index} style={{ fontFamily: "Quicksand" }}>
+                      {member.name}
+                    </h5>
+                  ))}
                 </div>
               </div>
             </div>

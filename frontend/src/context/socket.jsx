@@ -18,11 +18,11 @@ export const SocketProvider = ({ children }) => {
 
     s.on("connect_error", (err) => {
       console.log(err);
-      window.location.reload();
+      // window.location.reload();
     });
     s.on("connect_failed", (err) => {
       console.log(err);
-      window.location.reload();
+      // window.location.reload();
     });
 
     setSocket((prev) => s);

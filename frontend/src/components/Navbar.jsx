@@ -149,7 +149,7 @@ const Navbar = () => {
                   zIndex: 9999,
                   position: "fixed",
                   right: 10,
-                  top: 80,
+                  top: 64,
                   bgcolor: "#FAFAFA",
                   border: "1px solid black",
                   borderRadius: "10px",

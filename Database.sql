@@ -37,13 +37,6 @@ CREATE TABLE IF NOT EXISTS files (
     file_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- CREATE TABLE IF NOT EXISTS project_live_users(
---     project_id UUID REFERENCES projects(project_id) NOT NULL,   
---     username VARCHAR(255) REFERENCES users(username) NOT NULL,
---     project_live_users_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
---     PRIMARY KEY (project_id, username)
--- ); 
-
 CREATE TABLE IF NOT EXISTS live_users(
     file_id UUID REFERENCES files(file_id) NOT NULL,
     project_id UUID REFERENCES projects(project_id) NOT NULL,   
