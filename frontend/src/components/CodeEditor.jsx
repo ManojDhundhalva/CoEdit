@@ -110,7 +110,6 @@ import CodeRoundedIcon from '@mui/icons-material/CodeRounded';
 
 import { getAvatar } from "../utils/avatar";
 import { themes } from "../utils/code-editor-themes";
-import { executeCode } from "../utils/api";
 
 const CodeEditor = ({ fileName, socket, fileId, username, setTabs, localImage, selectedFileId }) => {
   const { GET, POST } = useAPI();
@@ -787,9 +786,11 @@ const CodeEditor = ({ fileName, socket, fileId, username, setTabs, localImage, s
     setIsCodeInputOutputOpen(true);
     setCodeOutput({});
 
+    const data = { language, version, sourceCode, codeInput }
+
     try {
-      const results = await executeCode(language, version, sourceCode, codeInput);
-      setCodeOutput(results);
+      const results = await POST("/project/execute", data);
+      setCodeOutput(results.data);
     } catch (error) {
       toast(error?.message || "Something went wrong!",
         {

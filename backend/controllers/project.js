@@ -274,6 +274,43 @@ const updateProjectName = async (req, res) => {
   }
 };
 
+const executeCode = async (req, res) => {
+  const {
+    language = "javascript",
+    version = "18.15.0",
+    sourceCode = "",
+    codeInput = ""
+  } = req.body;
+
+
+  const data = {
+    language: language,
+    version: version,
+    files: [
+      {
+        content: sourceCode,
+      },
+    ],
+    stdin: codeInput,
+  }
+
+  try {
+    const response = await fetch("https://emkc.org/api/v2/piston/execute", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+
+    const results = await response.json();
+    return res.status(200).json(results.run);
+
+  } catch (error) {
+    return res.status(500).json({ message: "Execution Failed" });
+  }
+
+};
+
+
 module.exports = {
   getAllProjects,
   addProject,
@@ -292,4 +329,5 @@ module.exports = {
   saveFile,
   getInitialContentOfFile,
   updateProjectName,
+  executeCode,
 };

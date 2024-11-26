@@ -27,30 +27,4 @@ API.interceptors.request.use((config) => {
   return Promise.reject(error);
 });
 
-export async function executeCode(language = "javascript", version = "18.15.0", sourceCode = "", input = "") {
-
-  const data = {
-    language: language,
-    version: version,
-    files: [
-      {
-        content: sourceCode,
-      },
-    ],
-    stdin: input,
-  }
-
-  const headers = {
-    withCredentials: true,
-    headers: { "Content-Type": "application/json" },
-  }
-
-  try {
-    const response = await axios.post("https://emkc.org/api/v2/piston/execute", data, headers);
-    return response.data.run;
-  } catch (error) {
-    throw new Error("Cannot Run !");
-  }
-}
-
 export default API;
