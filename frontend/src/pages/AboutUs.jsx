@@ -14,7 +14,7 @@ import MeshvImg from "../images/members/meshv.jpg";
 import MaunilImg from "../images/members/maunil.png";
 import ManojImg from "../images/members/manoj.jpg";
 import DivyImg from "../images/members/divy.jpg";
-import KishanImg from "../images/members/kishan.jpeg";
+import KishanImg from "../images/members/kishan.png";
 import ShravanImg from "../images/members/shravan.jpeg";
 
 const teamMembers = [
