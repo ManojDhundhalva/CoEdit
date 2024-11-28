@@ -27,7 +27,10 @@ const googleCredentials = async (req, res) => {
         const accountExists = Boolean(results.rows.length > 0);
 
         if (accountExists) {
-            const { id, username, profile_image } = results.rows[0];
+            const { id, username, image, profile_image } = results.rows[0];
+            if (!image) {
+                await pool.query(queries.updateUserImage, [picture, username]);
+            }
 
             const token = jwt.sign(
                 { id, username, image: profile_image },

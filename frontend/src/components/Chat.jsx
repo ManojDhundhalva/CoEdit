@@ -23,6 +23,7 @@ function Chat(props) {
     const [showScrollUp, setShowScrollUp] = useState(false);
     const [showScrollDown, setShowScrollDown] = useState(true);
     const chatContainerRef = useRef(null);
+    const textareaRef = useRef(null);
 
     const [isChatLoading, setIsChatLoading] = useState(false);
     const [msgSendLoading, setMsgSendLoading] = useState(false);
@@ -67,6 +68,13 @@ function Chat(props) {
                 chatContainer.removeEventListener('scroll', handleScroll);
             }
         };
+    }, []);
+
+    // Focus on the input field when the component renders
+    useEffect(() => {
+        if (textareaRef.current) {
+            textareaRef.current.focus();
+        }
     }, []);
 
     useEffect(() => {
@@ -238,10 +246,22 @@ function Chat(props) {
                 </button>
                 <textarea
                     id='style-1'
+                    ref={textareaRef}
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     placeholder="Type a message..."
                     rows={message.includes('\n') ? 2 : 1}
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                            if (e.shiftKey) {
+                                e.preventDefault(); // Prevents default newline behavior.
+                                setMessage((prevMsg) => prevMsg + '\n');
+                            } else {
+                                e.preventDefault(); // Prevents textarea from adding a new line.
+                                handleSubmit(); // Send the message.
+                            }
+                        }
+                    }}
                     style={{
                         flexGrow: 2,
                         backgroundColor: 'transparent',

@@ -43,11 +43,9 @@ function User(props) {
     const { userInfo, getUser } = useUser();
     const { LogOut } = useAuth();
 
-    const [fullName, setFullName] = useState(userInfo.fullName);
+    const [fullName, setFullName] = useState(userInfo.fullName || "");
     const [isUpdatingProfile, setIsUpdatingProfile] = useState(false);
     const [justVerify, setJustVerify] = useState(false);
-
-    const [isProfileImageUpdate, setIsProfileImageUpdate] = useState(false);
 
     const handleUpdateProfile = async (e) => {
         e.preventDefault();
@@ -174,21 +172,25 @@ function User(props) {
                             />
                         </Box>
                         <Box
+                            id="style-1"
                             sx={{
+                                maxHeight: 260,
+                                width: "100%",
+                                overflowY: "auto",
                                 flexGrow: 1,
                                 mt: 4,
                                 display: "flex",
+                                justifyContent: "space-evenly", // Aligns avatars in the center
                                 flexWrap: "wrap", // Allows avatars to wrap to the next line
                                 alignItems: "center",
-                                gap: 1, // Space between avatars
-                                maxWidth: "350px", // Adjust this width as per your layout
+                                maxWidth: 400, // Adjust this width as per your layout
                             }}
                         >
                             {userInfo.image ?
                                 <Avatar
                                     sx={{
                                         cursor: "pointer",
-                                        my: "2px",
+                                        my: "4px",
                                         bgcolor: "#333333",
                                         width: 80,
                                         height: 80,
@@ -215,7 +217,7 @@ function User(props) {
                                     key={index}
                                     sx={{
                                         cursor: "pointer",
-                                        my: "2px",
+                                        my: "4px",
                                         bgcolor: "#333333",
                                         width: 80,
                                         height: 80,
@@ -315,7 +317,7 @@ function User(props) {
                             fullWidth
                             size="small"
                             error={
-                                justVerify && (fullName === "")
+                                justVerify && (fullName.trim() === "")
                             }
                             helperText={
                                 justVerify &&

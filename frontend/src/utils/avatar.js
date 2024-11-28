@@ -2,8 +2,21 @@ import avatar1 from "../images/avatars/avatar1.png";
 import avatar2 from "../images/avatars/avatar2.png";
 import avatar3 from "../images/avatars/avatar3.png";
 import avatar4 from "../images/avatars/avatar4.png";
-import avatar5 from "../images/avatars/avatar5.png";
+import avatar5 from "../images/avatars/avatar5.jpg";
+import avatar6 from "../images/avatars/avatar6.jpg";
+import avatar7 from "../images/avatars/avatar7.jpg";
+import avatar8 from "../images/avatars/avatar8.jpg";
+import avatar9 from "../images/avatars/avatar9.jpg";
+import avatar10 from "../images/avatars/avatar10.jpg";
+import avatar11 from "../images/avatars/avatar11.jpg";
+import avatar12 from "../images/avatars/avatar12.jpg";
+import avatar13 from "../images/avatars/avatar13.jpg";
+import avatar14 from "../images/avatars/avatar14.jpg";
+import avatar15 from "../images/avatars/avatar15.jpg";
+import avatar16 from "../images/avatars/avatar16.jpg";
+import avatar17 from "../images/avatars/avatar17.jpg";
+import avatar18 from "../images/avatars/avatar18.jpg";
+import avatar19 from "../images/avatars/avatar19.jpg";
 
-export const avatars = [avatar1, avatar2, avatar3, avatar4, avatar5];
-
+export const avatars = [avatar1, avatar2, avatar3, avatar4, avatar5, avatar6, avatar7, avatar8, avatar9, avatar10, avatar11, avatar12, avatar13, avatar14, avatar15, avatar16, avatar17, avatar18, avatar19];
 export const getAvatar = (image) => typeof image === 'string' && image.startsWith('http') ? image : avatars[image];
