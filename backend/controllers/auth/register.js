@@ -41,7 +41,7 @@ const createAccount = async (req, res) => {
         const response = await fetch(`https://emailvalidation.abstractapi.com/v1/?api_key=${config.ABSTRACT_API_KEY}&email=${emailid}`);
         const data = await response.json();
 
-        if (data.deliverability !== "DELIVERABLE") {
+        if (data.deliverability != "DELIVERABLE") {
             return res.status(400).json({ message: "Email address not found." });
         }
 
