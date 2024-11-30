@@ -60,6 +60,7 @@ function FileExplorer(props) {
 
   // Emit an event to delete a node
   const handleDeleteNode = (nodeId) => {
+    setTabs(tabs.filter((tab) => tab.id !== nodeId));
     socket.emit("file-explorer:delete-node", { node_id: nodeId });
   };
 

@@ -821,9 +821,22 @@ function ProjectPage() {
                   </td>
                   <td>
                     <Box sx={{ position: "relative", display: "flex", justifyContent: "flex-end" }}>
-                      <IconButton aria-label="delete" onClick={(e) => e.stopPropagation()}>
-                        <DeleteOutlineRoundedIcon sx={{ color: "#333333" }} />
-                      </IconButton>
+                      <Tooltip title="delete"
+                        leaveDelay={0}
+                        enterDelay={0}
+                        componentsProps={{
+                          tooltip: {
+                            sx: {
+                              bgcolor: "common.black",
+                              color: "white",
+                              transition: "none",
+                            },
+                          },
+                        }}>
+                        <IconButton aria-label="delete" onClick={(e) => e.stopPropagation()}>
+                          <DeleteOutlineRoundedIcon sx={{ color: "#333333" }} />
+                        </IconButton>
+                      </Tooltip>
                     </Box>
                   </td>
                 </tr>
