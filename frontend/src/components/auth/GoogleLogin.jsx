@@ -1,14 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { toast } from "react-hot-toast"
-import { Box, Typography } from "@mui/material";
-import useAPI from '../../hooks/api';
 import { useNavigate } from 'react-router-dom';
+
+//hooks
+import useAPI from '../../hooks/api';
+
+//Material Components
+import { Box, Typography, CircularProgress } from "@mui/material";
+
+//Material Icons
+import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
+import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 
 //OAuth
 import { useGoogleLogin } from "@react-oauth/google"
 
 //images
 import googleImg from "../../images/google.png";
+
+//utils
 import { setDataToLocalStorage } from '../../utils/auth';
 
 function GoogleLogin(props) {
@@ -18,34 +28,11 @@ function GoogleLogin(props) {
     const { GET } = useAPI();
     const navigate = useNavigate();
 
-    // const responseGoogle = (authResult) => {
-    //     if (authResult["code"]) {
-    //         const { code } = authResult;
-    //         GET("/auth/google-credentials", { code })
-    //             .then(({ data }) => {
-    //                 const { accountExists } = data;
-
-    //                 if (accountExists) {
-    //                     toast.success(data.message);
-    //                     await setDataToLocalStorage(data);
-    //                     navigate("/");
-    //                 } else {
-    //                     const { email, name, image } = data;
-    //                     setEmail(email);
-    //                     setName(name);
-    //                     setImage(image);
-    //                     setIsNewUser((prev) => true);
-    //                 }
-    //             })
-    //             .catch((error) => {
-    //                 toast.error(error.message);
-    //             });
-    //     } else {
-    //         toast.error("google auth error");
-    //     }
-    // };
+    const [isLoading, setIsLoading] = useState(false);
 
     const responseGoogle = async (authResult) => {
+
+        setIsLoading((prev) => true);
         if (authResult["code"]) {
             try {
                 const { code } = authResult;
@@ -55,11 +42,20 @@ function GoogleLogin(props) {
                 const { accountExists } = data;
 
                 if (accountExists) {
-                    toast.success(data.message);
 
                     // Await setting data to localStorage
                     await setDataToLocalStorage(data);
 
+                    toast(data?.message || "Login successful!",
+                        {
+                            icon: <CheckCircleRoundedIcon />,
+                            style: {
+                                borderRadius: '10px',
+                                background: '#333',
+                                color: '#fff',
+                            },
+                        }
+                    );
                     // Navigate to the home page
                     navigate("/");
                 } else {
@@ -73,12 +69,31 @@ function GoogleLogin(props) {
                 }
             } catch (error) {
                 // Handle errors from GET request
-                toast.error(error.message);
+                toast(error.response?.data?.message || "Something went wrong!",
+                    {
+                        icon: <CancelRoundedIcon />,
+                        style: {
+                            borderRadius: '10px',
+                            background: '#333',
+                            color: '#fff',
+                        },
+                    }
+                );
             }
         } else {
             // Handle error when authResult does not contain a code
-            toast.error("Google auth error");
+            toast("Google auth error",
+                {
+                    icon: <CancelRoundedIcon />,
+                    style: {
+                        borderRadius: '10px',
+                        background: '#333',
+                        color: '#fff',
+                    },
+                }
+            );
         }
+        setIsLoading((prev) => false);
     };
 
 
@@ -97,11 +112,20 @@ function GoogleLogin(props) {
         <>
             <button onClick={handleGoogleLogin} style={{ padding: 6, width: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
                 <Box>
-                    <img src={googleImg} alt="Google Icon" style={{ marginRight: 10, width: 30, backgroundColor: "transparent" }} />
+                    <img src={googleImg} alt="Google Icon" style={{ width: 30, backgroundColor: "transparent" }} />
                 </Box>
-                <Typography fontWeight="bold">
+                <Typography fontWeight="bold" sx={{ mx: 1 }}>
                     Continue with Google
                 </Typography>
+                {isLoading ? <CircularProgress
+                    size={20}
+                    thickness={6}
+                    sx={{
+                        ml: 1,
+                        color: "black",
+                        '& circle': { strokeLinecap: 'round' },
+                    }}
+                /> : null}
             </button>
         </>
     )

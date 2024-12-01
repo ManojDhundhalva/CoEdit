@@ -1,10 +1,16 @@
 import React from "react";
-import home from "../images/home.png";
-import { Box, Typography } from "@mui/material";
+// Page Components
+import AboutUs from "./AboutUs";
+
+// Components
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+
+// Material UI Components
+import { Box, Typography } from "@mui/material";
+
+// Image
 import logo from "../images/logo.jpg";
-import AboutUs from "./AboutUs";
 
 function HomePage() {
   return (

@@ -1,9 +1,19 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Box, Avatar, Tooltip, Typography } from "@mui/material";
-import User from "../components/User";
-import { useUser } from "../context/user";
-import { getAvatar } from "../utils/avatar";
 import { useNavigate } from "react-router-dom";
+
+//Material Componets
+import { Box, Avatar, Tooltip, Typography } from "@mui/material";
+
+//Components
+import User from "../components/User";
+
+//context api
+import { useUser } from "../context/user";
+
+//utils
+import { getAvatar } from "../utils/avatar";
+
+//images
 import logo from "../images/logo.jpg";
 
 const Navbar = () => {
@@ -82,84 +92,99 @@ const Navbar = () => {
         </Box>
 
         {/* Right Section */}
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: { xs: "center", sm: "flex-end" },
-            alignItems: "center",
-            gap: 1,
-          }}
-        >
+        {userInfo.userName ?
           <Box
-            onClick={() => navigate("/project")}
             sx={{
-              cursor: "pointer",
-              fontWeight: "bold",
-              mx: { xs: 0, sm: 2 },
-              my: { xs: 1, sm: 0 },
-              bgcolor: "#F2F2F2",
-              borderRadius: "6px",
-              py: 1,
-              px: { xs: 1, sm: 3 },
-              "&:hover": {
-                bgcolor: "#E6E6E6",
-              },
+              display: "flex",
+              justifyContent: { xs: "center", sm: "flex-end" },
+              alignItems: "center",
+              gap: 1,
             }}
           >
-            Projects
-          </Box>
-
-          <Box>
-            <Tooltip
-              title="profile"
-              enterDelay={200}
-              leaveDelay={0}
-              componentsProps={{
-                tooltip: {
-                  sx: {
-                    bgcolor: "common.black",
-                    "& .MuiTooltip-arrow": {
-                      color: "common.black",
-                    },
-                  },
+            <Box
+              onClick={() => navigate("/project")}
+              sx={{
+                cursor: "pointer",
+                fontWeight: "bold",
+                mx: { xs: 1, sm: 2 },
+                my: { xs: 1, sm: 0 },
+                bgcolor: "#F2F2F2",
+                borderRadius: "6px",
+                py: 1,
+                px: { xs: 2, sm: 3 },
+                "&:hover": {
+                  bgcolor: "#E6E6E6",
                 },
               }}
             >
-              <Avatar
-                onClick={toggleProfile}
-                sx={{
-                  cursor: "pointer",
-                  width: 46,
-                  height: 46,
-                  border: "1px solid black",
-                }}
-                alt={userInfo.userName}
-                src={getAvatar(userInfo.profileImage)}
-                imgProps={{
-                  crossOrigin: "anonymous",
-                  referrerPolicy: "no-referrer",
-                  decoding: "async",
-                }}
-              />
-            </Tooltip>
-            {isProfileOpen ? (
-              <Box
-                ref={profileRef}
-                sx={{
-                  zIndex: 9999,
-                  position: "fixed",
-                  right: 10,
-                  top: 64,
-                  bgcolor: "#FAFAFA",
-                  border: "1px solid black",
-                  borderRadius: "10px",
+              Projects
+            </Box>
+
+            <Box>
+              <Tooltip
+                title="profile"
+                enterDelay={200}
+                leaveDelay={0}
+                componentsProps={{
+                  tooltip: {
+                    sx: {
+                      bgcolor: "common.black",
+                      "& .MuiTooltip-arrow": {
+                        color: "common.black",
+                      },
+                    },
+                  },
                 }}
               >
-                <User handleClose={handleCloseProfile} />
-              </Box>
-            ) : null}
+                <Avatar
+                  onClick={toggleProfile}
+                  sx={{
+                    cursor: "pointer",
+                    width: 46,
+                    height: 46,
+                    border: "1px solid black",
+                  }}
+                  alt={userInfo.userName}
+                  src={getAvatar(userInfo.profileImage)}
+                  imgProps={{
+                    crossOrigin: "anonymous",
+                    referrerPolicy: "no-referrer",
+                    decoding: "async",
+                  }}
+                />
+              </Tooltip>
+              {isProfileOpen ? (
+                <Box
+                  ref={profileRef}
+                  sx={{
+                    zIndex: 9999,
+                    position: "fixed",
+                    right: 10,
+                    top: 64,
+                    bgcolor: "#FAFAFA",
+                    border: "1px solid black",
+                    borderRadius: "10px",
+                  }}
+                >
+                  <User handleClose={handleCloseProfile} />
+                </Box>
+              ) : null}
+            </Box>
+          </Box> :
+          <Box >
+            <Box
+              onClick={() => navigate("/auth")}
+              sx={{
+                backgroundColor: "#333333", color: "white",
+                fontWeight: "bold", px: 2, py: 1, borderRadius: "6px",
+                cursor: "pointer",
+                "&:hover": { backgroundColor: "black" }
+              }}
+            >
+              Login / SignUp
+            </Box>
           </Box>
-        </Box>
+        }
       </Box>
 
     </>

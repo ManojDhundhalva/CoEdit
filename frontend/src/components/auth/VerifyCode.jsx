@@ -1,11 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import OtpInput from './OtpInput';
-import { Box, IconButton, Typography } from '@mui/material';
-import KeyboardBackspaceRoundedIcon from '@mui/icons-material/KeyboardBackspaceRounded';
-import { formatTimeMinutes } from "../../utils/formatters";
 import { toast } from 'react-hot-toast';
+
+//Componets
+import OtpInput from './OtpInput';
+
+//utils
+import { formatTimeMinutes } from "../../utils/formatters";
+
+//Material Components
+import { Box, IconButton, Typography, CircularProgress } from '@mui/material';
+
+//Material Icons
 import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
-import CircularProgress from '@mui/material/CircularProgress';
+import KeyboardBackspaceRoundedIcon from '@mui/icons-material/KeyboardBackspaceRounded';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 
 function VerifyCode(props) {

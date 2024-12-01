@@ -1,7 +1,9 @@
-// Desc: This file contains the ProjectPage component which is the main page of the application where the user can see all the projects they have created and can create new projects as well.
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
+
+// Components
+import User from "../components/User";
 
 // Hooks
 import useAPI from "../hooks/api";
@@ -12,24 +14,22 @@ import { useUser } from "../context/user";
 // Utils
 import { getAvatar } from "../utils/avatar";
 import { formatTimestamp } from "../utils/formatters";
-
-// Components
-import User from "../components/User";
+import { isValidProjectName } from "../utils/validation"
 
 // Material-UI Components
 import {
-  IconButton,
-  InputBase,
-  Typography,
   Box,
   Zoom,
-  Container,
+  Avatar,
   Tooltip,
+  Skeleton,
+  Container,
   TextField,
+  InputBase,
+  IconButton,
+  Typography,
   InputAdornment,
   CircularProgress,
-  Skeleton,
-  Avatar,
 } from "@mui/material";
 
 // Material-UI Icons
@@ -39,7 +39,6 @@ import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import DescriptionRoundedIcon from '@mui/icons-material/DescriptionRounded';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
-import { isValidProjectName } from "../utils/validation"
 import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded';// Example icon
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import SaveRoundedIcon from '@mui/icons-material/SaveRounded';

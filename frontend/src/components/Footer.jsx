@@ -1,7 +1,10 @@
 import React from "react";
+
+// Material UI Components
 import { Box, Typography, Link, Grid, IconButton } from "@mui/material";
+
+// Material UI Icons
 import GitHubIcon from '@mui/icons-material/GitHub';
-import logo from "../images/logo.jpg";
 
 const Footer = () => {
   return (

@@ -1,21 +1,25 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import {
-  Box,
-  Tooltip,
-  Zoom,
-  Typography,
-  IconButton,
-  Avatar,
-} from "@mui/material";
-import GroupAddRoundedIcon from "@mui/icons-material/GroupAddRounded";
-import Contributor from "./Contributor";
-import useAPI from "../hooks/api";
-import { useRef } from "react";
-import DescriptionRoundedIcon from '@mui/icons-material/DescriptionRounded';
+
+// Components
 import User from "./User";
+import Contributor from "./Contributor";
+
+// Hooks
+import useAPI from "../hooks/api";
+
+// Contexts
 import { useUser } from "../context/user";
+
+// Utils
 import { getAvatar } from "../utils/avatar";
+
+// Material UI Components
+import { Box, Tooltip, Zoom, Typography, IconButton, Avatar } from "@mui/material";
+
+// Material UI Icons
+import GroupAddRoundedIcon from "@mui/icons-material/GroupAddRounded";
+import DescriptionRoundedIcon from '@mui/icons-material/DescriptionRounded';
 
 
 const CustomDialog = ({ open, handleClose, projectId }) => {

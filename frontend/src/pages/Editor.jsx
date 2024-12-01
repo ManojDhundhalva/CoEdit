@@ -1,20 +1,28 @@
-// Editor.jsx
 import React, { useEffect, useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
-import { Grid, Box, Typography } from "@mui/material";
-import FileExplorer from "../components/FileExplorer";
+import { useParams, useNavigate } from "react-router-dom";
+
+// Components
+import Chat from "../components/Chat";
 import Tabs from "../components/Tabs";
-import { useParams } from "react-router-dom";
-import CodeEditor from "../components/CodeEditor";
 import Tools from "../components/Tools";
+import CodeEditor from "../components/CodeEditor";
+import FileExplorer from "../components/FileExplorer";
+
+// Contexts
 import { useSocket } from "../context/socket";
+
+// Hooks
 import useAPI from "../hooks/api";
+
+// Material UI Components
+import { Box, Typography } from "@mui/material";
+
+// Material UI Icons
 import DataObjectRoundedIcon from '@mui/icons-material/DataObjectRounded';
 import DataArrayRoundedIcon from '@mui/icons-material/DataArrayRounded';
 import FormatQuoteRoundedIcon from '@mui/icons-material/FormatQuoteRounded';
 import TextsmsRoundedIcon from '@mui/icons-material/TextsmsRounded';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
-import Chat from "../components/Chat";
 
 const styles = {
   container: {
@@ -22,7 +30,7 @@ const styles = {
     height: "100vh", // Ensure the container takes full viewport height
   },
   sidebar: {
-    minWidth: "200px",
+    minWidth: "240px",
     backgroundColor: "#f0f0f0",
     color: "white",
     overflowY: "auto",
@@ -60,20 +68,6 @@ function Editor() {
   const projectId = params?.projectId || null;
 
   const { socket } = useSocket();
-
-  // const getLiveUsers = async () => {
-  //   try {
-  //     const results = await GET("/project/get-live-users", { projectId });
-  //     console.log("getLiveUsers", results.data);
-  //     setLiveUsers((prev) => results.data);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   getLiveUsers();
-  // }, []);
 
   useEffect(() => {
     if (!socket) return;

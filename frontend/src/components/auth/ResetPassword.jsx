@@ -1,25 +1,26 @@
 import React, { useState } from 'react'
-import { Box, IconButton, Typography } from '@mui/material'
-import KeyboardBackspaceRoundedIcon from '@mui/icons-material/KeyboardBackspaceRounded'
-import CircularProgress from '@mui/material/CircularProgress'
-import TextField from '@mui/material/TextField'
-import VpnKeyRoundedIcon from '@mui/icons-material/VpnKeyRounded'
-import InputAdornment from '@mui/material/InputAdornment'
-import Visibility from '@mui/icons-material/Visibility'
-import VisibilityOff from '@mui/icons-material/VisibilityOff'
-import Tooltip from '@mui/material/Tooltip'
-import Zoom from '@mui/material/Zoom'
-import WarningAmberRoundedIcon from '@mui/icons-material/WarningAmberRounded'
-import CheckRoundedIcon from '@mui/icons-material/CheckRounded'
-import { Grid } from '@mui/material'
-import { avatars } from "../../utils/avatar";
-import useAPI from '../../hooks/api'
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast'
+
+//utils
+import { avatars } from "../../utils/avatar";
+import { setDataToLocalStorage } from '../../utils/auth'
+
+//hooks
+import useAPI from '../../hooks/api'
+
+//Material Componets
+import { Box, IconButton, Typography, CircularProgress, TextField, Tooltip, Zoom, InputAdornment } from '@mui/material'
+
+//Material Icons
+import KeyboardBackspaceRoundedIcon from '@mui/icons-material/KeyboardBackspaceRounded'
+import VpnKeyRoundedIcon from '@mui/icons-material/VpnKeyRounded'
+import Visibility from '@mui/icons-material/Visibility'
+import VisibilityOff from '@mui/icons-material/VisibilityOff'
+import WarningAmberRoundedIcon from '@mui/icons-material/WarningAmberRounded'
+import CheckRoundedIcon from '@mui/icons-material/CheckRounded'
 import CancelRoundedIcon from '@mui/icons-material/CancelRounded'
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded'
-import { getAvatar } from '../../utils/avatar'
-import { setDataToLocalStorage } from '../../utils/auth'
 
 function ResetPassword(props) {
 
@@ -97,6 +98,7 @@ function ResetPassword(props) {
                         crossOrigin="anonymous"
                         referrerPolicy="no-referrer"
                         decoding="async"
+                        onError={(e) => e.target.src = avatars[0]}
                     />
                 </Box>
                 <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column", my: 2 }}>

@@ -1,16 +1,22 @@
 // module-imports
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import WifiOffRoundedIcon from '@mui/icons-material/WifiOffRounded';
 
-// components
+// Components
 import Login from "../components/auth/Login";
 import Register from "../components/auth/Register";
 
+//context api
+import { useUser } from "../context/user";
+
+//Material Icons
+import WifiOffRoundedIcon from '@mui/icons-material/WifiOffRounded';
+
 function Auth() {
   const [hasAccount, setHasAccount] = useState(true);
-  const navigate = useNavigate();
   const [isOnline, setIsOnline] = useState(navigator.onLine);
+  const { clearUserInfo } = useUser();
+
+  useEffect(() => { clearUserInfo(); }, []);
 
   useEffect(() => {
     window.addEventListener("online", () => setIsOnline(true));

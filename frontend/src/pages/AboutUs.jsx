@@ -1,12 +1,22 @@
 import React, { useEffect, useState } from "react";
 import AOS from "aos";
+
+// CSS
 import "aos/dist/aos.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../CSS/AboutUs.css";
+
+// Utils
 import { avatars } from "../utils/avatar";
+
+// Material UI Components
+import { IconButton } from "@mui/material";
+
+// Material UI Icons
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
-import { IconButton } from "@mui/material";
+
+// Images
 import HardiImg from "../images/members/hardi.jpg";
 import PrathamImg from "../images/members/pratham.jpg";
 import DishankImg from "../images/members/dishank.jpeg";

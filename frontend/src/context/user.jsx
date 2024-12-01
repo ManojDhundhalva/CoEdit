@@ -1,18 +1,16 @@
 // Imports
 import React, { createContext, useContext, useState } from "react";
-import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 // Hooks
 import useAPI from "../hooks/api";
-
-//Material-UI Icons
-import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
 
 const userContext = createContext();
 
 export const UserProvider = ({ children }) => {
 
     const { GET } = useAPI();
+    const navigate = useNavigate();
 
     const [userInfo, setUserInfo] = useState({
         fullName: "",
@@ -37,22 +35,26 @@ export const UserProvider = ({ children }) => {
                 profileImage: data.profile_image,
                 image: data.image,
             });
+
         } catch (error) {
-            toast(error.response?.data?.message || "Error fetching user data",
-                {
-                    icon: <CancelRoundedIcon />,
-                    style: {
-                        borderRadius: '10px',
-                        background: '#333',
-                        color: '#fff',
-                    },
-                }
-            );
+            navigate("/");
         }
     };
 
+    const clearUserInfo = () => {
+        setUserInfo({
+            fullName: "",
+            userName: "",
+            email: "",
+            createdAt: "",
+            updatedOn: "",
+            profileImage: "",
+            image: "",
+        })
+    }
+
     return (
-        <userContext.Provider value={{ userInfo, getUser }}>
+        <userContext.Provider value={{ userInfo, getUser, clearUserInfo }}>
             {children}
         </userContext.Provider>
     );
