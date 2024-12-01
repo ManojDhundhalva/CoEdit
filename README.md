@@ -150,6 +150,49 @@ REACT_APP_GOOGLE_CLIENT_ID=YOUR_GOOGLE_CLIENT_ID
 
 ---
 
+### **Testing Highlights**
+
+- **Unit Testing:**  
+  - **Tools Used:** Jest, Vitest, Istanbul.  
+  - **Results:** High coverage for backend (controllers, authentication) and frontend (React components).  
+  - **Outcome:** Improved code quality and ensured early bug detection.
+
+- **Black-Box Testing:**  
+  - **Technique Used:** Equivalence Class Testing.  
+  - **Key Scenarios Tested:** Valid/invalid login credentials, file and folder names, and boundary testing for adding collaborators.  
+  - **Outcome:** Validated critical user workflows effectively.
+
+- **Performance Testing:**  
+  - **Tool Used:** JMeter (via BlazeMeter).  
+  - **Metrics:**  
+    - Max Users: 30  
+    - Throughput: 44.07 Hits/Second  
+    - Error Rate: 0.05%  
+    - Avg Response Time: 1274.27 ms  
+    - 90% Response Time: 1859 ms  
+  - **Outcome:** Efficient handling of concurrent users and low error rates.
+
+- **Compatibility Testing:**  
+  - **Platforms Tested:** Windows 11 with Chrome, Brave, Firefox, and Opera Mini.  
+  - **Outcome:** Seamless performance across browsers and platforms.
+
+- **Reliability Testing:**  
+  - **Results:**  
+    - Uptime: 100% over 7 days (0 incidents).  
+    - Avg Response Time: 209 ms  
+  - **Outcome:** Proven stability and consistent availability.
+
+- **GUI Testing:**  
+  - **Tool Used:** Selenium IDE.  
+  - **Key Scenarios Tested:** Authentication, real-time editing, file management, and collaborative workflows.  
+  - **Outcome:** Ensured the interface is user-friendly and responsive.
+
+- **Acceptance Testing:**  
+  - **Approach Used:** Test cases based on functional requirements and user stories.  
+  - **Outcome:** Confirmed alignment with business requirements and readiness for deployment.  
+  
+---
+
 ## **Contact**
  
 **Email**: [coedit.service@gmail.com]  
