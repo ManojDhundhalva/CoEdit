@@ -1,16 +1,17 @@
 import React, { useState, useEffect, useRef } from "react";
+
+// Hooks
+import useAPI from "../hooks/api";
+
+// Utils
+import { DateFormatter } from "../utils/formatters";
+
+// Material UI Components
+import { Zoom, Tooltip, Typography, Box } from "@mui/material/";
+
+// Material UI Icons
 import KeyboardArrowRightRoundedIcon from "@mui/icons-material/KeyboardArrowRightRounded";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
-import {
-  Button,
-  IconButton,
-  Zoom,
-  Tooltip,
-  Menu,
-  Fade,
-  Typography,
-  Box,
-} from "@mui/material/";
 import InsertDriveFileOutlinedIcon from "@mui/icons-material/InsertDriveFileOutlined";
 import FolderOutlinedIcon from "@mui/icons-material/FolderOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
@@ -18,8 +19,6 @@ import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import FolderRoundedIcon from '@mui/icons-material/FolderRounded';
 import DescriptionRoundedIcon from '@mui/icons-material/DescriptionRounded';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
-import useAPI from "../hooks/api";
-import { DateFormatter } from "../utils/formatters";
 
 const CustomDialog = ({ open, handleClose, date, name }) => {
 

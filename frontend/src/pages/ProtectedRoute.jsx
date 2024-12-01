@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
+
+//context api
 import { useUser } from '../context/user';
+
+//Material Icons
 import WifiOffRoundedIcon from '@mui/icons-material/WifiOffRounded';
 
 function ProtectedRoute(props) {
@@ -10,18 +14,14 @@ function ProtectedRoute(props) {
 
     const [isOnline, setIsOnline] = useState(navigator.onLine);
 
-    // useEffect(() => {
-    //     getUser();
-    // }, [])
-
     useEffect(() => {
         const authenticateUser = () => {
             const authToken = localStorage.getItem("authToken");
             const username = localStorage.getItem("username");
             const image = localStorage.getItem("image");
 
-            if (!authToken || !username || !image) navigate("/auth");
-            // window.location.href = "/auth";
+            if (!authToken || !username || !image) navigate("/");
+            // window.location.href = "/";
             else getUser();
         };
 

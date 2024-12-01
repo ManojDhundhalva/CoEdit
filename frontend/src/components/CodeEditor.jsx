@@ -134,6 +134,16 @@ const CodeEditor = ({ fileName, socket, fileId, username, setTabs, localImage, s
       const results = await GET("/project/code-editor/logs", { file_id: fileId });
       setLogs(results.data);
     } catch (error) {
+      toast(error.response?.data?.message || "Failed to fetch logs",
+        {
+          icon: <CancelRoundedIcon />,
+          style: {
+            borderRadius: '10px',
+            background: '#333',
+            color: '#fff',
+          },
+        }
+      );
     } finally {
       setIsLoadingLogs(false);
     }
@@ -157,7 +167,16 @@ const CodeEditor = ({ fileName, socket, fileId, username, setTabs, localImage, s
         return "";
       }
     } catch (error) {
-      toast.error("Error fetching initial content:", error);
+      toast(error.response?.data?.message || "Error fetching initial content",
+        {
+          icon: <CancelRoundedIcon />,
+          style: {
+            borderRadius: '10px',
+            background: '#333',
+            color: '#fff',
+          },
+        }
+      );
       return "";
     } finally {
       setIsLoadingContent(false);

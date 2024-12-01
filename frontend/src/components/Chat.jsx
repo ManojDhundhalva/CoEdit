@@ -1,17 +1,23 @@
 import React, { useState, useRef, useEffect } from 'react';
-import Box from '@mui/material/Box';
+import { toast } from 'react-hot-toast';
+import EmojiPicker, { Theme } from 'emoji-picker-react';
+
+//Hooks
+import useAPI from '../hooks/api';
+
+//Utils
+import { getAvatar } from '../utils/avatar';
+import { formatLogTimestamp } from "../utils/formatters";
+
+//Material Components
+import { Box, Avatar, CircularProgress, Typography } from '@mui/material';
+
+//Material Icons
 import SentimentSatisfiedRoundedIcon from '@mui/icons-material/SentimentSatisfiedRounded';
 import SendRoundedIcon from '@mui/icons-material/SendRounded';
-import EmojiPicker, { Theme } from 'emoji-picker-react';
 import KeyboardDoubleArrowUpRoundedIcon from '@mui/icons-material/KeyboardDoubleArrowUpRounded';
 import KeyboardDoubleArrowDownRoundedIcon from '@mui/icons-material/KeyboardDoubleArrowDownRounded';
-import { formatLogTimestamp } from "../utils/formatters";
-import CircularProgress from '@mui/material/CircularProgress';
-import Avatar from '@mui/material/Avatar';
-import Typography from '@mui/material/Typography';
-import useAPI from '../hooks/api';
-import { toast } from 'react-hot-toast';
-import { getAvatar } from '../utils/avatar';
+import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 
 function Chat(props) {
 
@@ -86,7 +92,16 @@ function Chat(props) {
                 setMessages(response.data);
                 scrollToBottom();
             } catch (error) {
-                toast.error('Failed to load messages');
+                toast(error.response?.data?.message || "Failed to load messages",
+                    {
+                        icon: <CancelRoundedIcon />,
+                        style: {
+                            borderRadius: '10px',
+                            background: '#333',
+                            color: '#fff',
+                        },
+                    }
+                );
             } finally {
                 setIsChatLoading(false);
             }

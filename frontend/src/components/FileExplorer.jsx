@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from "react";
+
+// Components
 import Folder from "./Folder";
-import useTraverseTree from "../hooks/use-traverse-tree";
+
+// Hooks
 import useAPI from "../hooks/api";
+import useTraverseTree from "../hooks/use-traverse-tree";
+
+// Material UI Components
 import { Box, Skeleton } from "@mui/material";
 
 // Build the tree from flat file structure

@@ -1,24 +1,27 @@
 import { useEffect, useRef, useState } from "react";
+import { toast } from "react-hot-toast";
+
+//hooks
+import useAPI from "../hooks/api";
+
+//utils
+import { getAvatar } from "../utils/avatar";
+
 import {
   Box,
   Chip,
-  List,
-  Button,
-  ListItem,
+  Avatar,
   TextField,
-  ListItemText,
-  InputAdornment,
-  ListItemAvatar,
   Typography,
+  InputAdornment,
+  CircularProgress
 } from "@mui/material";
-import { Avatar } from "@mui/material";
+
+//Material Icons
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
-import useAPI from "../hooks/api";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
-import FolderRoundedIcon from "@mui/icons-material/FolderRounded";
-import CircularProgress from "@mui/material/CircularProgress";
-import { toast } from "react-hot-toast";
-import { getAvatar } from "../utils/avatar";
+import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
+import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 
 function Contributor(props) {
   const { projectId, handleClose } = props;
@@ -96,11 +99,29 @@ function Contributor(props) {
   const addContributor = async (contributors) => {
     setIsAddingContributor(true);
     try {
-      const results = await POST("/project/add-contributor", { projectId, contributors });
-      toast.success(`Added, "${contributors.length}"`);
+      await POST("/project/add-contributor", { projectId, contributors });
+      toast(`${contributors.length} contributor${contributors.length > 1 ? "s" : ""} added`,
+        {
+          icon: <CheckCircleRoundedIcon />,
+          style: {
+            borderRadius: '10px',
+            background: '#333',
+            color: '#fff',
+          },
+        }
+      );
       setSelectedUsers([]);
-    } catch (err) {
-      toast.success(`NOT Added, "${contributors.length}"`);
+    } catch (error) {
+      toast(error.response?.data?.message || "Something went wrong!",
+        {
+          icon: <CancelRoundedIcon />,
+          style: {
+            borderRadius: '10px',
+            background: '#333',
+            color: '#fff',
+          },
+        }
+      );
     } finally {
       setIsAddingContributor(false);
     }

@@ -118,7 +118,6 @@ export default function Login({ hasAccount, setHasAccount }) {
             );
             navigate("/");
         } catch (err) {
-
             toast(err.response?.data?.message || "Something went wrong!",
                 {
                     icon: err.response?.data?.message === "You're Google Authenticated" ? <InfoRoundedIcon /> : <CancelRoundedIcon />,

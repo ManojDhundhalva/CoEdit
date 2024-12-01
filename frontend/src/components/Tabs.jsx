@@ -1,12 +1,21 @@
 import React from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import { Grid, Avatar, Tooltip, Zoom, IconButton } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import { styled } from '@mui/material/styles';
-import { Badge, Typography, Box } from '@mui/material';
-import MoreHorizRoundedIcon from '@mui/icons-material/MoreHorizRounded';
-import "../CSS/Tabs.css";
+
+// Utils
 import { getAvatar } from "../utils/avatar";
+
+// Material UI Styles
+import { styled } from '@mui/material/styles';
+
+// Material UI Components
+import { Grid, Avatar, Tooltip, Zoom, Badge, Typography, Box } from "@mui/material";
+
+// Material UI Icons
+import CloseIcon from "@mui/icons-material/Close";
+import MoreHorizRoundedIcon from '@mui/icons-material/MoreHorizRounded';
+
+// CSS
+import "../CSS/Tabs.css";
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   '& .MuiBadge-badge': {

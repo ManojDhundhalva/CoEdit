@@ -6,20 +6,18 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 //Pages
 import Auth from "./pages/Auth";
 import Editor from "./pages/Editor";
-import AboutUS from "./pages/AboutUs";
 import HomePage from "./pages/HomePage";
 import ProjectPage from "./pages/ProjectPage";
 import PageNotFound from "./pages/PageNotFound";
 import ProtectedRoute from "./pages/ProtectedRoute";
 
-//components
-// import TextEditor from "./components/TextEditor";
-
-//css
+// CSS
 import "./CSS/App.css";
+
+// Config
 import config from "./config";
 
-//OAuth
+// OAuth
 import { GoogleOAuthProvider } from "@react-oauth/google"
 
 function App() {
