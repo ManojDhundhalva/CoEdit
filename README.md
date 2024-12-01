@@ -242,12 +242,16 @@ Include screenshots or GIFs to showcase the application functionality.
 
 ### `Google OAuth`
 ![Google OAuth](./screenshots/google-oauth1.png)
+<br/>
 ![Google OAuth](./screenshots/google-oauth2.png)
+<br/>
 ![Google OAuth](./screenshots/google-oauth3.png)
 
 ### `Forgot Password`
 ![Forgot Password](./screenshots/forgot-password1.png)
+<br/>
 ![Forgot Password](./screenshots/forgot-password2.png)
+<br/>
 ![Forgot Password](./screenshots/forgot-password3.png)
 
 ### `Home Page`
@@ -258,20 +262,31 @@ Include screenshots or GIFs to showcase the application functionality.
 
 ### `Project Page`
 ![Project Page](./screenshots/project1.png)
+<br/>
 ![Project Page](./screenshots/project2.png)
 
 ### `Code Editor`
 ![Code Editor](./screenshots/code1.png)
 ![Code Editor](./screenshots/code2.png)
+<br/>
 ![Code Editor](./screenshots/code3.png)
+<br/>
 ![Code Editor](./screenshots/code4.png)
+<br/>
 ![Code Editor](./screenshots/code5.png)
+<br/>
 ![Code Editor](./screenshots/code6.png)
+<br/>
 ![Code Editor](./screenshots/code7.png)
+<br/>
 ![Code Editor](./screenshots/code8.png)
+<br/>
 ![Code Editor](./screenshots/code9.png)
+<br/>
 ![Code Editor](./screenshots/code10.png)
+<br/>
 ![Code Editor](./screenshots/code11.png)
+<br/>
 ![Code Editor](./screenshots/code12.png)
 
 ---
