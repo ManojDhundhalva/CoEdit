@@ -16,7 +16,9 @@ Check out the live version of the project here:
 3. [Tech Stack](#tech-stack)
 4. [Installation](#installation)
 5. [Environment Variables](#environment-variables)
-6. [Contact](#contact)
+6. [Testing Highlights](#testing-highlights)
+7. [Contact](#contact)
+8. [Team Members](#team-members)
 
 ---
 
@@ -197,21 +199,82 @@ REACT_APP_GOOGLE_CLIENT_ID=YOUR_GOOGLE_CLIENT_ID
  
 **Email**: [coedit.service@gmail.com]  
 
---- 
+---
+
+To add a team members list to your project documentation, you can include a section like this under a new heading in the document:
+
+---
+
+## **Team Members**
+
+Here is a list of team members who contributed to this project:
+
+- **Manoj Dhundhalva** - Project Leader
+- **Pratham Patel** 
+- **Meshv Patel** 
+- **Dishank Thakkar**
+- **Hardi Naik** 
+- **Divykumar Tandel** 
+- **Kishan Pansuriya** 
+- **Maunil Modi** 
+- **Shravankumar Makwana**
+ 
+
+---
 
 ### **Screenshots**  
 Include screenshots or GIFs to showcase the application functionality.
 
-`Login Page`
+1. [Login Page](#login-page)
+2. [SignUp Page](#signup-page)
+3. [Google-OAuth](#google-oauth)
+3. [Forgot Password](#forgot-password)
+4. [Home Page](#home-page)
+5. [Profile](#profile)
+6. [Project Page](#project-page)
+7. [Code Editor](#code-editor)
+
+### `Login Page`
 ![login](./screenshots/login.png)
 
-`SignUp Page`
+### `SignUp Page`
 ![SignUp](./screenshots/sign-up.png)
 
-`Google-Based Authentication (Google OAuth)`
-![SignUp](./screenshots/google-oauth1.png)
-![SignUp](./screenshots/google-oauth2.png)
-![SignUp](./screenshots/google-oauth3.png)
+### `Google OAuth`
+![Google OAuth](./screenshots/google-oauth1.png)
+![Google OAuth](./screenshots/google-oauth2.png)
+![Google OAuth](./screenshots/google-oauth3.png)
 
+### `Forgot Password`
+![Forgot Password](./screenshots/forgot-password1.png)
+![Forgot Password](./screenshots/forgot-password2.png)
+![Forgot Password](./screenshots/forgot-password3.png)
 
---- 
+### `Home Page`
+![Home](./screenshots/home.png)
+
+### `Profile`
+![Profile](./screenshots/profile.png)
+
+### `Project Page`
+![Project Page](./screenshots/project1.png)
+![Project Page](./screenshots/project2.png)
+
+### `Code Editor`
+![Code Editor](./screenshots/code1.png)
+![Code Editor](./screenshots/code2.png)
+![Code Editor](./screenshots/code3.png)
+![Code Editor](./screenshots/code4.png)
+![Code Editor](./screenshots/code5.png)
+![Code Editor](./screenshots/code6.png)
+![Code Editor](./screenshots/code7.png)
+![Code Editor](./screenshots/code8.png)
+![Code Editor](./screenshots/code9.png)
+![Code Editor](./screenshots/code10.png)
+![Code Editor](./screenshots/code11.png)
+![Code Editor](./screenshots/code12.png)
+
+---
+<div style="text-align: center; font-weight: bold">
+   - CoEdit Team -
+</div>
