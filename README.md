@@ -70,7 +70,7 @@ This project is a real-time collaborative platform built using the PERN stack (P
    git clone https://github.com/ManojDhundhalva/CoEdit.git
    cd CoEdit
    ```
-<br/>
+&nbsp;
 
 2. **Install dependencies**:
    - Install backend dependencies:
@@ -84,13 +84,13 @@ This project is a real-time collaborative platform built using the PERN stack (P
      npm install
      ```
 
-<br/>
+&nbsp;
 
 3. **Configure environment variables**:  
    Create a `.env` file in both `frontend` and `backend` directories. 
    See [Environment Variables](#environment-variables) for required keys.
 
-<br/>
+&nbsp;
 
 4. **Run the application**:
    - Start the backend:
@@ -103,7 +103,7 @@ This project is a real-time collaborative platform built using the PERN stack (P
      cd frontend
      npm run start
      ```
-<br/>
+&nbsp;
 
 5. Open [http://localhost:3000](http://localhost:3000) to view the application in the browser.
 
@@ -242,16 +242,20 @@ Include screenshots or GIFs to showcase the application functionality.
 
 ### `Google OAuth`
 ![Google OAuth](./screenshots/google-oauth1.png)
-<br/>
+&nbsp;
+&nbsp;
 ![Google OAuth](./screenshots/google-oauth2.png)
-<br/>
+&nbsp;
+&nbsp;
 ![Google OAuth](./screenshots/google-oauth3.png)
 
 ### `Forgot Password`
 ![Forgot Password](./screenshots/forgot-password1.png)
-<br/>
+&nbsp;
+&nbsp;
 ![Forgot Password](./screenshots/forgot-password2.png)
-<br/>
+&nbsp;
+&nbsp;
 ![Forgot Password](./screenshots/forgot-password3.png)
 
 ### `Home Page`
@@ -262,31 +266,44 @@ Include screenshots or GIFs to showcase the application functionality.
 
 ### `Project Page`
 ![Project Page](./screenshots/project1.png)
-<br/>
+&nbsp;
+&nbsp;
 ![Project Page](./screenshots/project2.png)
 
 ### `Code Editor`
 ![Code Editor](./screenshots/code1.png)
+&nbsp; 
+&nbsp;
 ![Code Editor](./screenshots/code2.png)
-<br/>
+&nbsp; 
+&nbsp;
 ![Code Editor](./screenshots/code3.png)
-<br/>
+&nbsp; 
+&nbsp;
 ![Code Editor](./screenshots/code4.png)
-<br/>
+&nbsp; 
+&nbsp;
 ![Code Editor](./screenshots/code5.png)
-<br/>
+&nbsp; 
+&nbsp;
 ![Code Editor](./screenshots/code6.png)
-<br/>
+&nbsp; 
+&nbsp;
 ![Code Editor](./screenshots/code7.png)
-<br/>
+&nbsp; 
+&nbsp;
 ![Code Editor](./screenshots/code8.png)
-<br/>
+&nbsp; 
+&nbsp;
 ![Code Editor](./screenshots/code9.png)
-<br/>
+&nbsp; 
+&nbsp; 
 ![Code Editor](./screenshots/code10.png)
-<br/>
+&nbsp; 
+&nbsp;
 ![Code Editor](./screenshots/code11.png)
-<br/>
+&nbsp; 
+&nbsp;
 ![Code Editor](./screenshots/code12.png)
 
 ---
