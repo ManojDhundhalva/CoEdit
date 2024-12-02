@@ -201,9 +201,6 @@ REACT_APP_GOOGLE_CLIENT_ID=YOUR_GOOGLE_CLIENT_ID
 
 ---
 
-To add a team members list to your project documentation, you can include a section like this under a new heading in the document:
-
----
 
 ## **Team Members**
 
@@ -307,6 +304,5 @@ Include screenshots or GIFs to showcase the application functionality.
 ![Code Editor](./screenshots/code12.png)
 
 ---
-<div style="text-align: center; font-weight: bold">
-   - CoEdit Team -
-</div>
+<p align="center"><strong>- CoEdit Team -</strong></p>
+
