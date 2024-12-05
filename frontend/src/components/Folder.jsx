@@ -233,10 +233,16 @@ const Folder = (props) => {
                     componentsProps={{
                       tooltip: {
                         sx: {
-                          bgcolor: "common.black",
-                          "& .MuiTooltip-arrow": {
-                            color: "common.black",
-                          },
+                          border: "1px solid black",
+                          bgcolor: "white",
+                          color: "black",
+                          transition: "none",
+                          fontWeight: "bold",
+                        },
+                      },
+                      arrow: {
+                        sx: {
+                          color: "black",
                         },
                       },
                     }}
@@ -252,10 +258,16 @@ const Folder = (props) => {
                     componentsProps={{
                       tooltip: {
                         sx: {
-                          bgcolor: "common.black",
-                          "& .MuiTooltip-arrow": {
-                            color: "common.black",
-                          },
+                          border: "1px solid black",
+                          bgcolor: "white",
+                          color: "black",
+                          transition: "none",
+                          fontWeight: "bold",
+                        },
+                      },
+                      arrow: {
+                        sx: {
+                          color: "black",
                         },
                       },
                     }}
@@ -271,10 +283,16 @@ const Folder = (props) => {
                     componentsProps={{
                       tooltip: {
                         sx: {
-                          bgcolor: "common.black",
-                          "& .MuiTooltip-arrow": {
-                            color: "common.black",
-                          },
+                          border: "1px solid black",
+                          bgcolor: "white",
+                          color: "black",
+                          transition: "none",
+                          fontWeight: "bold",
+                        },
+                      },
+                      arrow: {
+                        sx: {
+                          color: "black",
                         },
                       },
                     }}
@@ -294,10 +312,16 @@ const Folder = (props) => {
                     componentsProps={{
                       tooltip: {
                         sx: {
-                          bgcolor: "common.black",
-                          "& .MuiTooltip-arrow": {
-                            color: "common.black",
-                          },
+                          border: "1px solid black",
+                          bgcolor: "white",
+                          color: "black",
+                          transition: "none",
+                          fontWeight: "bold",
+                        },
+                      },
+                      arrow: {
+                        sx: {
+                          color: "black",
                         },
                       },
                     }}
@@ -418,10 +442,16 @@ const Folder = (props) => {
                   componentsProps={{
                     tooltip: {
                       sx: {
-                        bgcolor: "common.black",
-                        "& .MuiTooltip-arrow": {
-                          color: "common.black",
-                        },
+                        border: "1px solid black",
+                        bgcolor: "white",
+                        color: "black",
+                        transition: "none",
+                        fontWeight: "bold",
+                      },
+                    },
+                    arrow: {
+                      sx: {
+                        color: "black",
                       },
                     },
                   }}
@@ -438,10 +468,16 @@ const Folder = (props) => {
                   componentsProps={{
                     tooltip: {
                       sx: {
-                        bgcolor: "common.black",
-                        "& .MuiTooltip-arrow": {
-                          color: "common.black",
-                        },
+                        border: "1px solid black",
+                        bgcolor: "white",
+                        color: "black",
+                        transition: "none",
+                        fontWeight: "bold",
+                      },
+                    },
+                    arrow: {
+                      sx: {
+                        color: "black",
                       },
                     },
                   }}

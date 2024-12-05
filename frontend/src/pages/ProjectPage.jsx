@@ -21,6 +21,7 @@ import {
   Box,
   Zoom,
   Avatar,
+  Button,
   Tooltip,
   Skeleton,
   Container,
@@ -44,6 +45,9 @@ import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import SaveRoundedIcon from '@mui/icons-material/SaveRounded';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
+import InfoRoundedIcon from '@mui/icons-material/InfoRounded';
+import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
+import ManageAccountsRoundedIcon from '@mui/icons-material/ManageAccountsRounded';
 
 const CustomDialog = ({ open, handleClose, setAllProjects }) => {
 
@@ -240,6 +244,560 @@ const CustomDialog = ({ open, handleClose, setAllProjects }) => {
         </Box>
       </form>
     </Box >
+  );
+};
+
+const CustomDialogForDeleteProject = ({ open, handleClose, projectName, projectId, setAllProjects, isAdmin }) => {
+
+  const { POST } = useAPI();
+  const modalRef = useRef(null);
+  const [confirmation, setConfirmation] = useState("");
+  const [isLoadingDeleteProject, setIsLoadingDeleteProject] = useState(false);
+
+  useEffect(() => { setConfirmation(""); }, [open]);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (modalRef.current && !modalRef.current.contains(event.target)) {
+        handleClose();  // Close the modal if clicking outside of it
+      }
+    }
+
+    // Bind the event listener
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      // Unbind the event listener on cleanup
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [handleClose]);
+
+  useEffect(() => {
+    // Function to handle keydown event
+    const handleEsc = (event) => {
+      if (event.key === "Escape") {
+        handleClose(); // Call the function on pressing Escape
+      }
+    };
+
+    // Add event listener for keydown
+    document.addEventListener("keydown", handleEsc);
+
+    // Cleanup event listener on component unmount
+    return () => {
+      document.removeEventListener("keydown", handleEsc);
+    };
+  }, [handleClose]);
+
+  const handleDeleteCollaborator = async (e) => {
+    e.preventDefault();
+
+    if (confirmation.trim() !== `sudo delete ${projectName}`) return;
+
+    setIsLoadingDeleteProject(true);
+
+    try {
+      const results = await POST("/project/delete-project/contributor", { project_id: projectId, is_admin: isAdmin });
+      setAllProjects(results.data.projects);
+      toast("Project Deleted Successfully",
+        {
+          icon: <CheckCircleRoundedIcon />,
+          style: {
+            borderRadius: '10px',
+            background: '#333',
+            color: '#fff',
+          },
+        }
+      );
+      handleClose();
+    } catch (error) {
+      toast(error.response?.data?.message || "Something went wrong!",
+        {
+          icon: <CancelRoundedIcon />,
+          style: {
+            borderRadius: '10px',
+            background: '#333',
+            color: '#fff',
+          },
+        }
+      );
+    } finally {
+      setIsLoadingDeleteProject(false);
+    }
+  }
+
+  if (!open) return null;
+
+  return (
+    <Box ref={modalRef} sx={{
+      minWidth: "360px",
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "center",
+      position: "fixed",
+      top: "50%",
+      left: "50%",
+      zIndex: 1000,
+      bgcolor: "rgb(245, 245, 245)",
+      transform: "translate(-50%, -50%)",
+      p: 4,
+      borderRadius: "10px",
+      border: "1px solid #8C8C8C",
+      // boxShadow: "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px"
+    }}>
+      <Box onClick={handleClose}
+        sx={{
+          m: 1,
+          position: "absolute",
+          top: 0,
+          right: 0,
+          cursor: "pointer",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}>
+        <button style={{ padding: 0 }}>
+          <CloseRoundedIcon fontSize="small" sx={{ color: "black" }} />
+        </button>
+      </Box>
+      <Box sx={{ m: 3 }}>
+        <Typography fontWeight="bold" fontSize="xx-large">Delete Project</Typography>
+      </Box>
+      <Box sx={{ display: "flex", maxWidth: "420px", justifyContent: "flex-start", width: "100%", p: "12px", my: 2, borderRadius: 3, border: "1px solid #333333" }}>
+        <Typography fontWeight="bold" sx={{ mx: 2 }}>
+          <InfoRoundedIcon sx={{ mr: 1 }} />
+          {isAdmin ? "If you delete this project, all data and contributors will be permanently removed, and this action cannot be undone. Are you sure you want to continue?" : "If you delete this project, you will no longer be a contributor."}
+        </Typography>
+      </Box>
+      <Box sx={{ display: "flex", maxWidth: "420px", justifyContent: "flex-start", width: "100%", p: "12px", my: 2, borderRadius: 3, border: "1px solid #333333" }}>
+        <Typography fontWeight="bold" sx={{ mx: 2 }}>
+          <InfoRoundedIcon sx={{ mr: 1 }} />
+          Type <b style={{ fontFamily: "Cutive Mono" }}>"sudo delete {projectName}"</b> to confirm.
+        </Typography>
+      </Box>
+      <form onSubmit={handleDeleteCollaborator} style={{ display: "flex", width: "100%", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
+        <Box sx={{ m: 2, display: "flex", width: "100%" }}>
+          <TextField
+            autoFocus
+            value={confirmation}
+            onChange={(e) => setConfirmation(e.target.value)}
+            id="confirmation"
+            label="Confirmation"
+            variant="outlined"
+            fullWidth
+            required
+            size="small"
+            autoComplete="off"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <FolderRoundedIcon sx={{ color: "#333333" }} />
+                </InputAdornment>
+              ),
+            }}
+            sx={{
+              color: "black",
+              "& .MuiOutlinedInput-root": {
+                borderRadius: 3,
+                fontWeight: "bold",
+                "&.Mui-focused fieldset": {
+                  borderColor: "black", // Keep the border color when focused
+                },
+              },
+              "& .MuiInputLabel-root": {
+                color: "black", // Change the label color
+                "&.Mui-focused": {
+                  color: "black", // Change the label color
+                },
+              },
+            }}
+          />
+        </Box>
+        <Box sx={{ m: 1 }}>
+          <Button
+            type="submit"
+            color="error"
+            variant="outlined"
+            disabled={confirmation.trim() !== `sudo delete ${projectName}`}
+            sx={{ fontWeight: "bold", borderRadius: "6px", color: "#e5383b", borderColor: "#e5383b" }}
+          >
+            {isLoadingDeleteProject ? "Deleting..." : "Delete"}
+            {isLoadingDeleteProject ? (
+              <CircularProgress
+                size={20}
+                thickness={7}
+                sx={{
+                  ml: 2,
+                  color: "#e5383b",
+                  '& circle': { strokeLinecap: 'round' },
+                }}
+              />) : null}
+          </Button>
+        </Box>
+      </form>
+    </Box >
+  );
+};
+
+const CustomDialogForMakeAdmin = ({ open, handleClose, projectName, projectId, setAllProjects }) => {
+
+  const { GET, POST } = useAPI();
+  const modalRef = useRef(null);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (modalRef.current && !modalRef.current.contains(event.target)) {
+        handleClose();  // Close the modal if clicking outside of it
+      }
+    }
+
+    // Bind the event listener
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      // Unbind the event listener on cleanup
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [handleClose]);
+
+  useEffect(() => {
+    // Function to handle keydown event
+    const handleEsc = (event) => {
+      if (event.key === "Escape") {
+        handleClose(); // Call the function on pressing Escape
+      }
+    };
+
+    // Add event listener for keydown
+    document.addEventListener("keydown", handleEsc);
+
+    // Cleanup event listener on component unmount
+    return () => {
+      document.removeEventListener("keydown", handleEsc);
+    };
+  }, [handleClose]);
+
+  const [searchTerm, setSearchTerm] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
+  const [selectedUsers, setSelectedUsers] = useState([]);
+  const [selectedUserSet, setSelectedUserSet] = useState(new Set());
+  const [activeSuggestion, setActiveSuggestion] = useState(0);
+  const [isAddingContributor, setIsAddingContributor] = useState(false);
+  const [justVerify, setJustVerify] = useState(false);
+  const [isFetchingUsers, setIsFetchingUsers] = useState(false);
+  const [isLoadingMakingAdmin, setIsLoadingMakingAdmin] = useState(false);
+
+  useEffect(() => {
+    setSuggestions([]);
+    setSelectedUsers([]);
+  }, [open]);
+
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      setActiveSuggestion(0);
+      if (searchTerm.trim() === "") {
+        setSuggestions([]);
+        return;
+      }
+      setIsFetchingUsers(true);
+      const fetchUsersData = { q: searchTerm };
+      try {
+        const response = await GET("/project/users/search/make-admin", fetchUsersData);
+        console.log(response.data);
+        setSuggestions(response.data); // Use the data directly
+      } catch (err) {
+      } finally {
+        setIsFetchingUsers(false);
+      }
+    };
+
+    fetchUsers();
+  }, [searchTerm]);
+
+  const handleSelectUser = (user) => {
+    setSelectedUsers((prev) => [...prev, user]);
+    setSelectedUserSet((prev) => new Set([...prev, user.emailid])); // Adjusted for emailid
+    setSearchTerm("");
+    setSuggestions([]);
+    inputRef.current.focus();
+  };
+
+  const handleRemoveUser = (user) => {
+    const updatedUsers = selectedUsers.filter(
+      (selectedUser) => selectedUser.id !== user.id
+    );
+    setSelectedUsers(updatedUsers);
+
+    const updatedEmails = new Set(selectedUserSet);
+    updatedEmails.delete(user.emailid); // Adjusted for emailid
+    setSelectedUserSet(updatedEmails);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "ArrowDown" && suggestions.length > 0) {
+      e.preventDefault();
+      setActiveSuggestion((prevIndex) =>
+        prevIndex < suggestions.length - 1 ? prevIndex + 1 : prevIndex
+      );
+    } else if (e.key === "ArrowUp" && suggestions.length > 0) {
+      e.preventDefault();
+      setActiveSuggestion((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : 0));
+    } else if (
+      e.key === "Enter" &&
+      activeSuggestion >= 0 &&
+      activeSuggestion < suggestions.length
+    ) {
+      handleSelectUser(suggestions[activeSuggestion]);
+    }
+  };
+
+  const handleMakeAdmin = async () => {
+    setIsLoadingMakingAdmin(true);
+    try {
+      const results = await POST("/project/change-admin", { project_id: projectId, username: selectedUsers[0].username });
+      setAllProjects(results.data.projects);
+      toast("Admin Changed Successfully",
+        {
+          icon: <CheckCircleRoundedIcon />,
+          style: {
+            borderRadius: '10px',
+            background: '#333',
+            color: '#fff',
+          },
+        }
+      );
+      handleClose();
+    } catch (error) {
+      toast(error.response?.data?.message || "Something went wrong!",
+        {
+          icon: <CancelRoundedIcon />,
+          style: {
+            borderRadius: '10px',
+            background: '#333',
+            color: '#fff',
+          },
+        }
+      );
+    } finally {
+      setIsLoadingMakingAdmin(false);
+    }
+  }
+
+  if (!open) return null;
+
+  return (
+    <Box ref={modalRef} sx={{
+      minWidth: "420px",
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "center",
+      position: "fixed",
+      top: "50%",
+      left: "50%",
+      zIndex: 1000,
+      bgcolor: "rgb(245, 245, 245)",
+      transform: "translate(-50%, -50%)",
+      p: 4,
+      borderRadius: "10px",
+      border: "1px solid #8C8C8C",
+      // boxShadow: "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px"
+    }}>
+      <Box onClick={handleClose}
+        sx={{
+          m: 1,
+          position: "absolute",
+          top: 0,
+          right: 0,
+          cursor: "pointer",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}>
+        <button style={{ padding: 0 }}>
+          <CloseRoundedIcon fontSize="small" sx={{ color: "black" }} />
+        </button>
+      </Box>
+      <Box onClick={handleClose} sx={{
+        m: 1,
+        position: "absolute",
+        top: 0,
+        right: 0,
+        cursor: "pointer",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}>
+        <button style={{ padding: 0 }}>
+          <CloseRoundedIcon fontSize="small" sx={{ color: "black" }} />
+        </button>
+      </Box>
+      <Box sx={{ m: 2 }}>
+        <Typography fontWeight="bold" fontSize="xx-large">Make Admin of <span style={{ textDecoration: "underline" }}>{projectName}</span></Typography>
+      </Box>
+      {/* Pills */}
+      {selectedUsers.length ? selectedUsers.map((user, index) => (
+        <Box key={index} sx={{ maxWidth: "380px", px: 2, my: 3, py: "6px", border: "1px solid black", display: "flex", alignItems: "center", justifyContent: "space-between", borderRadius: 3, width: "100%" }}>
+          <Box sx={{ display: "flex", alignItems: "center", justifyContent: "flex-start" }}>
+            <Avatar src={getAvatar(user.profile_image)} alt="profile-image"
+              sx={{ width: 50, height: 50, border: "1px solid black" }}
+              imgProps={{
+                crossOrigin: "anonymous",
+                referrerPolicy: "no-referrer",
+                decoding: "async",
+              }} />
+            <Typography fontWeight="bold" fontSize="large" sx={{ px: 2 }}>{user.username}</Typography>
+          </Box>
+          <Box>
+            <Tooltip title="remove"
+              enterDelay={0}
+              leaveDelay={0}
+              componentsProps={{
+                tooltip: {
+                  sx: {
+                    border: "1px solid black",
+                    bgcolor: "white",
+                    color: "black",
+                    transition: "none",
+                    fontWeight: "bold",
+                  },
+                },
+                arrow: {
+                  sx: {
+                    color: "black",
+                  },
+                },
+              }}>
+              <IconButton size="small" onClick={(e) => { e.stopPropagation(); handleRemoveUser(user); }} sx={{ bgcolor: "#E6E6E6", mr: 1 }}>
+                <CloseRoundedIcon fontSize="small" sx={{ color: "black" }} />
+              </IconButton>
+            </Tooltip>
+          </Box>
+        </Box>
+      )) : null}
+
+      {selectedUsers.length < 1 ?
+        <Box sx={{ m: 2, my: 3 }}>
+          <Box sx={{ display: "flex", maxWidth: "380px", justifyContent: "flex-start", width: "100%", p: "12px", mb: 4, borderRadius: 3, border: "1px solid #333333" }}>
+            <Typography fontWeight="bold" sx={{ mx: 2 }}>
+              <InfoRoundedIcon sx={{ mr: 1 }} />
+              Changing the admin of project "{projectName}"
+            </Typography>
+          </Box>
+          <TextField
+            autoFocus
+            inputRef={inputRef}
+            value={searchTerm}
+            onChange={(e) => { setSearchTerm(e.target.value); setJustVerify(false); }}
+            id="contributors"
+            label="Contributors"
+            placeholder="Search For a User..."
+            onKeyDown={handleKeyDown}
+            fullWidth
+            size="small"
+            autoComplete="on"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <PersonRoundedIcon sx={{ color: "#333333" }} />
+                </InputAdornment>
+              ),
+            }}
+            error={
+              justVerify && (selectedUsers.length === 0)
+            }
+            helperText={
+              justVerify &&
+              (selectedUsers.length === 0 ? "Please select atleast a user." : "")
+            }
+            sx={{
+              width: "100%",
+              color: "black",
+              "& .MuiOutlinedInput-root": {
+                borderRadius: 3,
+                fontWeight: "bold",
+                "&.Mui-focused fieldset": {
+                  borderColor: "black", // Keep the border color when focused
+                },
+              },
+              "& .MuiInputLabel-root": {
+                color: "black", // Change the label color
+                "&.Mui-focused": {
+                  color: "black", // Change the label color
+                },
+              },
+            }}
+          />
+        </Box>
+        : null}
+
+
+      {selectedUsers.length === 1 ?
+        <Box sx={{ m: 1, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+          <Box sx={{ display: "flex", maxWidth: "380px", justifyContent: "flex-start", width: "100%", p: "12px", mb: 4, borderRadius: 3, border: "1px solid #333333" }}>
+            <Typography fontWeight="bold" sx={{ mx: 2 }}>
+              <InfoRoundedIcon sx={{ mr: 1 }} />
+              This action can't be undone. Are you sure you want to continue?
+            </Typography>
+          </Box>
+          <button
+            type="submit"
+            color="error"
+            variant="outlined"
+            style={{ fontWeight: "bold", borderRadius: "6px" }}
+            onClick={handleMakeAdmin}
+          >
+            {isLoadingMakingAdmin ? "Making Admin..." : "Make Admin"}
+            {isLoadingMakingAdmin ? (
+              <CircularProgress
+                size={20}
+                thickness={7}
+                sx={{
+                  ml: 2,
+                  color: "black",
+                  '& circle': { strokeLinecap: 'round' },
+                }}
+              />) : null}
+          </button>
+        </Box> : null}
+      {isFetchingUsers ?
+        (<CircularProgress
+          size={20}
+          thickness={7}
+          sx={{
+            color: "black",
+            '& circle': { strokeLinecap: 'round' },
+          }}
+        />) : (suggestions.length > selectedUsers.length ? (
+          suggestions.map((user, index) => (
+            <Box id={`suggestions-${index}`} key={index} sx={{ width: "100%", px: 2 }}>
+              <button
+                style={{ width: "100%", display: "flex", justifyContent: "flex-start", margin: 1 }}
+                selected={index === activeSuggestion}
+                onClick={() => handleSelectUser(user)}
+              >
+                <Box>
+                  <Avatar
+                    src={getAvatar(user.profile_image)}
+                    alt="profile-image"
+                    sx={{ border: "1px solid black" }} imgProps={{
+                      crossOrigin: "anonymous",
+                      referrerPolicy: "no-referrer",
+                      decoding: "async",
+                    }} />
+                </Box>
+                <Box sx={{ mx: 1 }}>
+                  <Typography fontWeight="bold">
+                    {user.username}
+                  </Typography>
+                </Box>
+              </button>
+            </Box>
+          )))
+          : null
+        )}
+    </Box>
   );
 };
 
@@ -456,9 +1014,52 @@ function ProjectPage() {
     }
   }
 
+
+  const [openDialogForDeleteProject, setOpenDialogForDeleteProject] = useState(false);
+  const handleOpenDialogForDeleteProject = () => setOpenDialogForDeleteProject(true);
+
+  const handleCloseDialogForDeleteProject = () => {
+    setSelectedforDeleteProjectId("");
+    setSelectedforDeleteProjectName("");
+    setOpenDialogForDeleteProject(false);
+    setIsAdminOfProject(false);
+  }
+
+  const [selectedforDeleteProjectName, setSelectedforDeleteProjectName] = useState("");
+  const [selectedforDeleteProjectId, setSelectedforDeleteProjectId] = useState("");
+  const [isAdminOfProject, setIsAdminOfProject] = useState(false);
+
+  const [openDialogForMakeAdmin, setOpenDialogForMakeAdmin] = useState(false);
+  const handleOpenDialogForMakeAdmin = () => setOpenDialogForMakeAdmin(true);
+  const handleCloseDialogForMakeAdmin = () => {
+    setSelectedforDeleteProjectId("");
+    setSelectedforDeleteProjectName("");
+    setOpenDialogForMakeAdmin(false);
+    setIsAdminOfProject(false);
+  }
+
   return (
     <>
-      <CustomDialog open={openDialog} handleClose={handleCloseDialog} setAllProjects={setAllProjects} />
+      <CustomDialog open={openDialog}
+        handleClose={handleCloseDialog}
+        setAllProjects={setAllProjects}
+      />
+      <CustomDialogForDeleteProject
+        open={openDialogForDeleteProject}
+        handleClose={handleCloseDialogForDeleteProject}
+        projectName={selectedforDeleteProjectName}
+        projectId={selectedforDeleteProjectId}
+        setAllProjects={setAllProjects}
+        isAdmin={isAdminOfProject}
+      />
+      <CustomDialogForMakeAdmin
+        open={openDialogForMakeAdmin}
+        handleClose={handleCloseDialogForMakeAdmin}
+        projectName={selectedforDeleteProjectName}
+        projectId={selectedforDeleteProjectId}
+        setAllProjects={setAllProjects}
+      />
+
 
       {/* header */}
       <Box sx={{ borderBottom: "1px solid rgb(100, 100, 100)", display: "flex", justifyContent: "space-between", alignItems: "center", px: 2, py: 1 }}>
@@ -504,10 +1105,16 @@ function ProjectPage() {
             componentsProps={{
               tooltip: {
                 sx: {
-                  bgcolor: "common.black",
-                  "& .MuiTooltip-arrow": {
-                    color: "common.black",
-                  },
+                  border: "1px solid black",
+                  bgcolor: "white",
+                  color: "black",
+                  transition: "none",
+                  fontWeight: "bold",
+                },
+              },
+              arrow: {
+                sx: {
+                  color: "black",
                 },
               },
             }}>
@@ -557,7 +1164,7 @@ function ProjectPage() {
                 <th style={{ width: "40%" }}>
                   <Box sx={{ display: "flex", justifyContent: "flex-start" }}>
                     <Typography fontWeight="bold">
-                      Today
+                      Name
                     </Typography>
                   </Box>
                 </th>
@@ -582,9 +1189,16 @@ function ProjectPage() {
                       componentsProps={{
                         tooltip: {
                           sx: {
-                            bgcolor: "common.black",
-                            color: "white",
+                            border: "1px solid black",
+                            bgcolor: "white",
+                            color: "black",
                             transition: "none",
+                            fontWeight: "bold",
+                          },
+                        },
+                        arrow: {
+                          sx: {
+                            color: "black",
                           },
                         },
                       }}>
@@ -621,6 +1235,13 @@ function ProjectPage() {
                 <th>
                   <Box sx={{ display: "flex", justifyContent: "flex-start" }}>
                     <Typography fontWeight="bold">
+                      Creator
+                    </Typography>
+                  </Box>
+                </th>
+                <th>
+                  <Box sx={{ display: "flex", justifyContent: "flex-start" }}>
+                    <Typography fontWeight="bold">
                       Admin
                     </Typography>
                   </Box>
@@ -628,7 +1249,7 @@ function ProjectPage() {
                 <th style={{ width: "40%" }}>
                   <Box sx={{ display: "flex", justifyContent: "flex-start" }}>
                     <Typography fontWeight="bold">
-                      Today
+                      Name
                     </Typography>
                   </Box>
                 </th>
@@ -653,9 +1274,16 @@ function ProjectPage() {
                       componentsProps={{
                         tooltip: {
                           sx: {
-                            bgcolor: "common.black",
-                            color: "white",
+                            border: "1px solid black",
+                            bgcolor: "white",
+                            color: "black",
                             transition: "none",
+                            fontWeight: "bold",
+                          },
+                        },
+                        arrow: {
+                          sx: {
+                            color: "black",
                           },
                         },
                       }}>
@@ -674,21 +1302,69 @@ function ProjectPage() {
                     <Box sx={{ position: "relative", display: "flex", justifyContent: "flex-start" }}>
                       <Tooltip
                         leaveDelay={0}
+                        enterDelay={0}
                         TransitionComponent={Zoom}
-                        title={project.project_created_by}
-                        placement="left"
+                        title={userInfo.userName == project.created_by_username ? "YOU" : project.created_by_username}
+                        // title={project.username}
+                        placement="bottom"
                         componentsProps={{
                           tooltip: {
                             sx: {
-                              bgcolor: "common.black",
-                              color: "white",
+                              border: "1px solid black",
+                              bgcolor: "white",
+                              color: "black",
                               transition: "none",
+                              fontWeight: "bold",
+                            },
+                          },
+                          arrow: {
+                            sx: {
+                              color: "black",
                             },
                           },
                         }}
                       >
                         <Avatar
-                          src={getAvatar(project.image)}
+                          src={getAvatar(project.created_by_image)}
+                          sx={{ width: 46, height: 46, border: "1px solid black" }}
+                          alt="admin-image"
+                          imgProps={{
+                            crossOrigin: "anonymous",
+                            referrerPolicy: "no-referrer",
+                            decoding: "async",
+                          }}
+                        />
+                      </Tooltip>
+                    </Box>
+                  </td>
+                  <td>
+                    <Box sx={{ position: "relative", display: "flex", justifyContent: "flex-start" }}>
+                      <Tooltip
+                        leaveDelay={0}
+                        enterDelay={0}
+                        TransitionComponent={Zoom}
+                        title={userInfo.userName == project.admin_username ? "YOU" : project.admin_username}
+                        // title={project.username}
+                        placement="bottom"
+                        componentsProps={{
+                          tooltip: {
+                            sx: {
+                              border: "1px solid black",
+                              bgcolor: "white",
+                              color: "black",
+                              transition: "none",
+                              fontWeight: "bold",
+                            },
+                          },
+                          arrow: {
+                            sx: {
+                              color: "black",
+                            },
+                          },
+                        }}
+                      >
+                        <Avatar
+                          src={getAvatar(project.admin_image)}
                           sx={{ width: 46, height: 46, border: "1px solid black" }}
                           alt="admin-image"
                           imgProps={{
@@ -702,7 +1378,7 @@ function ProjectPage() {
                   </td>
                   <td>
                     <Box sx={{ position: "relative", display: "flex", justifyContent: "flex-start", alignItems: "center" }}>
-                      {userInfo.userName === project.project_created_by && isProjectNameEditMode === project.project_id ?
+                      {project.is_admin && isProjectNameEditMode === project.project_id ?
                         <input
                           ref={editMode}
                           type="text"
@@ -722,20 +1398,26 @@ function ProjectPage() {
                         <Typography fontWeight="bold">
                           {project.project_name}
                         </Typography>}
-                      {userInfo.userName === project.project_created_by ?
+                      {project.is_admin ?
                         <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", mx: 1 }}>
                           {isProjectNameEditMode === project.project_id ?
                             <>
-                              <Tooltip title="save"
+                              <Tooltip title="Save"
                                 enterDelay={200}
                                 leaveDelay={0}
                                 componentsProps={{
                                   tooltip: {
                                     sx: {
-                                      bgcolor: "common.black",
-                                      "& .MuiTooltip-arrow": {
-                                        color: "common.black",
-                                      },
+                                      border: "1px solid black",
+                                      bgcolor: "white",
+                                      color: "black",
+                                      transition: "none",
+                                      fontWeight: "bold",
+                                    },
+                                  },
+                                  arrow: {
+                                    sx: {
+                                      color: "black",
                                     },
                                   },
                                 }}>
@@ -754,16 +1436,22 @@ function ProjectPage() {
                                   }
                                 </IconButton>
                               </Tooltip>
-                              <Tooltip title="cancel"
-                                enterDelay={200}
+                              <Tooltip title="Cancel"
+                                enterDelay={0}
                                 leaveDelay={0}
                                 componentsProps={{
                                   tooltip: {
                                     sx: {
-                                      bgcolor: "common.black",
-                                      "& .MuiTooltip-arrow": {
-                                        color: "common.black",
-                                      },
+                                      border: "1px solid black",
+                                      bgcolor: "white",
+                                      color: "black",
+                                      transition: "none",
+                                      fontWeight: "bold",
+                                    },
+                                  },
+                                  arrow: {
+                                    sx: {
+                                      color: "black",
                                     },
                                   },
                                 }}>
@@ -773,16 +1461,22 @@ function ProjectPage() {
                               </Tooltip>
                             </>
                             :
-                            <Tooltip title="edit"
+                            <Tooltip title="Edit"
                               enterDelay={200}
                               leaveDelay={0}
                               componentsProps={{
                                 tooltip: {
                                   sx: {
-                                    bgcolor: "common.black",
-                                    "& .MuiTooltip-arrow": {
-                                      color: "common.black",
-                                    },
+                                    border: "1px solid black",
+                                    bgcolor: "white",
+                                    color: "black",
+                                    transition: "none",
+                                    fontWeight: "bold",
+                                  },
+                                },
+                                arrow: {
+                                  sx: {
+                                    color: "black",
                                   },
                                 },
                               }}>
@@ -797,9 +1491,6 @@ function ProjectPage() {
                               </IconButton>
                             </Tooltip>
                           }
-                          <Typography fontWeight="bold" fontSize="small" sx={{ mx: 1, px: 1, alignContent: "center", border: "1px solid #ff9500", color: "#ff9500", borderRadius: "8px" }}>
-                            YOU
-                          </Typography>
                         </Box>
                         : null}
                     </Box>
@@ -820,19 +1511,64 @@ function ProjectPage() {
                   </td>
                   <td>
                     <Box sx={{ position: "relative", display: "flex", justifyContent: "flex-end" }}>
-                      <Tooltip title="delete"
+                      {project.is_admin ?
+                        <Tooltip title="Manage"
+                          leaveDelay={0}
+                          enterDelay={0}
+                          componentsProps={{
+                            tooltip: {
+                              sx: {
+                                border: "1px solid black",
+                                bgcolor: "white",
+                                color: "black",
+                                transition: "none",
+                                fontWeight: "bold",
+                              },
+                            },
+                            arrow: {
+                              sx: {
+                                color: "black",
+                              },
+                            },
+                          }}>
+                          <IconButton aria-label="delete"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleOpenDialogForMakeAdmin();
+                              setSelectedforDeleteProjectId(project.project_id);
+                              setSelectedforDeleteProjectName(project.project_name);
+                            }}>
+                            <ManageAccountsRoundedIcon sx={{ color: "#333333" }} />
+                          </IconButton>
+                        </Tooltip>
+                        : null}
+                      <Tooltip title="Delete"
                         leaveDelay={0}
                         enterDelay={0}
                         componentsProps={{
                           tooltip: {
                             sx: {
-                              bgcolor: "common.black",
-                              color: "white",
+                              border: "1px solid black",
+                              bgcolor: "white",
+                              color: "black",
                               transition: "none",
+                              fontWeight: "bold",
+                            },
+                          },
+                          arrow: {
+                            sx: {
+                              color: "black",
                             },
                           },
                         }}>
-                        <IconButton aria-label="delete" onClick={(e) => e.stopPropagation()}>
+                        <IconButton aria-label="delete"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedforDeleteProjectId(project.project_id);
+                            setSelectedforDeleteProjectName(project.project_name);
+                            setIsAdminOfProject(project.is_admin);
+                            handleOpenDialogForDeleteProject();
+                          }}>
                           <DeleteOutlineRoundedIcon sx={{ color: "#333333" }} />
                         </IconButton>
                       </Tooltip>

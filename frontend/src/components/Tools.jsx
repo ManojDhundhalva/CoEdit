@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 // Components
 import User from "./User";
 import Contributor from "./Contributor";
+import ExportProject from "./ExportProject";
 
 // Hooks
 import useAPI from "../hooks/api";
@@ -20,7 +21,7 @@ import { Box, Tooltip, Zoom, Typography, IconButton, Avatar } from "@mui/materia
 // Material UI Icons
 import GroupAddRoundedIcon from "@mui/icons-material/GroupAddRounded";
 import DescriptionRoundedIcon from '@mui/icons-material/DescriptionRounded';
-
+import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 
 const CustomDialog = ({ open, handleClose, projectId }) => {
   const modalRef = useRef(null);
@@ -145,17 +146,71 @@ const Tools = ({ liveUsers }) => {
         handleClose={handleCloseDialog}
         projectId={projectId}
       />
-      <Box sx={{ display: "flex", p: 0, m: 0, borderBottom: "1px solid black" }}>
+      <Box sx={{ position: "relative", display: "flex", alignItems: "center", p: 0, m: 0, borderBottom: "1px solid black" }}>
         {/* Left Section: Icon and Title */}
-        <Box sx={{ display: "flex", alignItems: "center", flexGrow: 1 }}>
-          <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-            <IconButton onClick={() => navigate("/project")}>
-              <DescriptionRoundedIcon fontSize="large" sx={{ color: "black" }} />
-            </IconButton>
-            <Typography fontWeight="bold" fontSize="x-large">
-              {projectName}
-            </Typography>
+        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexGrow: 1 }}>
+          <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", my: "6px" }}>
+            <Box sx={{ mx: 1 }}>
+              <Tooltip
+                TransitionComponent={Zoom}
+                title={"Home"}
+                placement="bottom"
+                componentsProps={{
+                  tooltip: {
+                    sx: {
+                      border: "1px solid black",
+                      bgcolor: "white",
+                      color: "black",
+                      transition: "none",
+                      fontWeight: "bold",
+                    },
+                  },
+                  arrow: {
+                    sx: {
+                      color: "black",
+                    },
+                  },
+                }}
+              >
+                <button onClick={() => navigate("/")}>
+                  <HomeRoundedIcon sx={{ color: "black" }} />
+                </button>
+              </Tooltip>
+            </Box>
+            <Box>
+              <Tooltip
+                TransitionComponent={Zoom}
+                title={"Projects"}
+                placement="bottom"
+                componentsProps={{
+                  tooltip: {
+                    sx: {
+                      border: "1px solid black",
+                      bgcolor: "white",
+                      color: "black",
+                      transition: "none",
+                      fontWeight: "bold",
+                    },
+                  },
+                  arrow: {
+                    sx: {
+                      color: "black",
+                    },
+                  },
+                }}
+              >
+
+                <button onClick={() => navigate("/project")}>
+                  <DescriptionRoundedIcon sx={{ color: "black" }} />
+                </button>
+              </Tooltip>
+            </Box>
           </Box>
+        </Box>
+        <Box sx={{ position: "absolute", left: "50%", transform: "traslate(-50%, -50%)" }}>
+          <Typography fontWeight="bold" fontSize="x-large">
+            {projectName}
+          </Typography>
         </Box>
 
         {/* Right Section: Icons and Avatar */}
@@ -175,10 +230,16 @@ const Tools = ({ liveUsers }) => {
                 componentsProps={{
                   tooltip: {
                     sx: {
-                      bgcolor: "common.black",
-                      "& .MuiTooltip-arrow": {
-                        color: "common.black",
-                      },
+                      border: "1px solid black",
+                      bgcolor: "white",
+                      color: "black",
+                      transition: "none",
+                      fontWeight: "bold",
+                    },
+                  },
+                  arrow: {
+                    sx: {
+                      color: "black",
                     },
                   },
                 }}
@@ -207,9 +268,16 @@ const Tools = ({ liveUsers }) => {
                 componentsProps={{
                   tooltip: {
                     sx: {
-                      bgcolor: "common.black",
-                      color: "white",
+                      border: "1px solid black",
+                      bgcolor: "white",
+                      color: "black",
                       transition: "none",
+                      fontWeight: "bold",
+                    },
+                  },
+                  arrow: {
+                    sx: {
+                      color: "black",
                     },
                   },
                 }}
@@ -220,6 +288,9 @@ const Tools = ({ liveUsers }) => {
               </Tooltip>
             </Box>
             : null}
+          <Box sx={{ marginLeft: 1 }}>
+            <ExportProject projectId={projectId} projectName={projectName} />
+          </Box>
           <Box sx={{ mx: 1 }}>
             <Tooltip title="profile"
               enterDelay={200}
@@ -227,10 +298,16 @@ const Tools = ({ liveUsers }) => {
               componentsProps={{
                 tooltip: {
                   sx: {
-                    bgcolor: "common.black",
-                    "& .MuiTooltip-arrow": {
-                      color: "common.black",
-                    },
+                    border: "1px solid black",
+                    bgcolor: "white",
+                    color: "black",
+                    transition: "none",
+                    fontWeight: "bold",
+                  },
+                },
+                arrow: {
+                  sx: {
+                    color: "black",
                   },
                 },
               }}>

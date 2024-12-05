@@ -38,10 +38,10 @@ button:active{
   background-color: rgb(244, 244, 244);    
 }
 
-/* ::selection {
+::selection {
   background-color: black; 
   color: white;            
-} */
+}
 
 /* Apply styles only to rows inside <tbody> */
 table tbody {

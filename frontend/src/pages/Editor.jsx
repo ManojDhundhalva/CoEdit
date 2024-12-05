@@ -417,7 +417,7 @@ function Editor() {
                           position: "absolute",
                           top: 0,
                           left: 0,
-                          zIndex: tab.id === selectedFileId ? 100 : 0,
+                          zIndex: tab.id === selectedFileId ? 1 : 0,
                           overflow: "hidden", // Prevent overflow issues
                         }}
                       >

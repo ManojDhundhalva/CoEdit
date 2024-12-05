@@ -1,6 +1,9 @@
 const pool = require("../db");
 const queries = require("../queries/project");
 const { v4: uuidv4 } = require("uuid");
+const archiver = require('archiver');
+const fs = require('fs');
+const path = require('path');
 
 const getAllProjects = async (req, resp) => {
   try {
@@ -10,8 +13,10 @@ const getAllProjects = async (req, resp) => {
 
     const results = await pool.query(queries.getAllProjects, [req.user.username]);
 
+
     return resp.status(200).json(results.rows);
   } catch (error) {
+    console.log(error);
     return resp.status(500).json({ message: "Internal Server Error" });
   }
 };
@@ -52,6 +57,7 @@ const addProject = async (req, resp) => {
       .status(201)
       .json({ project_id: projectId, message: "Project added successfully.", projects: rows });
   } catch (error) {
+    console.log(error);
     return resp.status(500).json({ message: "Internal Server Error." });
   }
 };
@@ -106,6 +112,7 @@ const getProjectName = async (req, resp) => {
 
     return resp.status(200).json(results.rows[0]);
   } catch (err) {
+    console.log(err);
     return resp.status(500).json({ message: "Internal Server Error" });
   }
 };
@@ -165,18 +172,6 @@ const getInitialTabs = async (req, resp) => {
     return resp.status(500).json({ message: "Internal Server Error" });
   }
 };
-
-// const getLiveUsers = async (req, resp) => {
-//   try {
-//     const results = await pool.query(queries.getLiveUsers, [
-//       req.query.projectId,
-//     ]);
-
-//     return resp.status(200).json(results.rows);
-//   } catch (err) {
-//     return resp.status(500).json({ message: "Internal Server Error" });
-//   }
-// };
 
 const setExpandData = async (req, resp) => {
   const { file_tree_id, expand } = req.body;
@@ -310,6 +305,151 @@ const executeCode = async (req, res) => {
 
 };
 
+const deleteProjectContributor = async (req, res) => {
+  const { project_id, is_admin } = req.body;
+  try {
+    if (is_admin) {
+      await pool.query(queries.deleteLiveUsers, [project_id]);
+      await pool.query(queries.deleteFileTreeExpandUser, [project_id]);
+      await pool.query(queries.deleteLogs, [project_id]);
+      await pool.query(queries.deleteChat, [project_id]);
+      await pool.query(queries.deleteFileTree, [project_id]);
+      await pool.query(queries.deleteFiles, [project_id]);
+      await pool.query(queries.deleteProjectOwners, [project_id]);
+      await pool.query(queries.deleteProjects, [project_id]);
+    } else {
+      await pool.query(queries.deleteProjectContributor, [project_id, req.user.username]);
+    }
+
+    const { rows } = await pool.query(queries.getAllProjects, [req.user.username]);
+    return res.status(200).json({ message: "Project Deleted Successfully", projects: rows });
+  } catch (err) {
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+const changeAdmin = async (req, res) => {
+  const { project_id, username } = req.body;
+  try {
+    await pool.query(queries.addContributor, [project_id, username]);
+    await pool.query(queries.changeAdmin, [project_id, username, true]);
+    await pool.query(queries.changeAdmin, [project_id, req.user.username, false]);
+
+    const { rows } = await pool.query(queries.getAllProjects, [req.user.username]);
+    return res.status(200).json({ message: "Admin changed successfully", projects: rows });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+const userSearchMakeAdmin = async (req, res) => {
+  const { q } = req.query; // Get the search term from query
+  try {
+    const result = await pool.query(queries.userSearchMakeAdmin, [`%${q}%`, req.user.username]); // Exclude the current user's username
+    return res.status(200).json(result.rows);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+const exportProject = async (req, res) => {
+  try {
+    const { project_id } = req.query;
+
+    // Fetch the file-folder structure from the database
+    const result = await pool.query(queries.exportProject, [project_id]);
+
+    // Create a map to store files and folders by their file_tree_id
+    const fileMap = new Map();
+    // Build the tree structure
+    const tree = [];
+
+    // First, loop through all rows and add them to the fileMap
+    result.rows.forEach((row) => {
+      // Create the file/folder item
+      const item = {
+        file_tree_id: row.file_tree_id,
+        parent_id: row.parent_id,
+        name: row.name,
+        is_folder: row.is_folder,
+        file_id: row.file_id,
+        file_name: row.file_name,
+        file_extension: row.file_extension,
+        file_data: row.file_data,
+        children: [] // Initialize an empty array for children
+      };
+
+      // Store the item in the map
+      fileMap.set(row.file_tree_id, item);
+
+      // If the parent_id is null, it's a root item, so add to the tree
+      if (!row.parent_id) {
+        tree.push(item);
+      }
+    });
+
+    // Second, loop through the rows again and build the hierarchy
+    result.rows.forEach((row) => {
+      if (row.parent_id) {
+        // Find the parent item and add the current item as its child
+        const parentItem = fileMap.get(row.parent_id);
+        const childItem = fileMap.get(row.file_tree_id);
+        parentItem.children.push(childItem);
+      }
+    });
+
+    // // Now, the `tree` contains the hierarchical file/folder structure
+    // console.log('File Tree Structure:', JSON.stringify(tree, null, 2));
+
+    // Initialize zip file
+    const zip = archiver('zip', { zlib: { level: 9 } });
+    const zipPath = path.join(__dirname, 'file_structure.zip');
+    const output = fs.createWriteStream(zipPath);
+    zip.pipe(output);
+
+    // Recursive function to add files/folders to zip
+    function addToZip(item, parentDir = '') {
+      const itemPath = path.join(parentDir, item.name);
+      if (item.is_folder) {
+        zip.append(Buffer.alloc(0), { name: itemPath + '/' }); // Add empty folder
+        item.children.forEach(child => addToZip(child, itemPath)); // Add child items recursively
+      } else {
+        zip.append(item?.file_data?.content || "", { name: itemPath });
+      }
+    }
+
+    // Iterate over the root items and add them to the zip
+    tree.forEach(item => {
+      addToZip(item);
+    });
+
+    // Finalize the zip file
+    zip.finalize();
+
+    // Send the .zip file to the client
+    output.on('close', () => {
+      res.download(path.join(__dirname, 'file_structure.zip'), 'file_structure.zip', (err) => {
+        if (err) {
+          console.error('Error during file download:', err);
+        }
+        // Once the download is complete, delete the zip file
+        fs.unlink(zipPath, (unlinkErr) => {
+          if (unlinkErr) {
+            console.error('Error deleting the zip file:', unlinkErr);
+          } else {
+            console.log('Zip file deleted successfully');
+          }
+        });
+      });
+    });
+
+  } catch (err) {
+    console.error('Error fetching data:', err);
+    res.status(500).send('Internal Server Error');
+  }
+};
 
 module.exports = {
   getAllProjects,
@@ -321,7 +461,6 @@ module.exports = {
   getAllActiveFiles,
   getFileTree,
   getInitialTabs,
-  // getLiveUsers,
   setExpandData,
   userSearch,
   getLogs,
@@ -330,4 +469,8 @@ module.exports = {
   getInitialContentOfFile,
   updateProjectName,
   executeCode,
+  deleteProjectContributor,
+  changeAdmin,
+  userSearchMakeAdmin,
+  exportProject,
 };

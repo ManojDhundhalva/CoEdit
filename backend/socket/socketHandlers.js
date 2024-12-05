@@ -247,7 +247,7 @@ const updateLastOpened = async (project_id, username) => {
 
 const socketHandlers = (io) => {
     io.on("connection", (socket) => {
-        socket.setMaxListeners(20);
+        socket.setMaxListeners(100);
 
         socket.on("editor:join-project", async ({ project_id, username, image }) => {
             socket.join(project_id);
