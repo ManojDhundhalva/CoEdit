@@ -13,7 +13,6 @@ router.post("/add-contributor", verifyTokenAndAuthorization, controller.addContr
 router.get("/get-all-active-files", verifyTokenAndAuthorization, controller.getAllActiveFiles);
 router.get("/get-file-tree", verifyTokenAndAuthorization, controller.getFileTree);
 router.get("/get-initial-tabs", verifyTokenAndAuthorization, controller.getInitialTabs);
-// router.get("/get-live-users", verifyTokenAndAuthorization, controller.getLiveUsers);
 router.post("/set-expand-data", verifyTokenAndAuthorization, controller.setExpandData);
 router.get("/users/search", verifyTokenAndAuthorization, controller.userSearch);
 router.get("/code-editor/logs", verifyTokenAndAuthorization, controller.getLogs);
@@ -22,5 +21,9 @@ router.post("/code-editor/save", verifyTokenAndAuthorization, controller.saveFil
 router.get("/code-editor/content", verifyTokenAndAuthorization, controller.getInitialContentOfFile);
 router.post("/update/project-name", verifyTokenAndAuthorization, controller.updateProjectName);
 router.post("/execute", verifyTokenAndAuthorization, controller.executeCode);
+router.post("/delete-project/contributor", verifyTokenAndAuthorization, controller.deleteProjectContributor);
+router.post("/change-admin", verifyTokenAndAuthorization, controller.changeAdmin);
+router.get("/users/search/make-admin", verifyTokenAndAuthorization, controller.userSearchMakeAdmin);
+router.get("/export-project", verifyTokenAndAuthorization, controller.exportProject);
 
 module.exports = router;

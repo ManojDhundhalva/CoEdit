@@ -1,5 +1,12 @@
 const getAllProjects = `
-SELECT p.*, po.*, u.profile_image AS image
+SELECT 
+        p.*,
+        po.*,
+        u.profile_image AS created_by_image,
+        u.username AS created_by_username,
+        admins.profile_image AS admin_image,
+        admins.username AS admin_username
+
 FROM
     projects AS p
 JOIN
@@ -10,6 +17,15 @@ JOIN
     users AS u
 ON
     p.project_created_by = u.username
+JOIN
+    (SELECT pos.project_id, u.username, u.profile_image 
+    FROM project_owners AS pos 
+    JOIN users AS u 
+    ON pos.username = u.username 
+    WHERE is_admin = TRUE
+    ) AS admins
+ON
+    p.project_id = admins.project_id
 WHERE
     po.username = $1
 ORDER BY
@@ -112,15 +128,16 @@ VALUES
 
 const getProjectName = `
 SELECT 
-  project_name, 
-  CASE 
-    WHEN project_created_by = $2 THEN TRUE 
-    ELSE FALSE 
-  END AS is_admin
+    p.project_name, 
+    po.is_admin
 FROM 
-  projects 
+    projects AS p
+JOIN
+    project_owners AS po
+ON
+    p.project_id = po.project_id
 WHERE 
-  project_id = $1;
+    p.project_id = $1 AND po.username = $2;
 `;
 
 const getContributorId = `
@@ -128,12 +145,9 @@ SELECT id FROM users WHERE username = $1;
 `;
 
 const addContributor = `
-INSERT INTO project_owners (
-    project_id,
-    username
-)
-VALUES 
-    ($1, $2);
+INSERT INTO project_owners (project_id, username)
+VALUES ($1, $2)
+ON CONFLICT (project_id, username) DO NOTHING;
 `;
 
 const getAllActiveFiles = `
@@ -184,14 +198,6 @@ ON lu.file_id = f.file_id
 WHERE lu.username = $1 AND lu.project_id = $2;
 `;
 
-// const getLiveUsers = `
-// SELECT u.username, u.profile_image AS image
-// FROM project_live_users AS plu
-// JOIN users AS u
-// ON plu.username = u.username
-// WHERE project_id = $1;
-// `;
-
 const insertExpandData = `
   INSERT INTO file_tree_expand_user (user_id, file_tree_id)
   VALUES ($1, $2)
@@ -204,10 +210,11 @@ const deleteExpandData = `
 
 const userSearch = `
 SELECT * FROM users 
-WHERE (username ILIKE $1)
+WHERE username ILIKE $1
 AND username NOT IN (
     SELECT username FROM project_owners WHERE project_id = $2
 )
+LIMIT 5;
 `;
 
 const getLogs = `
@@ -244,6 +251,97 @@ SET project_name = $3
 WHERE project_created_by = $1 AND project_id = $2;
 `;
 
+const deleteProjectContributor = `
+DELETE FROM project_owners
+WHERE project_id = $1 AND username = $2;
+`;
+
+const changeAdmin = `
+UPDATE project_owners
+SET is_admin = $3
+WHERE project_id = $1 AND username = $2;
+`;
+
+const userSearchMakeAdmin = `
+SELECT * FROM users 
+WHERE username ILIKE $1
+AND username <> $2
+LIMIT 4;
+`;
+
+const deleteLiveUsers = `
+DELETE FROM live_users WHERE project_id = $1;
+`;
+
+const deleteFileTreeExpandUser = `
+DELETE FROM file_tree_expand_user WHERE file_tree_id IN (
+    SELECT file_tree_id FROM file_tree WHERE project_id = $1
+);
+`;
+
+const deleteLogs = `
+DELETE FROM logs WHERE file_id IN (
+    SELECT file_id FROM files WHERE project_id = $1
+);`;
+
+const deleteChat = `
+DELETE FROM chat WHERE project_id = $1;
+`;
+
+const deleteFiles = `
+DELETE FROM files WHERE project_id = $1;
+`;
+
+const deleteFileTree = `
+DELETE FROM file_tree WHERE project_id = $1;
+`;
+
+const deleteProjectOwners = `
+DELETE FROM project_owners WHERE project_id = $1;
+`;
+
+const deleteProjects = `
+DELETE FROM projects WHERE project_id = $1;
+`;
+
+const exportProject = `
+WITH RECURSIVE file_tree_hierarchy AS (
+    SELECT
+		fte.project_id,
+        fte.file_tree_id,
+        fte.parent_id,
+        fte.name,
+        fte.is_folder,
+        fte.file_tree_timestamp
+    FROM file_tree AS fte
+    WHERE parent_id IS NULL -- starting point (root folders)
+
+    UNION ALL
+
+    SELECT
+		ft.project_id,
+        ft.file_tree_id,
+        ft.parent_id,
+        ft.name,
+        ft.is_folder,
+        ft.file_tree_timestamp
+    FROM file_tree ft
+    INNER JOIN file_tree_hierarchy fth ON ft.parent_id = fth.file_tree_id
+)
+SELECT
+    ft.file_tree_id,
+    ft.parent_id,
+    ft.name,
+    ft.is_folder,
+    f.file_id,
+    f.file_name,
+    f.file_extension,
+    f.file_data
+FROM file_tree_hierarchy ft
+LEFT JOIN files f ON ft.file_tree_id = f.file_id
+WHERE ft.project_id = $1;
+`;
+
 module.exports = {
     getAllProjects,
     addProjects,
@@ -260,7 +358,6 @@ module.exports = {
     getFileTree,
     getInitialTabs,
     setAllFilesLive,
-    // getLiveUsers,
     insertExpandData,
     deleteExpandData,
     userSearch,
@@ -269,4 +366,16 @@ module.exports = {
     saveFile,
     getInitialContentOfFile,
     updateProjectName,
+    deleteProjectContributor,
+    changeAdmin,
+    userSearchMakeAdmin,
+    deleteLiveUsers,
+    deleteFileTreeExpandUser,
+    deleteLogs,
+    deleteChat,
+    deleteFiles,
+    deleteFileTree,
+    deleteProjectOwners,
+    deleteProjects,
+    exportProject
 };

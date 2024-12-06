@@ -1,5 +1,7 @@
-import React, { useEffect, useRef, useState, useMemo, useCallback } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
+import { toast } from "react-hot-toast";
 import CodeMirror from "codemirror";
+import debounce from "lodash.debounce";
 import "codemirror/lib/codemirror.css";
 
 import "codemirror/theme/3024-day.css";
@@ -74,12 +76,19 @@ import "codemirror/addon/hint/anyword-hint";
 
 import "codemirror/keymap/sublime";
 
-
-import debounce from "lodash.debounce";
+// Hooks
 import useAPI from "../hooks/api";
+
+// Utils
+import { LANGUAGE_DATA } from "../utils/constants";
 import { formatLogTimestamp } from "../utils/formatters";
-import { Avatar, Box, selectClasses, Tooltip, Typography, Zoom } from "@mui/material";
-import CircularProgress from "@mui/material/CircularProgress";
+import { getAvatar } from "../utils/avatar";
+import { themes } from "../utils/code-editor-themes";
+
+// Material UI Components
+import { Avatar, Box, Tooltip, Typography, Zoom, CircularProgress } from "@mui/material";
+
+// Material UI Icons
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import MinimizeRoundedIcon from '@mui/icons-material/MinimizeRounded';
 import FilterNoneRoundedIcon from '@mui/icons-material/FilterNoneRounded';
@@ -87,9 +96,7 @@ import CheckBoxOutlineBlankRoundedIcon from '@mui/icons-material/CheckBoxOutline
 import HistoryRoundedIcon from '@mui/icons-material/HistoryRounded';
 import OpenInFullRoundedIcon from '@mui/icons-material/OpenInFullRounded';
 import CloudDoneRoundedIcon from '@mui/icons-material/CloudDoneRounded';
-import { LANGUAGE_DATA } from "../utils/constants";
 import PlayArrowRoundedIcon from '@mui/icons-material/PlayArrowRounded';
-import { toast } from "react-hot-toast";
 import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 import CodeRoundedIcon from '@mui/icons-material/CodeRounded';
 
@@ -108,8 +115,6 @@ import CodeRoundedIcon from '@mui/icons-material/CodeRounded';
     ]
 */
 
-import { getAvatar } from "../utils/avatar";
-import { themes } from "../utils/code-editor-themes";
 
 const CodeEditor = ({ fileName, socket, fileId, username, setTabs, localImage, selectedFileId }) => {
   const { GET, POST } = useAPI();
@@ -248,14 +253,14 @@ const CodeEditor = ({ fileName, socket, fileId, username, setTabs, localImage, s
     };
     setupEditor();
 
-    const handleInputRead = (cm, event) => {
-      if (!cm.state.completionActive && event.text[0]?.match(/\w/)) {
+    const handleInputRead = debounce(function (cm, event) {
+      if (!cm.state.completionActive && event.text[0].match(/\w/)) {
         cm.showHint({
           hint: CodeMirror.hint.anyword,
           completeSingle: false,
         });
       }
-    };
+    }, 300);
 
     editor.on("inputRead", handleInputRead);
 
@@ -289,7 +294,7 @@ const CodeEditor = ({ fileName, socket, fileId, username, setTabs, localImage, s
     });
 
     const receiveChangeHandler = ({ file_id, change, newLog }) => {
-      if (fileId === file_id || change.origin !== "setValue") {
+      if (fileId === file_id && change.origin !== "setValue") {
         isRemoteChange.current = true;
 
         setLogs((prevLogs) => [...prevLogs, newLog]);
@@ -355,6 +360,10 @@ const CodeEditor = ({ fileName, socket, fileId, username, setTabs, localImage, s
     socket.on("code-editor:remove-user-specific-cursor", removeUserSpecificCursor);
 
     return () => {
+      if(editorInstance.current){
+        editorInstance.current.toTextArea(); // Clean up CodeMirror instance safely
+      }
+    
       if (editor) {
         editor.toTextArea(); // Clean up CodeMirror instance safely
       }
@@ -852,16 +861,6 @@ const CodeEditor = ({ fileName, socket, fileId, username, setTabs, localImage, s
           </Box>
         ) :
           <Box sx={{ display: "flex", position: "absolute", left: "50%", transform: "translateX(-50%)" }}>
-            {/* {selectLanguage.icon ?
-              <Box>
-                <img
-                  src={selectLanguage.icon}
-                  alt={selectLanguage.language + " icon"}
-                  crossOrigin="anonymous"
-                  referrerPolicy="no-referrer"
-                  decoding="async"
-                />
-              </Box> : null} */}
             <select id="style-1" value={selectLanguage.language} onChange={handleSelectLanguage}>
               {LANGUAGE_DATA.map((lang, index) => (
                 <option key={index} value={lang.language}>
@@ -895,16 +894,22 @@ const CodeEditor = ({ fileName, socket, fileId, username, setTabs, localImage, s
                 </Box>
                 :
                 <Tooltip
-                  title={"run"}
+                  title={"Run"}
                   placement="top"
+                  arrow
                   componentsProps={{
                     tooltip: {
                       sx: {
+                        border: "1px solid black",
+                        bgcolor: "white",
+                        color: "black",
+                        transition: "none",
                         fontWeight: "bold",
-                        bgcolor: "common.black",
-                        "& .MuiTooltip-arrow": {
-                          color: "common.black",
-                        },
+                      },
+                    },
+                    arrow: {
+                      sx: {
+                        color: "black",
                       },
                     },
                   }}
@@ -939,10 +944,33 @@ const CodeEditor = ({ fileName, socket, fileId, username, setTabs, localImage, s
             </Box>
           }
           <Box sx={{ px: 1 }}>
-            <HistoryRoundedIcon
-              onClick={toggleLog}
-              sx={{ p: "1px", cursor: "pointer", color: "white", borderRadius: "4px", "&:hover": { color: "black", bgcolor: "#CCCCCC" } }}
-            />
+            <Tooltip
+              title="History"
+              leaveDelay={0}
+              enterDelay={0}
+              placement="top"
+              componentsProps={{
+                tooltip: {
+                  sx: {
+                    border: "1px solid black",
+                    bgcolor: "white",
+                    color: "black",
+                    transition: "none",
+                    fontWeight: "bold",
+                  },
+                },
+                arrow: {
+                  sx: {
+                    color: "black",
+                  },
+                },
+              }}
+            >
+              <HistoryRoundedIcon
+                onClick={toggleLog}
+                sx={{ p: "1px", cursor: "pointer", color: "white", borderRadius: "4px", "&:hover": { color: "black", bgcolor: "#CCCCCC" } }}
+              />
+            </Tooltip>
           </Box>
           <select id="style-1" value={selectedTheme} onChange={(e) => handleThemeSelect(e.target.value)}>
             {themes.map((theme, index) => (
@@ -961,8 +989,7 @@ const CodeEditor = ({ fileName, socket, fileId, username, setTabs, localImage, s
           height: "100%",
         }}
       >
-        <textarea ref={editorRef}>
-        </textarea>
+        <textarea ref={editorRef}></textarea>
         <Box
           onClick={() => {
             setIsCodeInputOutputOpen(true);
@@ -1224,10 +1251,16 @@ const CodeEditor = ({ fileName, socket, fileId, username, setTabs, localImage, s
                     componentsProps={{
                       tooltip: {
                         sx: {
-                          bgcolor: "common.black",
-                          "& .MuiTooltip-arrow": {
-                            color: "common.black",
-                          },
+                          border: "1px solid black",
+                          bgcolor: "white",
+                          color: "black",
+                          transition: "none",
+                          fontWeight: "bold",
+                        },
+                      },
+                      arrow: {
+                        sx: {
+                          color: "black",
                         },
                       },
                     }}
