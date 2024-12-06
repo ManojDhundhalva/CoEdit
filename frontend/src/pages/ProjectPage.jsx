@@ -49,6 +49,9 @@ import InfoRoundedIcon from '@mui/icons-material/InfoRounded';
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
 import ManageAccountsRoundedIcon from '@mui/icons-material/ManageAccountsRounded';
 
+// Image
+import logo from "../images/logo.jpg";
+
 const CustomDialog = ({ open, handleClose, setAllProjects }) => {
 
   const { POST } = useAPI();
@@ -1063,9 +1066,17 @@ function ProjectPage() {
 
       {/* header */}
       <Box sx={{ borderBottom: "1px solid rgb(100, 100, 100)", display: "flex", justifyContent: "space-between", alignItems: "center", px: 2, py: 1 }}>
-        <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-          <DescriptionRoundedIcon fontSize="large" sx={{ color: "black" }} />
-          <Typography fontWeight="bold" fontSize="x-large">
+        <Box onClick={() => navigate("/")} sx={{ cursor: "pointer", display: "flex", justifyContent: "center", alignItems: "center" }}>
+          {/* <DescriptionRoundedIcon fontSize="large" sx={{ color: "black" }} /> */}
+          <img
+            src={logo}
+            alt="logo"
+            style={{
+              width: 50,
+              objectFit: "contain",
+            }}
+          />
+          <Typography fontWeight="bold" fontSize="x-large" sx={{ mx: 1 }}>
             CoEdit
           </Typography>
         </Box>
@@ -1099,7 +1110,7 @@ function ProjectPage() {
           </Box>
         </Box>
         <Box>
-          <Tooltip title="profile"
+          <Tooltip title="Profile"
             enterDelay={200}
             leaveDelay={0}
             componentsProps={{

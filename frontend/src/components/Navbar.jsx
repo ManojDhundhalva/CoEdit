@@ -15,6 +15,7 @@ import { getAvatar } from "../utils/avatar";
 
 //images
 import logo from "../images/logo.jpg";
+import LandingPage from "./home/LandingPage";
 
 const Navbar = () => {
   const { userInfo } = useUser();
@@ -59,9 +60,10 @@ const Navbar = () => {
   }, [handleCloseProfile]);
 
   return (
-    <>
+    <Box sx={{ height: "100vh", display: "flex", flexDirection: "column" }}>
       <Box
         sx={{
+          bgcolor: "#FAFAFA",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
@@ -122,7 +124,7 @@ const Navbar = () => {
 
             <Box>
               <Tooltip
-                title="profile"
+                title="Profile"
                 enterDelay={200}
                 leaveDelay={0}
                 componentsProps={{
@@ -192,8 +194,8 @@ const Navbar = () => {
           </Box>
         }
       </Box>
-
-    </>
+      <LandingPage />
+    </Box>
   );
 };
 

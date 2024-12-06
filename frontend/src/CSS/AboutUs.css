@@ -39,7 +39,7 @@
   width: 70px;
   height: 70px;
   line-height: 70px;
-  background: #333333;
+  background: #012A4A;
   color: #ffffff;
   text-align: center;
   border-radius: 50%;
@@ -110,10 +110,10 @@
 
 .section-title h2 {
   font-weight: 700;
-  color: black;
+  color: #012A4A;
   font-size: 45px;
   margin: 0 0 15px;
-  border-left: 5px solid black;
+  border-left: 5px solid #012A4A;
   padding-left: 15px;
 }
 

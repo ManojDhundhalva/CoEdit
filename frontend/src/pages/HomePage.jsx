@@ -12,11 +12,25 @@ import { Box, Typography } from "@mui/material";
 // Image
 import logo from "../images/logo.jpg";
 
+import ThreeScene from "../components/home/ThreeScene";
+import HorizontalScroll from "../components/home/HorizontalScroll";
+
 function HomePage() {
   return (
     <>
       <Navbar />
-      <Box
+      <Box sx={{ overflow: "hidden", display: "flex", justifyContent: "flex-end" }}>
+        <ThreeScene />
+      </Box>
+      <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+        <Typography fontWeight="bold" fontSize={100} sx={{ color: "#012A4A" }}>
+          Features/Services
+        </Typography>
+      </Box>
+      <Box sx={{ overflow: "hidden", my: 4 }}>
+        <HorizontalScroll />
+      </Box>
+      {/* <Box
         sx={{
           display: "flex",
           justifyContent: "center",
@@ -44,7 +58,7 @@ function HomePage() {
         >
           CoEdit
         </Typography>
-      </Box>
+      </Box> */}
       <AboutUs />
       <Footer />
     </>

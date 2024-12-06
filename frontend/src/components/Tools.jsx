@@ -292,7 +292,7 @@ const Tools = ({ liveUsers }) => {
             <ExportProject projectId={projectId} projectName={projectName} />
           </Box>
           <Box sx={{ mx: 1 }}>
-            <Tooltip title="profile"
+            <Tooltip title="Profile"
               enterDelay={200}
               leaveDelay={0}
               componentsProps={{

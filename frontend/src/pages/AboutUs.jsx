@@ -115,7 +115,7 @@ function AboutUS() {
           <div className="row">
             <div className="col-lg-6">
               <div className="section-title">
-                <h2 style={{ fontFamily: "Quicksand" }}>About US</h2>
+                <h2 style={{ fontFamily: "Quicksand", fontSize: "4em" }}>About US</h2>
                 <p style={{ fontFamily: "Quicksand" }}>
                   We developed powerful real-time collaborative editing tools designed to make online teamwork seamless and efficient.
                 </p>
@@ -138,10 +138,10 @@ function AboutUS() {
                     <h5 style={{ fontFamily: "Quicksand", marginTop: 20 }}>{member.name}</h5>
                     <div>
                       <IconButton sx={{ mx: "2px" }} onClick={() => window.open(member.github, "_blank")}>
-                        <GitHubIcon sx={{ color: "#333333" }} />
+                        <GitHubIcon sx={{ color: "#012A4A" }} />
                       </IconButton>
                       <IconButton sx={{ mx: "2px" }} onClick={() => window.open(member.linkedin, "_blank")}>
-                        <LinkedInIcon sx={{ color: "#333333" }} />
+                        <LinkedInIcon sx={{ color: "#012A4A" }} />
                       </IconButton>
                     </div>
                   </div>
