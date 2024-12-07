@@ -10,6 +10,7 @@ import useAPI from "../hooks/api";
 
 // Contexts
 import { useUser } from "../context/user";
+import { useSocket } from "../context/socket";
 
 // Utils
 import { getAvatar } from "../utils/avatar";
@@ -253,6 +254,7 @@ const CustomDialog = ({ open, handleClose, setAllProjects }) => {
 const CustomDialogForDeleteProject = ({ open, handleClose, projectName, projectId, setAllProjects, isAdmin }) => {
 
   const { POST } = useAPI();
+  const { socket } = useSocket();
   const modalRef = useRef(null);
   const [confirmation, setConfirmation] = useState("");
   const [isLoadingDeleteProject, setIsLoadingDeleteProject] = useState(false);
@@ -297,6 +299,10 @@ const CustomDialogForDeleteProject = ({ open, handleClose, projectName, projectI
     if (confirmation.trim() !== `sudo delete ${projectName}`) return;
 
     setIsLoadingDeleteProject(true);
+
+    if (isAdmin && socket) {
+      socket.emit("project:delete-project", { project_id: projectId });
+    }
 
     try {
       const results = await POST("/project/delete-project/contributor", { project_id: projectId, is_admin: isAdmin });

@@ -265,6 +265,9 @@ const socketHandlers = (io) => {
             //     `,
             //     [project_id, username]
             // );
+            socket.on("editor:live-user-left-from-editor", (data) => {
+                io.to(project_id).emit("editor:live-user-left", data);
+            });
 
             socket.broadcast.to(project_id).emit("editor:live-user-joined", { username, image });
             socket.on("editor:live-user-joined-send-back", (data) => {
@@ -362,10 +365,12 @@ const socketHandlers = (io) => {
                 io.to(project_id).emit("chat:receive-message", { message, time, image, username, socketId: socket.id });
             });
 
+            socket.on("project:delete-project", async (data) => {
+                io.to(project_id).emit("project:delete-project", data);
+            });
+
             socket.on("disconnect", async () => {
-                socket.broadcast
-                    .to(project_id)
-                    .emit("editor:live-user-left", { username });
+                io.to(project_id).emit("editor:live-user-left", { username });
 
                 socket.broadcast
                     .to(project_id)

@@ -70,6 +70,30 @@ function Editor() {
   const { socket } = useSocket();
 
   useEffect(() => {
+    return () => {
+      if (!socket) return;
+      socket.emit("editor:live-user-left-from-editor", { username: localStorage.getItem("username") });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleDeleteProject = (data) => {
+      const { project_id } = data;
+      if (project_id && project_id === projectId) {
+        navigate("/project");
+      }
+    };
+
+    socket.on("project:delete-project", handleDeleteProject);
+
+    return () => {
+      socket.off("project:delete-project", handleDeleteProject);
+    }
+  }, [socket]);
+
+  useEffect(() => {
     if (!socket) return;
 
     const liveUserJoined = ({ username, image }) => {
@@ -119,7 +143,7 @@ function Editor() {
       socket.off("editor:live-user-joined", liveUserJoined);
       socket.off("editor:live-user-left", liveUserLeft);
     };
-  }, [socket]);
+  }, [socket, tabs]);
 
   useEffect(() => {
     if (!socket) return;
