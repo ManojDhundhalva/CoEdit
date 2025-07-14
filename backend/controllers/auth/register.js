@@ -38,12 +38,12 @@ const createAccount = async (req, res) => {
             return res.status(409).json({ message: "User already exists." });
         }
 
-        const response = await fetch(`https://emailvalidation.abstractapi.com/v1/?api_key=${config.ABSTRACT_API_KEY}&email=${emailid}`);
-        const data = await response.json();
+        // const response = await fetch(`https://emailvalidation.abstractapi.com/v1/?api_key=${config.ABSTRACT_API_KEY}&email=${emailid}`);
+        // const data = await response.json();
 
-        if (data.deliverability != "DELIVERABLE") {
-            return res.status(400).json({ message: "Email address not found." });
-        }
+        // if (data.deliverability != "DELIVERABLE") {
+        //     return res.status(400).json({ message: "Email address not found." });
+        // }
 
         // Hash the password
         const hashedPassword = await hashAsync(password, saltRounds);
